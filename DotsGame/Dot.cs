@@ -44,7 +44,11 @@ namespace DotsGame
 		EnableMask = Dot.Putted | Dot.Player,
 		BoundMask = Dot.Bound | Dot.Putted | Dot.Player,
 		AllowingMask = Dot.Putted,
-		SurroundCountMask = (1 << 16) | (1 << 17), // 2 bits are enough for base depth saving.
-		FirstSurroundLevel = 0x00010000
+		SurroundCountMask = (1 << 8) | (1 << 9), // 2 bits are enough for base depth saving.
+		FirstSurroundLevel = 1 << 8,
+
+		DiagonalGroupMaskStep = 1 << 23,
+		DiagonalGroupMaskShift = 22,
+		DiagonalGroupMask = -4194304,
 	}
 }

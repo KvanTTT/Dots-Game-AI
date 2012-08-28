@@ -96,6 +96,11 @@ namespace DotsGame
 			return (dot & Dot.Tagged) == Dot.Tagged;
 		}
 
+		public static bool IsInEmptyBase(this Dot dot)
+		{
+			return (dot & Dot.EmptyBase) == Dot.EmptyBase;
+		}
+
 		public static void ClearTag(this Dot dot)
 		{
 			dot &= ~Dot.Tagged;
@@ -104,6 +109,21 @@ namespace DotsGame
 		public static Dot GetEnabledCondition(this Dot dot)
 		{
 			return dot & Dot.EnableMask;
+		}
+
+		public static Dot GetDiagonalGroupNumber(this Dot dot)
+		{
+			return dot & Dot.DiagonalGroupMask;
+		}
+
+		public static Dot SetDiagonalGroupNumber(this Dot dot, int groupNumber)
+		{
+			return (Dot)((dot & ~Dot.DiagonalGroupMask) | (Dot)groupNumber);
+		}
+
+		public static Dot ClearGroupNumber(this Dot dot)
+		{
+			return (Dot)(dot & ~Dot.DiagonalGroupMask);
 		}
 
 		static Helper()

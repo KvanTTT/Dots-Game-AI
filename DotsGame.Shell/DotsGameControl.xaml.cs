@@ -84,7 +84,7 @@ namespace DotsGame.Shell
 			this.FieldWidth = FieldWidth;
 			this.FieldHeight = FieldHeight;
 
-			Field = new Field(FieldWidth, FieldHeight, enmSurroundCondition.Standart);
+			Field = new FieldWithGroups(FieldWidth, FieldHeight, enmSurroundCondition.Standart);
 			HashField = new ZobristHashField(Field, 0);
 			GameField = new GameField(Field, enmBeginPattern.Clean);
 			GameField.Move += OnMakeMove;
@@ -101,8 +101,8 @@ namespace DotsGame.Shell
 		{
 			RedrawField();
 
-			if (!string.IsNullOrEmpty(Settings.Default.LoadedFileName))
-				LoadGame(Settings.Default.LoadedFileName);
+			//if (!string.IsNullOrEmpty(Settings.Default.LoadedFileName))
+			//	LoadGame(Settings.Default.LoadedFileName);
 		}
 
 		private void OnMakeMove(object sender, MoveEventArgs e)
@@ -144,6 +144,7 @@ namespace DotsGame.Shell
 			lblX.Content = x;
 			lblY.Content = y;
 			lblPos.Content = pos;
+			lblDiagGroup.Content = (int)Field[pos].GetDiagonalGroupNumber() >> (int)Dot.DiagonalGroupMaskShift;
 		}
 
 		private void btnUnmakeMove_Click(object sender, RoutedEventArgs e)
@@ -166,7 +167,7 @@ namespace DotsGame.Shell
 
 		private void btnClear_Click(object sender, RoutedEventArgs e)
 		{
-			Field = new Field(FieldWidth, FieldHeight, enmSurroundCondition.Standart);
+			Field = new FieldWithGroups(FieldWidth, FieldHeight, enmSurroundCondition.Standart);
 			GameField = new GameField(Field, enmBeginPattern.Clean);
 			GameField.Move += OnMakeMove;
 			RedrawField();
@@ -341,7 +342,7 @@ namespace DotsGame.Shell
 
 		private void LoadGame(string fileName)
 		{
-			Field = new Field(39, 32);
+			Field = new FieldWithGroups(39, 32);
 			GameField = new GameField(Field, enmBeginPattern.Crosswise);
 			HashField = new ZobristHashField(Field, 0);
 
@@ -390,13 +391,13 @@ namespace DotsGame.Shell
 			Polygon polygon;
 			if (State.Base != null && Field.LastMoveCaptureCount != 0)
 			{
-				var chainPositions = State.Base.ChainDotPositions;
+				var chainPositions = State.Base.ChainPositions;
 				var GraphicsPoints = new PointCollection(chainPositions.Count);
 				foreach (var PointPos in chainPositions)
-					GraphicsPoints.Add(GetGraphicaPoint(PointPos.Position));
+					GraphicsPoints.Add(GetGraphicaPoint(PointPos));
 
 				polygon = new Polygon { StrokeThickness = LineCellRatio * CellSize, Points = GraphicsPoints, Stretch = Stretch.None };
-				if (Field[chainPositions.Last().Position].IsRedPutted())
+				if (Field[chainPositions.Last()].IsRedPutted())
 				{
 					polygon.Fill = Player1Fill;
 					polygon.Stroke = Player1Stroke;

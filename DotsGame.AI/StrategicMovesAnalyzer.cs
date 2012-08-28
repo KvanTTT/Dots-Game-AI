@@ -10,14 +10,14 @@ namespace DotsGame.AI
 	{
 		#region Fields
 
-		private Dot[] Dots_;
+		private Dot[] _dots;
 
-		private List<LinkedGroup> Groups_;
-		private List<LinkedGroup> OwnGroups_;
-		private List<LinkedGroup> EnemyGroups_;
+		private List<LinkedGroup> _groups_;
+		private List<LinkedGroup> _ownGroups;
+		private List<LinkedGroup> _enemyGroups;
 		private int[] DotsGroups;
 
-		private SortedList<int, Crosswise> Crosswises_;
+		private SortedList<int, Crosswise> _crosswises;
 
 		#endregion
 
@@ -26,7 +26,7 @@ namespace DotsGame.AI
 		public StrategicMovesAnalyzer(Field field)
 		{
 			Field = field;
-			Dots_ = Field.CloneDots();
+			_dots = Field.CloneDots();
 			DotsGroups = new int[Field.RealDotsCount];
 		}
 
@@ -40,9 +40,9 @@ namespace DotsGame.AI
 
 		public void GenerateGroups()
 		{
-			Groups_ = new List<LinkedGroup>();
-			OwnGroups_ = new List<LinkedGroup>();
-			EnemyGroups_ = new List<LinkedGroup>();
+			_groups_ = new List<LinkedGroup>();
+			_ownGroups = new List<LinkedGroup>();
+			_enemyGroups = new List<LinkedGroup>();
 			var ownPlayer = Field.CurrentPlayer.NextPlayer();
 			var enemyPlayer = Field.CurrentPlayer;
 			LinkedGroup group;
@@ -52,19 +52,19 @@ namespace DotsGame.AI
 				{
 					int ind = Field.GetPosition(i, j);
 
-					if (!Dots_[ind].IsTagged())
+					if (!_dots[ind].IsTagged())
 					{
-						if (Dots_[ind].IsPlayerPutted(ownPlayer))
+						if (_dots[ind].IsPlayerPutted(ownPlayer))
 						{
-							group = new LinkedGroup(ownPlayer, Groups_.Count + 1, FillDiagVertHorizLinkedDots(ind, Groups_.Count + 1));
-							OwnGroups_.Add(group);
-							Groups_.Add(group);
+							group = new LinkedGroup(ownPlayer, _groups_.Count + 1, FillDiagVertHorizLinkedDots(ind, _groups_.Count + 1));
+							_ownGroups.Add(group);
+							_groups_.Add(group);
 						}
-						else if (Dots_[ind].IsPlayerPutted(enemyPlayer))
+						else if (_dots[ind].IsPlayerPutted(enemyPlayer))
 						{
-							group = new LinkedGroup(enemyPlayer, Groups_.Count + 1, FillDiagVertHorizLinkedDots(ind, Groups_.Count + 1));
-							EnemyGroups_.Add(group);
-							Groups_.Add(group);
+							group = new LinkedGroup(enemyPlayer, _groups_.Count + 1, FillDiagVertHorizLinkedDots(ind, _groups_.Count + 1));
+							_enemyGroups.Add(group);
+							_groups_.Add(group);
 						}
 					}
 				}
@@ -76,22 +76,22 @@ namespace DotsGame.AI
 		{
 			var ownPlayer = Field.CurrentPlayer.NextPlayer();
 			var enemyPlayer = Field.CurrentPlayer;
-			Crosswises_ = new SortedList<int, Crosswise>();
+			_crosswises = new SortedList<int, Crosswise>();
 
-			foreach (var group in OwnGroups_)
+			foreach (var group in _ownGroups)
 				foreach (var pos in group.Positions)
 				{
 					if (Field[pos + Field.RealWidth].IsPlayerPutted(enemyPlayer))
 					{
 						if (Field[pos + Field.RealWidth + 1].IsPlayerPutted(ownPlayer) &&
 							Field[pos + 1].IsPlayerPutted(enemyPlayer))
-							Crosswises_.Add(Crosswises_.Count + 1,
-								new Crosswise(ownPlayer, pos, enmCrosswiseOrientation.BottomRight, Crosswises_.Count + 1));
+							_crosswises.Add(_crosswises.Count + 1,
+								new Crosswise(ownPlayer, pos, enmCrosswiseOrientation.BottomRight, _crosswises.Count + 1));
 
 						if (Field[pos + Field.RealWidth - 1].IsPlayerPutted(ownPlayer) &&
 							Field[pos - 1].IsPlayerPutted(enemyPlayer))
-							Crosswises_.Add(Crosswises_.Count + 1,
-								new Crosswise(ownPlayer, pos, enmCrosswiseOrientation.BottomLeft, Crosswises_.Count + 1));
+							_crosswises.Add(_crosswises.Count + 1,
+								new Crosswise(ownPlayer, pos, enmCrosswiseOrientation.BottomLeft, _crosswises.Count + 1));
 					}
 				}
 		}
@@ -100,9 +100,9 @@ namespace DotsGame.AI
 		{
 			var result = new List<int>();
 
-			Dot player = Dots_[pos].GetPlayer();
+			Dot player = _dots[pos].GetPlayer();
 			var tempStack = new Stack<int>();
-			Dots_[pos] |= Dot.Tagged;
+			_dots[pos] |= Dot.Tagged;
 			tempStack.Push(pos);
 			result.Add(pos);
 
@@ -114,9 +114,9 @@ namespace DotsGame.AI
 				for (int i = 0; i < Field.DiagVertHorizDeltas.Length; i++)
 				{
 					int newPos = pos + Field.DiagVertHorizDeltas[i];
-					if (Dots_[newPos].IsPlayerPutted(player) && !Dots_[newPos].IsTagged())
+					if (_dots[newPos].IsPlayerPutted(player) && !_dots[newPos].IsTagged())
 					{
-						Dots_[newPos] |= Dot.Tagged;
+						_dots[newPos] |= Dot.Tagged;
 						tempStack.Push(newPos);
 						result.Add(newPos);
 
@@ -132,7 +132,7 @@ namespace DotsGame.AI
 		{
 			for (int i = 1; i <= Field.Width; i++)
 				for (int j = 1; j <= Field.Height; j++)
-					Dots_[j * Field.RealWidth + i].ClearTag();
+					_dots[j * Field.RealWidth + i].ClearTag();
 		}
 
 		#endregion
@@ -143,7 +143,7 @@ namespace DotsGame.AI
 		{
 			get
 			{
-				return OwnGroups_;
+				return _ownGroups;
 			}
 		}
 
@@ -151,7 +151,7 @@ namespace DotsGame.AI
 		{
 			get
 			{
-				return EnemyGroups_;
+				return _enemyGroups;
 			}
 		}
 
@@ -159,7 +159,7 @@ namespace DotsGame.AI
 		{
 			get
 			{
-				return Groups_;
+				return _groups_;
 			}
 		}
 
@@ -167,7 +167,7 @@ namespace DotsGame.AI
 		{
 			get
 			{
-				return Crosswises_;
+				return _crosswises;
 			}
 		}
 

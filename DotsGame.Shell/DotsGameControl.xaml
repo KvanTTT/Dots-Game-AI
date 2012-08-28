@@ -26,23 +26,7 @@
 						<TextBox AcceptsReturn="True" Height="22" HorizontalAlignment="Stretch" HorizontalContentAlignment="Right" Margin="45,0,63,198" Name="tbHash" Text="" VerticalAlignment="Bottom" IsReadOnly="True" />
 						<Button Content="Clear" Height="22" HorizontalAlignment="Right" IsEnabled="{Binding InputEnabled, Mode=OneWay}" Margin="0,0,4,198" Name="btnClearHash" VerticalAlignment="Bottom" Click="btnClearHash_Click" Width="52" />
 						<Image Height="109" HorizontalAlignment="Left" Margin="205,450,0,0" Name="image1" Stretch="Fill" VerticalAlignment="Top" Width="161" />
-						<Grid Height="28" HorizontalAlignment="Stretch" Margin="7,0,4,228" Name="grid5" VerticalAlignment="Bottom">
-							<Grid.ColumnDefinitions>
-								<ColumnDefinition Width="19" />
-								<ColumnDefinition Width="*" />
-								<ColumnDefinition Width="19" />
-								<ColumnDefinition Width="*" />
-								<ColumnDefinition Width="29" />
-								<ColumnDefinition Width="*" />
-							</Grid.ColumnDefinitions>
-							<Label Content="X" Name="label6" />
-							<Label Grid.Column="1" Name="lblX" />
-							<Label Content="Y" Grid.Column="2" Name="label8" />
-							<Label Grid.Column="3" Name="lblY" />
-							<Label Content="Pos" Grid.Column="4" Name="label10" />
-							<Label Grid.Column="5" Name="lblPos" />
-						</Grid>
-						<Grid Height="52" HorizontalAlignment="Stretch" Margin="7,0,4,142" Name="grid6" VerticalAlignment="Bottom">
+                        <Grid Height="52" HorizontalAlignment="Stretch" Margin="7,0,4,142" Name="grid6" VerticalAlignment="Bottom">
 							<Grid.RowDefinitions>
 								<RowDefinition />
 								<RowDefinition />
@@ -85,7 +69,29 @@
 						<Button Content="&gt;" Name="button2" Grid.Column="1" IsEnabled="{Binding InputEnabled, Mode=OneWay}" />
 						<Slider Name="sliderMain" ValueChanged="sliderMain_ValueChanged" Grid.Column="2" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Margin="5,0" IsEnabled="{Binding InputEnabled, Mode=OneWay}"/>
 					</Grid>
-				</Grid>
+                    <Grid Height="47" HorizontalAlignment="Stretch" Margin="5,0,6,226" Name="grid5" VerticalAlignment="Bottom">
+                        <Grid.RowDefinitions>
+                            <RowDefinition />
+                            <RowDefinition />
+                        </Grid.RowDefinitions>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="19" />
+                            <ColumnDefinition Width="66*" />
+                            <ColumnDefinition Width="19" />
+                            <ColumnDefinition Width="48*" />
+                            <ColumnDefinition Width="48" />
+                            <ColumnDefinition Width="65*" />
+                        </Grid.ColumnDefinitions>
+                        <Label Content="X" Name="label6" />
+                        <Label Grid.Column="1" Name="lblX" />
+                        <Label Content="Y" Grid.Column="2" Name="label8" />
+                        <Label Grid.Column="3" Name="lblY" />
+                        <Label Content="Pos" Grid.Column="4" Name="label10" />
+                        <Label Grid.Column="5" Name="lblPos" />
+                        <Label Content="Group" Name="label5" Grid.Row="1" Grid.Column="4" />
+                        <Label Name="lblDiagGroup" Grid.Column="5" Grid.Row="1" />
+                    </Grid>
+                </Grid>
 			</TabItem>
 		</TabControl>
 		<ScrollViewer HorizontalAlignment="Stretch" Margin="12,12,0,12" Name="scrollViewer1" VerticalAlignment="Stretch" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto">

@@ -21,6 +21,7 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -49,6 +50,7 @@
     <Compile Include="enmCrosswiseOrientation.cs" />
     <Compile Include="enmRandomGenerateMethod.cs" />
     <Compile Include="Estimator.cs" />
+    <Compile Include="ForcedAttackMoveGenerator.cs" />
     <Compile Include="GameBot.cs" />
     <Compile Include="HashEntry.cs" />
     <Compile Include="LinkedGroup.cs" />

@@ -25,14 +25,21 @@ namespace DotsGame
 			set;
 		}
 
+		public int DiagonalGroupCount
+		{
+			get;
+			set;
+		}
+
 		#endregion
 
 		#region Constructors
 
-		public State(DotPosition dotPosition, Base b) : this()
+		public State(DotPosition dotPosition, Base b, int diagonalGroupCount = 0) : this()
 		{
 			Base = b;
 			Move = dotPosition;
+			DiagonalGroupCount = diagonalGroupCount;
 		}
 
 		#endregion
@@ -55,6 +62,7 @@ namespace DotsGame
 					new List<DotPosition>(Base.ChainDotPositions), new List<DotPosition>(Base.SurrroundDotPositions),
 					new List<int>(Base.ChainPositions), new List<int>(Base.SurroundPoistions), Base.RedSquare, Base.BlueSquare);
 			result.Move = Move;
+			result.DiagonalGroupCount = DiagonalGroupCount;
 			return result;
 		}
 	}
