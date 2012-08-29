@@ -113,21 +113,21 @@ namespace DotsGame.Tests
 			field.MakeMove(startX, startY + 2);
 			field.MakeMove(startX - 1, startY + 2);
 
-			Assert.AreEqual(1, (int)field.GetDot(startX, startY).GetDiagonalGroupNumber() >> (int)Dot.DiagonalGroupMaskShift);
-			Assert.AreEqual(1, (int)field.GetDot(startX + 1, startY + 1).GetDiagonalGroupNumber() >> (int)Dot.DiagonalGroupMaskShift);
-			Assert.AreEqual(1, (int)field.GetDot(startX, startY + 2).GetDiagonalGroupNumber() >> (int)Dot.DiagonalGroupMaskShift);
+			Assert.AreEqual(1, (int)field.GetDot(startX, startY).GetDiagGroupNumber() >> (int)Dot.DiagonalGroupMaskShift);
+			Assert.AreEqual(1, (int)field.GetDot(startX + 1, startY + 1).GetDiagGroupNumber() >> (int)Dot.DiagonalGroupMaskShift);
+			Assert.AreEqual(1, (int)field.GetDot(startX, startY + 2).GetDiagGroupNumber() >> (int)Dot.DiagonalGroupMaskShift);
 
-			Assert.AreEqual(2, (int)field.GetDot(startX - 1, startY).GetDiagonalGroupNumber() >> (int)Dot.DiagonalGroupMaskShift);
-			Assert.AreEqual(2, (int)field.GetDot(startX, startY + 1).GetDiagonalGroupNumber() >> (int)Dot.DiagonalGroupMaskShift);
-			Assert.AreEqual(2, (int)field.GetDot(startX - 1, startY + 2).GetDiagonalGroupNumber() >> (int)Dot.DiagonalGroupMaskShift);
+			Assert.AreEqual(2, (int)field.GetDot(startX - 1, startY).GetDiagGroupNumber() >> (int)Dot.DiagonalGroupMaskShift);
+			Assert.AreEqual(2, (int)field.GetDot(startX, startY + 1).GetDiagGroupNumber() >> (int)Dot.DiagonalGroupMaskShift);
+			Assert.AreEqual(2, (int)field.GetDot(startX - 1, startY + 2).GetDiagGroupNumber() >> (int)Dot.DiagonalGroupMaskShift);
 
 			field.MakeMove(startX - 1, startY + 1);
 
-			Assert.AreEqual(1, (int)field.GetDot(startX - 1, startY + 1).GetDiagonalGroupNumber() >> (int)Dot.DiagonalGroupMaskShift);
-			Assert.AreEqual(0, (int)field.GetDot(startX, startY + 1).GetDiagonalGroupNumber() >> (int)Dot.DiagonalGroupMaskShift);
+			Assert.AreEqual(1, (int)field.GetDot(startX - 1, startY + 1).GetDiagGroupNumber() >> (int)Dot.DiagonalGroupMaskShift);
+			Assert.AreEqual(1, (int)field.GetDot(startX, startY + 1).GetDiagGroupNumber() >> (int)Dot.DiagonalGroupMaskShift);
 
-			Assert.AreEqual(3, (int)field.GetDot(startX - 1, startY).GetDiagonalGroupNumber() >> (int)Dot.DiagonalGroupMaskShift);
-			Assert.AreEqual(4, (int)field.GetDot(startX - 1, startY + 2).GetDiagonalGroupNumber() >> (int)Dot.DiagonalGroupMaskShift);
+			Assert.AreEqual(3, (int)field.GetDot(startX - 1, startY).GetDiagGroupNumber() >> (int)Dot.DiagonalGroupMaskShift);
+			Assert.AreEqual(4, (int)field.GetDot(startX - 1, startY + 2).GetDiagGroupNumber() >> (int)Dot.DiagonalGroupMaskShift);
 
 			field.UnmakeAllMoves();
 

@@ -12,7 +12,7 @@ namespace DotsGame
 		public const int RealWidth = 64;
 		public const int InputSurroundDotsCount = 4;
 
-		public static int[] DiagVertHorizDeltas = {
+		public static int[] DiagDeltas = {
 			-Field.RealWidth - 1, -Field.RealWidth, -Field.RealWidth + 1,
 			-1, +1, 
 			+Field.RealWidth - 1, +Field.RealWidth, +Field.RealWidth + 1 };
@@ -262,7 +262,7 @@ namespace DotsGame
 		/// <param name="pos1"></param>
 		/// <param name="pos2"></param>
 		/// <returns></returns>
-		protected static int GetSquare(int pos1, int pos2)
+		public static int GetSquare(int pos1, int pos2)
 		{
 			return (pos1 / RealWidth) * (pos2 % RealWidth) - (pos1 % RealWidth) * (pos2 / RealWidth);
 		}
@@ -277,9 +277,24 @@ namespace DotsGame
 		/// </summary>
 		/// <param name="centerPosition"></param>
 		/// <param name="pos"></param>
-		protected static void GetFirstNextPos(int centerPosition, ref int pos)
+		public static void GetFirstNextPos(int centerPosition, ref int pos)
 		{
-			pos = centerPosition + Helper.NextFirstPosOffsets_[pos - centerPosition + Field.RealWidth + 1];
+			pos = centerPosition + Helper.NextFirstPosOffsets[pos - centerPosition + Field.RealWidth + 1];
+		}
+
+		/// <summary>
+		///  . . .   . . *   * . x   x x .
+		///  x o .   . o .   . o x   . o .
+		///  x . *   . x x   . . .   * . .
+		///  o - center pos
+		///  x - pos
+		///  * - result (new pos)
+		/// </summary>
+		/// <param name="centerPosition"></param>
+		/// <param name="pos"></param>
+		public static void GetFirstNextPosCCW(int centerPosition, ref int pos)
+		{
+			pos = centerPosition + Helper.NextFirstPosOffsetsCCW[pos - centerPosition + Field.RealWidth + 1];
 		}
 
 		/// <summary>
@@ -292,9 +307,9 @@ namespace DotsGame
 		/// </summary>
 		/// <param name="centerPosition"></param>
 		/// <param name="pos"></param>
-		protected static void GetNextPos(int centerPosition, ref int pos)
+		public static void GetNextPos(int centerPosition, ref int pos)
 		{
-			pos = centerPosition + Helper.NextPosOffsets_[pos - centerPosition + Field.RealWidth + 1];
+			pos = centerPosition + Helper.NextPosOffsets[pos - centerPosition + Field.RealWidth + 1];
 		}
 
 		protected void RemoveEmptyBaseFlags(int startPosition)
@@ -758,6 +773,46 @@ namespace DotsGame
 
 		#region Public methods
 
+		public List<int> GetInputDots(int centerPos, Dot player)
+		{
+			var result = new List<int>(4);
+
+			Dot enableCond = player | Dot.Putted;
+			if (!_dots[centerPos - 1].IsEnable(enableCond))
+			{
+				if (_dots[centerPos - RealWidth - 1].IsEnable(enableCond))
+					result.Add(centerPos - RealWidth - 1);
+				else if (_dots[centerPos - RealWidth].IsEnable(enableCond))
+					result.Add(centerPos - RealWidth);
+			}
+
+			if (!_dots[centerPos + RealWidth].IsEnable(enableCond))
+			{
+				if (_dots[centerPos + RealWidth - 1].IsEnable(enableCond))
+					result.Add(centerPos + RealWidth - 1);
+				else if (_dots[centerPos - 1].IsEnable(enableCond))
+					result.Add(centerPos - 1);
+			}
+
+			if (!_dots[centerPos + 1].IsEnable(enableCond))
+			{
+				if (_dots[centerPos + RealWidth + 1].IsEnable(enableCond))
+					result.Add(centerPos + RealWidth + 1);
+				else if (_dots[centerPos + RealWidth].IsEnable(enableCond))
+					result.Add(centerPos + RealWidth);
+			}
+
+			if (!_dots[centerPos - RealWidth].IsEnable(enableCond))
+			{
+				if (_dots[centerPos - RealWidth + 1].IsEnable(enableCond))
+					result.Add(centerPos - RealWidth + 1);
+				else if (_dots[centerPos + 1].IsEnable(enableCond))
+					result.Add(centerPos + 1);
+			}
+
+			return result;
+		}
+
 		public bool IsBaseAddedAtLastMove
 		{
 			get
@@ -849,6 +904,7 @@ namespace DotsGame
 								new List<int>(_chainPositions), new List<int>(_surroundPositions), oldRedSquare, oldBlueSquare),
 						DiagonalGroupCount = oldDiagonalLinkedGroupsCount
 					});
+				LastState = _dotsSequenceStates[_dotsSequenceStates.Count - 1];
 
 				CurrentPlayer = CurrentPlayer.NextPlayer();
 
@@ -977,6 +1033,11 @@ namespace DotsGame
 		public Dot GetDot(int x, int y)
 		{
 			return _dots[Field.GetPosition(x, y)];
+		}
+
+		public State GetState(int ind)
+		{
+			return _dotsSequenceStates[ind];
 		}
 
 		#endregion

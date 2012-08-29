@@ -9,7 +9,7 @@ namespace DotsGame
 	/// Struct for field changes on each move
 	/// if surround on Move then Base != null
 	/// </remarks>
-	public struct State
+	public class State
 	{
 		#region Properties
 
@@ -34,6 +34,10 @@ namespace DotsGame
 		#endregion
 
 		#region Constructors
+
+		public State()
+		{
+		}
 
 		public State(DotPosition dotPosition, Base b, int diagonalGroupCount = 0) : this()
 		{

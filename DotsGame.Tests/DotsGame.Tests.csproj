@@ -48,6 +48,7 @@
     <Compile Include="DotFunctionsTest.cs" />
     <Compile Include="FieldTests.cs" />
     <Compile Include="FieldWithGroupsTests.cs" />
+    <Compile Include="ForcedAttackTests.cs" />
     <Compile Include="HashEntryTest.cs" />
     <Compile Include="LinkedGroupTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

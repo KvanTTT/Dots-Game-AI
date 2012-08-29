@@ -144,7 +144,7 @@ namespace DotsGame.Shell
 			lblX.Content = x;
 			lblY.Content = y;
 			lblPos.Content = pos;
-			lblDiagGroup.Content = (int)Field[pos].GetDiagonalGroupNumber() >> (int)Dot.DiagonalGroupMaskShift;
+			lblDiagGroup.Content = (int)Field[pos].GetDiagGroupNumber() >> (int)Dot.DiagonalGroupMaskShift;
 		}
 
 		private void btnUnmakeMove_Click(object sender, RoutedEventArgs e)
@@ -202,7 +202,7 @@ namespace DotsGame.Shell
 		{
 			var analyzer = new StrategicMovesAnalyzer(Field);
 			analyzer.GenerateGroups();
-			analyzer.GenerateCrosswises();
+			analyzer.FindCrosswises();
 
 			foreach (var crosswise in analyzer.Crosswises)
 			{

@@ -8,8 +8,9 @@ namespace DotsGame
 {
 	public static class Helper
 	{
-		public static int[] NextPosOffsets_;
-		public static int[] NextFirstPosOffsets_;
+		public static int[] NextPosOffsets;
+		public static int[] NextFirstPosOffsets;
+		public static int[] NextFirstPosOffsetsCCW;
 
 		public static Dot GetPlayer(this Dot dot)
 		{
@@ -19,6 +20,11 @@ namespace DotsGame
 		public static bool IsPutted(this Dot dot)
 		{
 			return (dot & Dot.Putted) == Dot.Putted;
+		}
+
+		public static bool IsNotPutted(this Dot dot)
+		{
+			return (dot & Dot.Putted) != Dot.Putted;
 		}
 
 		public static bool IsPuttingAllowed(this Dot dot)
@@ -111,7 +117,7 @@ namespace DotsGame
 			return dot & Dot.EnableMask;
 		}
 
-		public static Dot GetDiagonalGroupNumber(this Dot dot)
+		public static Dot GetDiagGroupNumber(this Dot dot)
 		{
 			return dot & Dot.DiagonalGroupMask;
 		}
@@ -128,25 +134,35 @@ namespace DotsGame
 
 		static Helper()
 		{
-			NextPosOffsets_ = new int[Field.RealWidth * 2 + 3];
-			NextPosOffsets_[0] = -Field.RealWidth;
-			NextPosOffsets_[1] = -Field.RealWidth + 1;
-			NextPosOffsets_[2] = +1;
-			NextPosOffsets_[2 + Field.RealWidth] = +Field.RealWidth + 1;
-			NextPosOffsets_[2 + Field.RealWidth * 2] = +Field.RealWidth;
-			NextPosOffsets_[1 + Field.RealWidth * 2] = +Field.RealWidth - 1;
-			NextPosOffsets_[0 + Field.RealWidth * 2] = -1;
-			NextPosOffsets_[0 + Field.RealWidth] = -Field.RealWidth - 1;
+			NextPosOffsets = new int[Field.RealWidth * 2 + 3];
+			NextPosOffsets[0] = -Field.RealWidth;
+			NextPosOffsets[1] = -Field.RealWidth + 1;
+			NextPosOffsets[2] = +1;
+			NextPosOffsets[2 + Field.RealWidth] = +Field.RealWidth + 1;
+			NextPosOffsets[2 + Field.RealWidth * 2] = +Field.RealWidth;
+			NextPosOffsets[1 + Field.RealWidth * 2] = +Field.RealWidth - 1;
+			NextPosOffsets[0 + Field.RealWidth * 2] = -1;
+			NextPosOffsets[0 + Field.RealWidth] = -Field.RealWidth - 1;
 			
-			NextFirstPosOffsets_ = new int[Field.RealWidth * 2 + 3];
-			NextFirstPosOffsets_[0] = -Field.RealWidth + 1;
-			NextFirstPosOffsets_[1] = +Field.RealWidth + 1;
-			NextFirstPosOffsets_[2] = +Field.RealWidth + 1;
-			NextFirstPosOffsets_[2 + Field.RealWidth] = +Field.RealWidth - 1;
-			NextFirstPosOffsets_[2 + Field.RealWidth * 2] = +Field.RealWidth - 1;
-			NextFirstPosOffsets_[1 + Field.RealWidth * 2] = -Field.RealWidth - 1;
-			NextFirstPosOffsets_[0 + Field.RealWidth * 2] = -Field.RealWidth - 1;
-			NextFirstPosOffsets_[0 + Field.RealWidth] = -Field.RealWidth + 1;
+			NextFirstPosOffsets = new int[Field.RealWidth * 2 + 3];
+			NextFirstPosOffsets[0] = -Field.RealWidth + 1;
+			NextFirstPosOffsets[1] = +Field.RealWidth + 1;
+			NextFirstPosOffsets[2] = +Field.RealWidth + 1;
+			NextFirstPosOffsets[2 + Field.RealWidth] = +Field.RealWidth - 1;
+			NextFirstPosOffsets[2 + Field.RealWidth * 2] = +Field.RealWidth - 1;
+			NextFirstPosOffsets[1 + Field.RealWidth * 2] = -Field.RealWidth - 1;
+			NextFirstPosOffsets[0 + Field.RealWidth * 2] = -Field.RealWidth - 1;
+			NextFirstPosOffsets[0 + Field.RealWidth] = -Field.RealWidth + 1;
+
+			NextFirstPosOffsetsCCW = new int[Field.RealWidth * 2 + 3];
+			NextFirstPosOffsetsCCW[0] = +Field.RealWidth - 1;
+			NextFirstPosOffsetsCCW[1] = +Field.RealWidth - 1;
+			NextFirstPosOffsetsCCW[2] = -Field.RealWidth - 1;
+			NextFirstPosOffsetsCCW[2 + Field.RealWidth] = -Field.RealWidth - 1;
+			NextFirstPosOffsetsCCW[2 + Field.RealWidth * 2] = -Field.RealWidth + 1;
+			NextFirstPosOffsetsCCW[1 + Field.RealWidth * 2] = -Field.RealWidth + 1;
+			NextFirstPosOffsetsCCW[0 + Field.RealWidth * 2] = +Field.RealWidth + 1;
+			NextFirstPosOffsetsCCW[0 + Field.RealWidth] = +Field.RealWidth + 1;
 		}
 	}
 }

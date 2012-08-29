@@ -59,5 +59,141 @@ namespace DotsGame.Tests
 			Assert.AreEqual(0, field.BlueCaptureCount);
 			Assert.IsTrue(field.IsEmpty);
 		}
+
+		[Test]
+		public void GetNextPosTest()
+		{
+			int startX = 16;
+			int startY = 16;
+
+			int centerPos = Field.GetPosition(startX, startY);
+			int pos = centerPos - Field.RealWidth - 1;
+
+			Field.GetNextPos(centerPos, ref pos);
+			Assert.AreEqual(centerPos - Field.RealWidth, pos);
+
+			Field.GetNextPos(centerPos, ref pos);
+			Assert.AreEqual(centerPos - Field.RealWidth + 1, pos);
+
+			Field.GetNextPos(centerPos, ref pos);
+			Assert.AreEqual(centerPos + 1, pos);
+
+			Field.GetNextPos(centerPos, ref pos);
+			Assert.AreEqual(centerPos + Field.RealWidth + 1, pos);
+
+			Field.GetNextPos(centerPos, ref pos);
+			Assert.AreEqual(centerPos + Field.RealWidth, pos);
+
+			Field.GetNextPos(centerPos, ref pos);
+			Assert.AreEqual(centerPos + Field.RealWidth - 1, pos);
+
+			Field.GetNextPos(centerPos, ref pos);
+			Assert.AreEqual(centerPos - 1, pos);
+
+			Field.GetNextPos(centerPos, ref pos);
+			Assert.AreEqual(centerPos - Field.RealWidth - 1, pos);
+		}
+
+		[Test]
+		public void GetFirstNextPosTest()
+		{
+			int startX = 16;
+			int startY = 16;
+
+			int centerPos = Field.GetPosition(startX, startY);
+			int pos = centerPos - Field.RealWidth - 1;
+			int firstNextPos;
+
+			Field.GetNextPos(centerPos, ref pos);
+			firstNextPos = pos;
+			Field.GetFirstNextPos(centerPos, ref firstNextPos);
+			Assert.AreEqual(centerPos + Field.RealWidth + 1, firstNextPos);
+
+			Field.GetNextPos(centerPos, ref pos);
+			firstNextPos = pos;
+			Field.GetFirstNextPos(centerPos, ref firstNextPos);
+			Assert.AreEqual(centerPos + Field.RealWidth + 1, firstNextPos);
+
+			Field.GetNextPos(centerPos, ref pos);
+			firstNextPos = pos;
+			Field.GetFirstNextPos(centerPos, ref firstNextPos);
+			Assert.AreEqual(centerPos + Field.RealWidth - 1, firstNextPos);
+
+			Field.GetNextPos(centerPos, ref pos);
+			firstNextPos = pos;
+			Field.GetFirstNextPos(centerPos, ref firstNextPos);
+			Assert.AreEqual(centerPos + Field.RealWidth - 1, firstNextPos);
+
+			Field.GetNextPos(centerPos, ref pos);
+			firstNextPos = pos;
+			Field.GetFirstNextPos(centerPos, ref firstNextPos);
+			Assert.AreEqual(centerPos - Field.RealWidth - 1, firstNextPos);
+
+			Field.GetNextPos(centerPos, ref pos);
+			firstNextPos = pos;
+			Field.GetFirstNextPos(centerPos, ref firstNextPos);
+			Assert.AreEqual(centerPos - Field.RealWidth - 1, firstNextPos);
+
+			Field.GetNextPos(centerPos, ref pos);
+			firstNextPos = pos;
+			Field.GetFirstNextPos(centerPos, ref firstNextPos);
+			Assert.AreEqual(centerPos - Field.RealWidth + 1, firstNextPos);
+
+			Field.GetNextPos(centerPos, ref pos);
+			firstNextPos = pos;
+			Field.GetFirstNextPos(centerPos, ref firstNextPos);
+			Assert.AreEqual(centerPos - Field.RealWidth + 1, firstNextPos);
+		}
+
+		[Test]
+		public void GetFirstNextPosCCWTest()
+		{
+			int startX = 16;
+			int startY = 16;
+
+			int centerPos = Field.GetPosition(startX, startY);
+			int pos = centerPos - Field.RealWidth - 1;
+			int firstNextPos;
+
+			Field.GetNextPos(centerPos, ref pos);
+			firstNextPos = pos;
+			Field.GetFirstNextPosCCW(centerPos, ref firstNextPos);
+			Assert.AreEqual(centerPos + Field.RealWidth - 1, firstNextPos);
+
+			Field.GetNextPos(centerPos, ref pos);
+			firstNextPos = pos;
+			Field.GetFirstNextPosCCW(centerPos, ref firstNextPos);
+			Assert.AreEqual(centerPos - Field.RealWidth - 1, firstNextPos);
+
+			Field.GetNextPos(centerPos, ref pos);
+			firstNextPos = pos;
+			Field.GetFirstNextPosCCW(centerPos, ref firstNextPos);
+			Assert.AreEqual(centerPos - Field.RealWidth - 1, firstNextPos);
+
+			Field.GetNextPos(centerPos, ref pos);
+			firstNextPos = pos;
+			Field.GetFirstNextPosCCW(centerPos, ref firstNextPos);
+			Assert.AreEqual(centerPos - Field.RealWidth + 1, firstNextPos);
+
+			Field.GetNextPos(centerPos, ref pos);
+			firstNextPos = pos;
+			Field.GetFirstNextPosCCW(centerPos, ref firstNextPos);
+			Assert.AreEqual(centerPos - Field.RealWidth + 1, firstNextPos);
+
+			Field.GetNextPos(centerPos, ref pos);
+			firstNextPos = pos;
+			Field.GetFirstNextPosCCW(centerPos, ref firstNextPos);
+			Assert.AreEqual(centerPos + Field.RealWidth + 1, firstNextPos);
+
+			Field.GetNextPos(centerPos, ref pos);
+			firstNextPos = pos;
+			Field.GetFirstNextPosCCW(centerPos, ref firstNextPos);
+			Assert.AreEqual(centerPos + Field.RealWidth + 1, firstNextPos);
+
+			Field.GetNextPos(centerPos, ref pos);
+			firstNextPos = pos;
+			Field.GetFirstNextPosCCW(centerPos, ref firstNextPos);
+			Assert.AreEqual(centerPos + Field.RealWidth - 1, firstNextPos);
+		}
 	}
 }
