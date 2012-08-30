@@ -91,5 +91,36 @@ namespace DotsGame.Tests
 			Assert.AreEqual(8, CapturesMoves[0].ChainPositions.Count);
 			Assert.AreEqual(8, CapturesMoves[0].ChainPositions.Count);
 		}
+
+		[Test]
+		public void LadderTest()
+		{
+			int startX = 16;
+			int startY = 16;
+			var field = new FieldWithGroups(39, 32);
+
+			field.MakeMove(startX, startY);
+			field.MakeMove(startX + 1, startY);
+
+			field.MakeMove(startX + 1, startY + 1);
+			field.MakeMove(startX + 2, startY);
+
+			field.MakeMove(startX + 2, startY + 1);
+
+			field.MakeMove(startX + 3, startY, Dot.RedPlayer);
+
+			// far dot.
+			field.MakeMove(startX + 5, startY - 4, Dot.RedPlayer);
+
+			var moveGenerator = new ForcedAttackMoveGenerator(field);
+			var CapturesMoves = moveGenerator.FindCapturesMoves(Dot.RedPlayer, 2);
+
+			Assert.AreEqual(1, CapturesMoves.Count);
+			Assert.AreEqual(Field.GetPosition(startX + 1, startY - 1), CapturesMoves[0].CapturePositions[0]);
+			Assert.AreEqual(Field.GetPosition(startX + 2, startY - 1), CapturesMoves[0].CapturePositions[1]);
+			Assert.AreEqual(6, CapturesMoves[0].ChainPositions.Count);
+			Assert.AreEqual(Field.GetPosition(startX + 2, startY), CapturesMoves[0].SurroundedPositions[0]);
+			Assert.AreEqual(Field.GetPosition(startX + 1, startY), CapturesMoves[0].SurroundedPositions[1]);
+		}
 	}
 }

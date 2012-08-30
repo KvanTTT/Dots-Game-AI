@@ -11,8 +11,8 @@ namespace DotsGame
 		public readonly int LastFreedCount;
 		public readonly int RedSquare;
 		public readonly int BlueSquare;
-		public readonly List<int> ChainPositions;
-		public readonly List<int> SurroundPoistions;
+		public readonly List<short> ChainPositions;
+		public readonly List<short> SurroundPoistions;
 		public readonly List<DotPosition> ChainDotPositions;
 		public readonly List<DotPosition> SurrroundDotPositions;
 
@@ -20,8 +20,8 @@ namespace DotsGame
 			int lastFreedCount,
 			List<DotPosition> chainPointPoses,
 			List<DotPosition> surPointPoses,
-			List<int> chainPositions,
-			List<int> surroundPoistions,
+			List<short> chainPositions,
+			List<short> surroundPoistions,
 			int redSquare, int blueSquare)
 		{
 			LastCaptureCount = lastCaptureCount;

@@ -24,8 +24,8 @@ namespace DotsGame
 		#region Fields & readonly
 
 		protected List<int> _tempList;
-		protected List<int> _chainPositions;
-		protected List<int> _surroundPositions;
+		protected List<short> _chainPositions;
+		protected List<short> _surroundPositions;
 		private bool _emptyBaseCreated;
 		private int _lastBaseCaptureCount;
 		private int _lastBaseFreedCount;
@@ -99,7 +99,7 @@ namespace DotsGame
 		{
 			get
 			{
-				return DotsSequanceStates.Select(state => state.Move.Position);
+				return DotsSequanceStates.Select(state => (int)state.Move.Position);
 			}
 		}
 
@@ -198,7 +198,7 @@ namespace DotsGame
 		/// <summary>
 		/// Indexes of last move chain dots.
 		/// </summary>
-		public IEnumerable<int> ChainPositions
+		public IEnumerable<short> ChainPositions
 		{
 			get
 			{
@@ -209,7 +209,7 @@ namespace DotsGame
 		/// <summary>
 		/// Indexes of last move surorund dots.
 		/// </summary>
-		public IEnumerable<int> SurroundPositions
+		public IEnumerable<short> SurroundPositions
 		{
 			get
 			{
@@ -242,8 +242,8 @@ namespace DotsGame
 
 			_dotsSequenceStates = new List<State>(64);
 
-			_chainPositions = new List<int>(16);
-			_surroundPositions = new List<int>(InputSurroundDotsCount);
+			_chainPositions = new List<short>(16);
+			_surroundPositions = new List<short>(InputSurroundDotsCount);
 			_chainDotsPositions = new List<DotPosition>(16);
 			_surroundDotsPositions = new List<DotPosition>(InputSurroundDotsCount);
 			_tempList = new List<int>(16);
@@ -444,7 +444,7 @@ namespace DotsGame
 			for (var i = 0; i < _inputChainDots.Count; i++)
 			{
 				var previousChainDotsCount = _chainPositions.Count;
-				_chainPositions.Add(position);
+				_chainPositions.Add((short)position);
 				pos = _inputChainDots[i];
 				var centerPos = position;
 
@@ -455,7 +455,7 @@ namespace DotsGame
 					if ((_chainPositions.Count > previousChainDotsCount + 1) && (pos == _chainPositions[_chainPositions.Count - 2]))
 						_chainPositions.RemoveAt(_chainPositions.Count - 1);
 					else
-						_chainPositions.Add(pos);
+						_chainPositions.Add((short)pos);
 
 					int t = pos;
 					pos = centerPos;
@@ -567,7 +567,7 @@ namespace DotsGame
 				_tempList.RemoveAt(_tempList.Count - 1);
 				CheckCapturedAndFreed(pos, player);
 
-				_surroundPositions.Add(pos);
+				_surroundPositions.Add((short)pos);
 
 				if (!_dots[pos - 1].IsBound(boundCondition) && !_dots[pos - 1].IsTagged())
 				{
@@ -901,7 +901,7 @@ namespace DotsGame
 						Base = _chainDotsPositions.Count == 0 && _surroundDotsPositions.Count == 0 ? null :
 							new Base(LastMoveCaptureCount, LastMoveFreedCount,
 								new List<DotPosition>(_chainDotsPositions), new List<DotPosition>(_surroundDotsPositions),
-								new List<int>(_chainPositions), new List<int>(_surroundPositions), oldRedSquare, oldBlueSquare),
+								new List<short>(_chainPositions), new List<short>(_surroundPositions), oldRedSquare, oldBlueSquare),
 						DiagonalGroupCount = oldDiagonalLinkedGroupsCount
 					});
 				LastState = _dotsSequenceStates[_dotsSequenceStates.Count - 1];
@@ -996,8 +996,8 @@ namespace DotsGame
 		{
 			var result = new Field();
 			result._tempList = new List<int>(_tempList);
-			result._chainPositions = new List<int>(_chainPositions);
-			result._surroundPositions = new List<int>(_surroundPositions);
+			result._chainPositions = new List<short>(_chainPositions);
+			result._surroundPositions = new List<short>(_surroundPositions);
 			result._emptyBaseCreated = _emptyBaseCreated;
 			result.RedCaptureCount = RedCaptureCount;
 			result.BlueCaptureCount = BlueCaptureCount;

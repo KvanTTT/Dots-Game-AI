@@ -60,7 +60,7 @@ namespace DotsGame.Shell
 			{
 				MovesTree.Add(X, Y);
 				OnMove(new MoveEventArgs(enmMoveState.Add, Field.CurrentPlayer.NextPlayer(),
-					Field.LastPosition, Field.ChainPositions, Field.SurroundPositions));
+					(short)Field.LastPosition, Field.ChainPositions, Field.SurroundPositions));
 
 				return true;
 			}
@@ -73,7 +73,7 @@ namespace DotsGame.Shell
 			if (Field.UnmakeMove())
 			{
 				OnMove(new MoveEventArgs(enmMoveState.Remove, Field.CurrentPlayer.NextPlayer(),
-					Field.LastPosition, Field.ChainPositions, Field.SurroundPositions));
+					(short)Field.LastPosition, Field.ChainPositions, Field.SurroundPositions));
 				return true;
 			}
 			else

@@ -133,7 +133,7 @@ namespace DotsGame
 			for (var i = 0; i < _inputChainDots.Count; i++)
 			{
 				var previousChainDotsCount = _chainPositions.Count;
-				_chainPositions.Add(position);
+				_chainPositions.Add((short)position);
 				pos = _inputChainDots[i];
 				var centerPos = position;
 
@@ -141,7 +141,7 @@ namespace DotsGame
 				int tempSquare = GetSquare(centerPos, pos);
 				do
 				{
-					_chainPositions.Add(pos);
+					_chainPositions.Add((short)pos);
 
 					int t = pos;
 					pos = centerPos;

@@ -2,9 +2,11 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Runtime.InteropServices;
 
 namespace DotsGame
 {
+	[StructLayout(LayoutKind.Sequential, Pack=1)]
 	public struct DotPosition
 	{
 		public Dot Dot
@@ -13,15 +15,16 @@ namespace DotsGame
 			set;
 		}
 
-		public int Position
+		public short Position
 		{
 			get;
 			set;
 		}
 
-		public DotPosition(int pos, Dot point) : this()
+		public DotPosition(int pos, Dot point)
+			: this()
 		{
-			Position = pos;
+			Position = (short)pos;
 			Dot = point;
 		}
 

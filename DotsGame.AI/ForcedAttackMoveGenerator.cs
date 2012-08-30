@@ -7,9 +7,9 @@ namespace DotsGame.AI
 {
 	public class MovesSequence
 	{
-		public List<int> ChainPositions;
-		public List<int> SurroundedPositions;
-		public List<int> CapturePositions;
+		public List<short> ChainPositions;
+		public List<short> SurroundedPositions;
+		public List<short> CapturePositions;
 	}
 
 	public class ForcedAttackMoveGenerator : CMoveGenerator
@@ -43,9 +43,13 @@ namespace DotsGame.AI
 			float score = 0;
 			int depth = 0;
 
+
 			var capturesMovesSequences = FindCapturesMoves(player, 2);
 			foreach (var seq in capturesMovesSequences)
 			{
+
+
+
 				Field.MakeMove(seq.CapturePositions[0], player);
 
 				Field.MakeMove(seq.CapturePositions[1], player.NextPlayer());
@@ -93,7 +97,7 @@ namespace DotsGame.AI
 								if (Field.LastMoveCaptureCount > 0)
 									result.Add(new MovesSequence()
 									{
-										CapturePositions = new List<int> { pos },
+										CapturePositions = new List<short> { (short)pos },
 										SurroundedPositions = Field.LastState.Base.SurroundPoistions,
 										ChainPositions = Field.LastState.Base.ChainPositions
 									});
@@ -144,13 +148,13 @@ namespace DotsGame.AI
 											Field.MakeMove(inputDot, player);
 											if (Field.LastMoveCaptureCount > 0)
 											{
-												var capturePositions = new List<int> { pos, inputDot };
+												var capturePositions = new List<short> { (short)pos, (short)inputDot };
 												if (result.Where(item => item.CapturePositions.Except(capturePositions).Count() == 0).Count() == 0)
 													result.Add(new MovesSequence
 													{
 														CapturePositions = capturePositions,
-														SurroundedPositions = new List<int>(Field.LastState.Base.SurroundPoistions),
-														ChainPositions = new List<int>(Field.LastState.Base.ChainPositions)
+														SurroundedPositions = new List<short>(Field.LastState.Base.SurroundPoistions),
+														ChainPositions = new List<short>(Field.LastState.Base.ChainPositions)
 													});
 											}
 											Field.UnmakeMove();
@@ -172,6 +176,7 @@ namespace DotsGame.AI
 								}
 								else
 								{
+
 								}
 							}
 
@@ -191,13 +196,13 @@ namespace DotsGame.AI
 
 						if (Field.LastMoveCaptureCount > 0)
 						{
-							var capturePositions = new List<int> { groupsPositions[i].Position, groupsPositions[j].Position };
+							var capturePositions = new List<short> { (short)groupsPositions[i].Position, (short)groupsPositions[j].Position };
 							if (result.Where(item => item.CapturePositions.Except(capturePositions).Count() == 0).Count() == 0)
 								result.Add(new MovesSequence
 								{
 									CapturePositions = capturePositions,
-									SurroundedPositions = new List<int>(Field.LastState.Base.SurroundPoistions),
-									ChainPositions = new List<int>(Field.LastState.Base.ChainPositions)
+									SurroundedPositions = new List<short>(Field.LastState.Base.SurroundPoistions),
+									ChainPositions = new List<short>(Field.LastState.Base.ChainPositions)
 								});
 						}
 

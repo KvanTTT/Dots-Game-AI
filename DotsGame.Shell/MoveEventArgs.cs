@@ -9,11 +9,11 @@ namespace DotsGame.Shell
 	{
 		public enmMoveState Action;
 		public Dot PlayerColor;
-		public int Pos;
-		public IEnumerable<int> ChainPoses;
-		public IEnumerable<int> SurPoses;
+		public short Pos;
+		public IEnumerable<short> ChainPoses;
+		public IEnumerable<short> SurPoses;
 
-		public MoveEventArgs(enmMoveState Action, Dot PlayerColor, int Pos, IEnumerable<int> chainPositions, IEnumerable<int> surroundPositions)
+		public MoveEventArgs(enmMoveState Action, Dot PlayerColor, short Pos, IEnumerable<short> chainPositions, IEnumerable<short> surroundPositions)
 		{
 			this.Action = Action;
 			this.PlayerColor = PlayerColor;

@@ -64,7 +64,7 @@ namespace DotsGame
 			if (Base != null)
 				result.Base = new Base(Base.LastCaptureCount, Base.LastFreedCount,
 					new List<DotPosition>(Base.ChainDotPositions), new List<DotPosition>(Base.SurrroundDotPositions),
-					new List<int>(Base.ChainPositions), new List<int>(Base.SurroundPoistions), Base.RedSquare, Base.BlueSquare);
+					new List<short>(Base.ChainPositions), new List<short>(Base.SurroundPoistions), Base.RedSquare, Base.BlueSquare);
 			result.Move = Move;
 			result.DiagonalGroupCount = DiagonalGroupCount;
 			return result;
