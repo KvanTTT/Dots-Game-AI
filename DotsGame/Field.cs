@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.IO;
 
 namespace DotsGame
 {
@@ -174,7 +175,7 @@ namespace DotsGame
 		public Dot CurrentPlayer
 		{
 			get;
-			private set;
+			set;
 		}
 
 		public int LastPosition
@@ -252,9 +253,23 @@ namespace DotsGame
 			LastMoveState = enmMoveState.None;
 		}
 
+		public Field(string pointsXtFileName)
+			: this(39, 32)
+		{
+			byte[] buffer;
+			using (var stream = new StreamReader(pointsXtFileName))
+			{
+				buffer = new byte[stream.BaseStream.Length];
+				stream.BaseStream.Read(buffer, 0, buffer.Length);
+			}
+
+			for (var i = 58; i < buffer.Length; i += 13)
+				MakeMove(buffer[i] + 1, buffer[i + 1] + 1);
+		}
+
 		#endregion
 
-		#region Helpers
+		#region Static Helpers
 
 		/// <summary>
 		/// Returns square bounded by the triangle with vertexes (0, pos1, pos2)
@@ -311,6 +326,17 @@ namespace DotsGame
 		{
 			pos = centerPosition + Helper.NextPosOffsets[pos - centerPosition + Field.RealWidth + 1];
 		}
+
+		public static int Distance(int pos1, int pos2)
+		{
+			return
+				Math.Max(Math.Abs((pos1 % Field.RealWidth) - (pos2 % Field.RealWidth)),
+						 Math.Abs((pos1 / Field.RealWidth) - (pos2 / Field.RealWidth)));
+		}
+
+		#endregion
+
+		#region Helpers
 
 		protected void RemoveEmptyBaseFlags(int startPosition)
 		{
@@ -829,7 +855,10 @@ namespace DotsGame
 
 		public bool IsValidPos(int position)
 		{
-			return position > Field.RealWidth + 1 && position < _dots.Length - Field.RealWidth;
+			//return position > Field.RealWidth + 1 && position < _dots.Length - Field.RealWidth;
+			int x = position % RealWidth;
+			int y = position / RealWidth;
+			return x >= 1 && x <= Width && y >= 1 && y <= Height;
 		}
 
 		public static int GetPosition(int x, int y)
@@ -948,7 +977,7 @@ namespace DotsGame
 					_chainDotsPositions = LastState.Base.ChainDotPositions;
 					_surroundDotsPositions = LastState.Base.SurrroundDotPositions;
 					_chainPositions = LastState.Base.ChainPositions;
-					_surroundPositions = LastState.Base.SurroundPoistions;
+					_surroundPositions = LastState.Base.SurroundPositions;
 					RedSquare = LastState.Base.RedSquare;
 					BlueSquare = LastState.Base.BlueSquare;
 				}

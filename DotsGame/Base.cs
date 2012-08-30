@@ -12,7 +12,7 @@ namespace DotsGame
 		public readonly int RedSquare;
 		public readonly int BlueSquare;
 		public readonly List<short> ChainPositions;
-		public readonly List<short> SurroundPoistions;
+		public readonly List<short> SurroundPositions;
 		public readonly List<DotPosition> ChainDotPositions;
 		public readonly List<DotPosition> SurrroundDotPositions;
 
@@ -29,7 +29,7 @@ namespace DotsGame
 			ChainDotPositions = chainPointPoses;
 			SurrroundDotPositions = surPointPoses;
 			ChainPositions = chainPositions;
-			SurroundPoistions = surroundPoistions;
+			SurroundPositions = surroundPoistions;
 			RedSquare = redSquare;
 			BlueSquare = blueSquare;
 		}

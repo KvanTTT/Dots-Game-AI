@@ -2,12 +2,21 @@
 using System.IO;
 using NUnit.Framework;
 using DotsGame;
+using System.Reflection;
 
 namespace DotsGame.Tests
 {
 	[TestFixture]
 	public class FieldTests
 	{
+		private string DataFolderPath;
+
+		[SetUp]
+		public void Init()
+		{
+			DataFolderPath = Path.GetDirectoryName(Assembly.GetAssembly(typeof(FieldTests)).CodeBase).Replace(@"file:\", "") + @"\..\..\..\Data\";
+		}
+
 		#region Tests
 		
 		[Test]
@@ -189,7 +198,12 @@ namespace DotsGame.Tests
 
 		protected void ComplexBaseInBaseTest(Field field)
 		{
-			var buffer = DotsGame.Tests.Properties.Resources.DotFunctionsTest;
+			byte[] buffer;
+			using (var stream = new StreamReader(DataFolderPath + "DotFunctionsTest.sav"))
+			{
+				buffer = new byte[stream.BaseStream.Length];
+				stream.BaseStream.Read(buffer, 0, buffer.Length);
+			}
 
 			for (var i = 58; i < buffer.Length; i += 13)
 			{
@@ -428,7 +442,13 @@ namespace DotsGame.Tests
 
 		protected void VerylongGameTest(Field field)
 		{
-			var buffer = DotsGame.Tests.Properties.Resources.VeryLongGame;
+			byte[] buffer;
+			using (var stream = new StreamReader(DataFolderPath + "VeryLongGame.sav"))
+			{
+				buffer = new byte[stream.BaseStream.Length];
+				stream.BaseStream.Read(buffer, 0, buffer.Length);
+			}
+			
 			for (var i = 58; i < buffer.Length; i += 13)
 				Assert.IsTrue(field.MakeMove(buffer[i] + 1, buffer[i + 1] + 1));
 

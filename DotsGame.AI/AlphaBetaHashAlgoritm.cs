@@ -17,11 +17,11 @@ namespace DotsGame.AI
 
 		#region Constructors
 
-		public AlphaBetaHashAlgoritm(Field field, CMoveGenerator moveGenerator = null, Estimator estimator = null,
+		public AlphaBetaHashAlgoritm(Field field, MoveGenerator moveGenerator = null, Estimator estimator = null,
 			ZobristHashField hashField = null, TranspositionTable transpositionTable = null)
 		{
 			Field = field;
-			MoveGenerator = moveGenerator ?? new MoveGenerator(field);
+			MoveGenerator = moveGenerator ?? new StandartMoveGenerator(field);
 			Estimator = estimator ?? new Estimator(field);
 			if (hashField == null)
 				HashField = new ZobristHashField(field, 0);
@@ -203,7 +203,7 @@ namespace DotsGame.AI
 			set;
 		}
 
-		public CMoveGenerator MoveGenerator
+		public MoveGenerator MoveGenerator
 		{
 			get;
 			set;

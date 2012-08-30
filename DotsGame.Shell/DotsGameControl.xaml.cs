@@ -101,8 +101,8 @@ namespace DotsGame.Shell
 		{
 			RedrawField();
 
-			//if (!string.IsNullOrEmpty(Settings.Default.LoadedFileName))
-			//	LoadGame(Settings.Default.LoadedFileName);
+			if (!string.IsNullOrEmpty(Settings.Default.LoadedFileName))
+				LoadGame(Settings.Default.LoadedFileName);
 		}
 
 		private void OnMakeMove(object sender, MoveEventArgs e)

@@ -10,10 +10,10 @@ namespace DotsGame.AI
 	{
 		#region Constructors
 
-		public AlphaBetaAlgoritm(Field field, CMoveGenerator moveGenerator = null, Estimator estimator = null)
+		public AlphaBetaAlgoritm(Field field, MoveGenerator moveGenerator = null, Estimator estimator = null)
 		{
 			Field = field;
-			MoveGenerator = moveGenerator ?? new MoveGenerator(field);
+			MoveGenerator = moveGenerator ?? new StandartMoveGenerator(field);
 			Estimator = estimator ?? new Estimator(field);
 		}
 
@@ -101,7 +101,7 @@ namespace DotsGame.AI
 			set;
 		}
 
-		public CMoveGenerator MoveGenerator
+		public MoveGenerator MoveGenerator
 		{
 			get;
 			set;

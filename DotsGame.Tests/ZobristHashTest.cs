@@ -4,12 +4,22 @@ using System.Collections.Generic;
 using NUnit.Framework;
 using DotsGame;
 using DotsGame.AI;
+using System.IO;
+using System.Reflection;
 
 namespace DotsGame.Tests
 {
 	[TestFixture]
 	public class ZobristHashTest
 	{
+		private string DataFolderPath;
+
+		[SetUp]
+		public void Init()
+		{
+			DataFolderPath = Path.GetDirectoryName(Assembly.GetAssembly(typeof(FieldTests)).CodeBase).Replace(@"file:\", "") + @"\..\..\..\Data\";
+		}
+
 		[Test]
 		public void SimpleSequenceTest()
 		{
@@ -465,14 +475,21 @@ namespace DotsGame.Tests
 
 			Assert.AreEqual(initKey, hash.Key);
 		}
-		public void VeryulongGameTest()
+
+		[Test]
+		public void VeryLongGameTest()
 		{
 			var field = new Field(39, 32);
 			ZobristHashField hash = new ZobristHashField(field, 0);
 
 			ulong initKey = hash.Key;
 
-			var buffer = DotsGame.Tests.Properties.Resources.VeryLongGame;
+			byte[] buffer;
+			using (var stream = new StreamReader(DataFolderPath + "VeryLongGame.sav"))
+			{
+				buffer = new byte[stream.BaseStream.Length];
+				stream.BaseStream.Read(buffer, 0, buffer.Length);
+			}
 
 			for (var i = 58; i < buffer.Length; i += 13)
 			{

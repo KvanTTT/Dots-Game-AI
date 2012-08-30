@@ -21,7 +21,7 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <AllowUnsafeBlocks>false</AllowUnsafeBlocks>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -60,10 +60,6 @@
     </Compile>
     <Compile Include="StrategicalMovesGeneratorTest.cs" />
     <Compile Include="ZobristHashTest.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="DotFunctionsTest.sav" />
-    <None Include="VeryLongGame.sav" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\DotsGame.AI\DotsGame.AI.csproj">

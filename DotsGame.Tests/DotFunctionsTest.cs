@@ -4,6 +4,8 @@ using System.Collections.Generic;
 using System.Linq;
 using NUnit.Framework;
 using DotsGame;
+using System.IO;
+using System.Reflection;
 
 namespace DotsGame.Tests
 {
@@ -13,12 +15,25 @@ namespace DotsGame.Tests
 	[TestFixture]
 	public class DotFunctionsTest
 	{
+		private string DataFolderPath;
+
+		[SetUp]
+		public void Init()
+		{
+			DataFolderPath = Path.GetDirectoryName(Assembly.GetAssembly(typeof(FieldTests)).CodeBase).Replace(@"file:\", "") + @"\..\..\..\Data\";
+		}
+
 		[Test]
 		public void IsRedDotTest()
 		{
 			Field field = new Field(39, 32);
 
-			var buffer = DotsGame.Tests.Properties.Resources.DotFunctionsTest;
+			byte[] buffer;
+			using (var stream = new StreamReader(DataFolderPath + "DotFunctionsTest.sav"))
+			{
+				buffer = new byte[stream.BaseStream.Length];
+				stream.BaseStream.Read(buffer, 0, buffer.Length);
+			}
 
 			for (var i = 58; i < buffer.Length; i += 13)
 			{

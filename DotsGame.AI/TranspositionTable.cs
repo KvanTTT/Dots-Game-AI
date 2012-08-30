@@ -45,7 +45,7 @@ namespace DotsGame.AI
 
 				if (entry->GetDepth() <= depth)
 				{
-					ulong data = HashEntry.PackData(depth, type, move, score);
+					ulong data = HashEntry.PackData(move, score, depth, type);
 
 					Interlocked.Exchange(ref *(long*)&entry->HashKey, (long)(key ^ data));
 					Interlocked.Exchange(ref *(long*)&entry->Data, (long)data);
@@ -61,13 +61,6 @@ namespace DotsGame.AI
 		{
 			for (int i = 0; i < HashEntries_.Length; i++)
 				HashEntries_[i].Data = 0;
-		}
-
-		public static void DecrementDepths()
-		{
-			foreach (var entry in HashEntries_)
-				if (entry.GetDepth() > 0)
-					entry.DecDepth();
 		}
 
 		public IEnumerable<HashEntry> HashEntries

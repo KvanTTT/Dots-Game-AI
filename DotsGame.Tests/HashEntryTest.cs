@@ -10,12 +10,12 @@ namespace DotsGame.Tests
 		[Test]
 		public void PackUnpcackDataTest()
 		{
-			byte depth = 15;
+			byte depth = 255;
 			HashEntryData type = HashEntryData.AlphaType;
 			ushort bestMove = 1167;
 			float score = 123.0342f;
-			
-			ulong data = HashEntry.PackData(depth, type, bestMove, score);
+
+			ulong data = HashEntry.PackData(bestMove, score, depth, type);
 			HashEntry unpackedHashEntry = new HashEntry() { Data = data };
 
 			Assert.AreEqual(data, unpackedHashEntry.Data);

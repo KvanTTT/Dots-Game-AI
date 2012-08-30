@@ -17,19 +17,19 @@ namespace DotsGame.AI
 	public class HashEntryConstants
 	{
 		public const byte DepthShift = 0;
-		public const byte TypeShift = 4;
-		public const byte BestMoveShift = 6;
+		public const byte TypeShift = 8;
+		public const byte BestMoveShift = 10;
 		public const byte ScoreShift = 32;
 	}
 
 	[Flags]
-	public  enum HashEntryData : ulong
+	public enum HashEntryData : ulong
 	{
-		DepthMask =    0xF,
+		DepthMask =    0xFF,
 		TypeMask =     0x3 << HashEntryConstants.TypeShift,
 		BestMoveMask = 0xFFF << HashEntryConstants.BestMoveShift,
 		ScoreMask =    0xFFFFFFFF00000000,
-		// 14 bit still free.
+		// 10 bit still free.
 
 		EmptyType = 0 << HashEntryConstants.TypeShift,
 		ExactType = 1 << HashEntryConstants.TypeShift,
@@ -63,17 +63,12 @@ namespace DotsGame.AI
 			return *(float*)&scoreBitwise;
 		}
 
-		public static unsafe ulong PackData(byte depth, HashEntryData type, ushort bestMove, float score)
+		public static unsafe ulong PackData(ushort bestMove, float score, byte depth, HashEntryData type = HashEntryData.EmptyType)
 		{
 			return depth |
 				(ulong)type |
 				((ulong)bestMove << HashEntryConstants.BestMoveShift) |
 				((ulong)(*(int*)&score) << HashEntryConstants.ScoreShift);
-		}
-		
-		public void DecDepth()
-		{
-			Data--;
 		}
 
 		public override string ToString()

@@ -5,11 +5,11 @@ using DotsGame;
 
 namespace DotsGame.AI
 {
-	public class MoveGenerator : CMoveGenerator
+	public class StandartMoveGenerator : MoveGenerator
 	{
 		#region Constructors
 
-		public MoveGenerator(Field field) :
+		public StandartMoveGenerator(Field field) :
 			base(field)
 		{
 		}
@@ -22,7 +22,7 @@ namespace DotsGame.AI
 		{
 			if (depth == MaxDepth)
 			{
-				Moves = new List<int>(Field.DotsSequenceCount * 2);
+				Moves.Clear();
 
 				foreach (var dotState in Field.DotsSequanceStates)
 					AddRemoveEmptyPositions(dotState.Move.Position);
@@ -44,10 +44,6 @@ namespace DotsGame.AI
 
 				position += Field.RealWidth;
 			}
-		}
-
-		public override void UpdateMoves()
-		{
 		}
 
 		#endregion

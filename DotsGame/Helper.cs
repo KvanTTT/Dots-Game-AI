@@ -24,12 +24,12 @@ namespace DotsGame
 
 		public static bool IsNotPutted(this Dot dot)
 		{
-			return (dot & Dot.Putted) != Dot.Putted;
+			return (dot & Dot.EnableMask) == Dot.Empty;
 		}
 
 		public static bool IsPuttingAllowed(this Dot dot)
 		{
-			return (dot & Dot.AllowingMask) == 0;
+			return (dot & Dot.EnableMask) == Dot.Empty;
 		}
 
 		public static Dot NextPlayer(this Dot player)

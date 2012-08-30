@@ -420,6 +420,11 @@ namespace DotsGame
 		{
 		}
 
+		public FieldWithGroups(string pointsXtFileName)
+			: base(pointsXtFileName)
+		{
+		}
+
 		#endregion
 	}
 }

@@ -6,13 +6,14 @@ using DotsGame;
 
 namespace DotsGame.AI
 {
-	public abstract class CMoveGenerator
+	public abstract class MoveGenerator
 	{
 		#region Constructors
 		
-		public CMoveGenerator(Field field)
+		public MoveGenerator(Field field)
 		{
 			Field = field;
+			Moves = new List<int>(Field.DotsSequenceCount * 2);
 		}
 
 		#endregion
@@ -20,7 +21,9 @@ namespace DotsGame.AI
 		#region Abstract
 		
 		public abstract void GenerateMoves(Dot player, int depth = 0);
-		public abstract void UpdateMoves();
+		public virtual void UpdateMoves()
+		{
+		}
 
 		#endregion
 
@@ -33,6 +36,12 @@ namespace DotsGame.AI
 		}
 
 		public List<int> Moves
+		{
+			get;
+			protected set;
+		}
+
+		public List<ulong> HashEntries
 		{
 			get;
 			protected set;
