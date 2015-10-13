@@ -1,11 +1,8 @@
 ﻿
-Microsoft Visual Studio Solution File, Format Version 11.00
-# Visual Studio 2010
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Dependencies", "Dependencies", "{C5D46E6C-DF40-499A-AE53-EEA55767964C}"
-	ProjectSection(SolutionItems) = preProject
-		Dependencies\nunit.framework.dll = Dependencies\nunit.framework.dll
-	EndProjectSection
-EndProject
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 14
+VisualStudioVersion = 14.0.23107.0
+MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DotsGame.AI", "DotsGame.AI\DotsGame.AI.csproj", "{58622BC8-D9E6-49C1-AEDE-EDF70A0E0993}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DotsGame.Tests", "DotsGame.Tests\DotsGame.Tests.csproj", "{B75A16F6-D3CC-4026-80C4-A8E8E425DB1B}"
