@@ -11,7 +11,7 @@ namespace DotsGame.AI
 		#region Readonly & Fields
 
 		public const int ZeroGroup = 0;
-		public readonly Dot Player;
+		public readonly DotState Player;
 		public readonly List<int> Positions;
 		public readonly int Number;
 		private List<int> EnvelopePositions_;
@@ -20,7 +20,7 @@ namespace DotsGame.AI
 
 		#region Constructors
 		
-		public LinkedGroup(Dot player, int number, List<int> positions)
+		public LinkedGroup(DotState player, int number, List<int> positions)
 		{
 			Player = player;
 			Positions = positions;

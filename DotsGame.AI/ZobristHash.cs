@@ -45,7 +45,7 @@ namespace DotsGame.AI
 			if (Field.LastMoveState == enmMoveState.Add)
 			{
 				int pos = Field.LastPosition;
-				if (Field.CurrentPlayer == Dot.RedPlayer)
+				if (Field.CurrentPlayer == DotState.RedPlayer)
 					pos *= 2;
 				Key ^= HashTable_[pos];
 				
@@ -58,7 +58,7 @@ namespace DotsGame.AI
 					UpdateLastBaseHash();
 
 				int pos = Field.LastPosition;
-				if (Field.CurrentPlayer == Dot.BluePlayer)
+				if (Field.CurrentPlayer == DotState.BluePlayer)
 					pos *= 2;
 				Key ^= HashTable_[pos];
 			}
@@ -101,8 +101,8 @@ namespace DotsGame.AI
 		/// </summary>
 		private void UpdateLastBaseHash()
 		{
-			bool isRed = !((Field.CurrentPlayer == Dot.RedPlayer && Field.LastMoveState == enmMoveState.Add)
-				|| (Field.CurrentPlayer == Dot.BluePlayer && Field.LastMoveState == enmMoveState.Remove)) ? true : false;
+			bool isRed = !((Field.CurrentPlayer == DotState.RedPlayer && Field.LastMoveState == enmMoveState.Add)
+				|| (Field.CurrentPlayer == DotState.BluePlayer && Field.LastMoveState == enmMoveState.Remove)) ? true : false;
 			if (Field.LastMoveCaptureCount < 0)
 				isRed = !isRed;
 			if (isRed)

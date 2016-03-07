@@ -10,7 +10,7 @@ namespace DotsGame.AI
 	{
 		#region Fields
 
-		private Dot[] _dots;
+		private DotState[] _dots;
 
 		private List<LinkedGroup> _groups;
 		private List<LinkedGroup> _ownGroups;
@@ -100,13 +100,13 @@ namespace DotsGame.AI
 		{
 			var result = new List<int>();
 
-			Dot player = _dots[pos].GetPlayer();
+			DotState player = _dots[pos].GetPlayer();
 			var tempStack = new Stack<int>();
-			_dots[pos] |= Dot.Tagged;
+			_dots[pos] |= DotState.Tagged;
 			tempStack.Push(pos);
 			result.Add(pos);
 
-			List<Dot> dots = new List<Dot>();
+			List<DotState> dots = new List<DotState>();
 			while (tempStack.Count != 0)
 			{
 				pos = tempStack.Pop();
@@ -116,7 +116,7 @@ namespace DotsGame.AI
 					int newPos = pos + Field.DiagDeltas[i];
 					if (_dots[newPos].IsPlayerPutted(player) && !_dots[newPos].IsTagged())
 					{
-						_dots[newPos] |= Dot.Tagged;
+						_dots[newPos] |= DotState.Tagged;
 						tempStack.Push(newPos);
 						result.Add(newPos);
 

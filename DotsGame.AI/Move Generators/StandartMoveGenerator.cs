@@ -18,13 +18,13 @@ namespace DotsGame.AI
 
 		#region Overrides
 
-		public override void GenerateMoves(Dot player, int depth = 0)
+		public override void GenerateMoves(DotState player, int depth = 0)
 		{
 			if (depth == MaxDepth)
 			{
 				Moves.Clear();
 
-				foreach (var dotState in Field.DotsSequanceStates)
+				foreach (var dotState in Field.States)
 					AddRemoveEmptyPositions(dotState.Move.Position);
 			}
 		}

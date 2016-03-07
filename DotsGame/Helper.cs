@@ -12,124 +12,124 @@ namespace DotsGame
 		public static int[] NextFirstPosOffsets;
 		public static int[] NextFirstPosOffsetsCCW;
 
-		public static Dot GetPlayer(this Dot dot)
+		public static DotState GetPlayer(this DotState dot)
 		{
-			return dot & Dot.Player;
+			return dot & DotState.Player;
 		}
 
-		public static bool IsPutted(this Dot dot)
+		public static bool IsPutted(this DotState dot)
 		{
-			return (dot & Dot.Putted) == Dot.Putted;
+			return (dot & DotState.Putted) == DotState.Putted;
 		}
 
-		public static bool IsNotPutted(this Dot dot)
+		public static bool IsNotPutted(this DotState dot)
 		{
-			return (dot & Dot.EnableMask) == Dot.Empty;
+			return (dot & DotState.EnableMask) == DotState.Empty;
 		}
 
-		public static bool IsPuttingAllowed(this Dot dot)
+		public static bool IsPuttingAllowed(this DotState dot)
 		{
-			return (dot & Dot.EnableMask) == Dot.Empty;
+			return (dot & DotState.EnableMask) == DotState.Empty;
 		}
 
-		public static Dot NextPlayer(this Dot player)
+		public static DotState NextPlayer(this DotState player)
 		{
-			return (player & Dot.Player) == Dot.RedPlayer ? Dot.BluePlayer : Dot.RedPlayer;
+			return (player & DotState.Player) == DotState.RedPlayer ? DotState.BluePlayer : DotState.RedPlayer;
 		}
 
-		public static bool IsPlayerPutted(this Dot dot, Dot player)
+		public static bool IsPlayerPutted(this DotState dot, DotState player)
 		{
-			return (dot & Dot.EnableMask) == (Dot.Putted | player);
+			return (dot & DotState.EnableMask) == (DotState.Putted | player);
 		}
 
-		public static bool IsRedPutted(this Dot dot)
+		public static bool IsRedPutted(this DotState dot)
 		{
-			return (dot & Dot.EnableMask) == (Dot.Putted | Dot.RedPlayer);
+			return (dot & DotState.EnableMask) == (DotState.Putted | DotState.RedPlayer);
 		}
 
-		public static bool IsBluePutted(this Dot dot)
+		public static bool IsBluePutted(this DotState dot)
 		{
-			return (dot & Dot.EnableMask) == (Dot.Putted | Dot.BluePlayer);
+			return (dot & DotState.EnableMask) == (DotState.Putted | DotState.BluePlayer);
 		}
 
-		public static bool IsZeroSurroundLevel(this Dot dot)
+		public static bool IsZeroSurroundLevel(this DotState dot)
 		{
-			return (dot & Dot.SurroundCountMask) == (Dot)0;
+			return (dot & DotState.SurroundCountMask) == (DotState)0;
 		}
 
-		public static bool IsOneSurroundLevel(this Dot dot)
+		public static bool IsOneSurroundLevel(this DotState dot)
 		{
-			return (dot & Dot.SurroundCountMask) == Dot.FirstSurroundLevel;
+			return (dot & DotState.SurroundCountMask) == DotState.FirstSurroundLevel;
 		}
 
-		public static bool IsMoreThanOneSurroundLevel(this Dot dot)
+		public static bool IsMoreThanOneSurroundLevel(this DotState dot)
 		{
-			return (dot & Dot.SurroundCountMask) > Dot.FirstSurroundLevel;
+			return (dot & DotState.SurroundCountMask) > DotState.FirstSurroundLevel;
 		}
 
-		public static bool IsSurrounded(this Dot dot)
+		public static bool IsSurrounded(this DotState dot)
 		{
-			return (dot & Dot.SurroundCountMask) >= Dot.FirstSurroundLevel;
+			return (dot & DotState.SurroundCountMask) >= DotState.FirstSurroundLevel;
 		}
 
-		public static bool IsRealPutted(this Dot dot)
+		public static bool IsRealPutted(this DotState dot)
 		{
-			return (dot & Dot.RealPutted) == Dot.RealPutted;
+			return (dot & DotState.RealPutted) == DotState.RealPutted;
 		}
 
-		public static bool IsRealRedPlayer(this Dot dot)
+		public static bool IsRealRedPlayer(this DotState dot)
 		{
-			return (dot & Dot.RealPlayer) == Dot.RedRealPlayer;
+			return (dot & DotState.RealPlayer) == DotState.RedRealPlayer;
 		}
 
-		public static bool IsRealBluePlayer(this Dot dot)
+		public static bool IsRealBluePlayer(this DotState dot)
 		{
-			return (dot & Dot.RealPlayer) == Dot.BlueRealPlayer;
+			return (dot & DotState.RealPlayer) == DotState.BlueRealPlayer;
 		}
 
-		public static bool IsEnable(this Dot dot, Dot enableCondition)
+		public static bool IsEnable(this DotState dot, DotState enableCondition)
 		{
-			return (dot & Dot.EnableMask) == enableCondition;
+			return (dot & DotState.EnableMask) == enableCondition;
 		}
 
-		public static bool IsBound(this Dot dot, Dot boundCond)
+		public static bool IsBound(this DotState dot, DotState boundCond)
 		{
-			return (dot & Dot.BoundMask) == boundCond;
+			return (dot & DotState.BoundMask) == boundCond;
 		}
 
-		public static bool IsTagged(this Dot dot)
+		public static bool IsTagged(this DotState dot)
 		{
-			return (dot & Dot.Tagged) == Dot.Tagged;
+			return (dot & DotState.Tagged) == DotState.Tagged;
 		}
 
-		public static bool IsInEmptyBase(this Dot dot)
+		public static bool IsInEmptyBase(this DotState dot)
 		{
-			return (dot & Dot.EmptyBase) == Dot.EmptyBase;
+			return (dot & DotState.EmptyBase) == DotState.EmptyBase;
 		}
 
-		public static void ClearTag(this Dot dot)
+		public static void ClearTag(this DotState dot)
 		{
-			dot &= ~Dot.Tagged;
+			dot &= ~DotState.Tagged;
 		}
 
-		public static Dot GetEnabledCondition(this Dot dot)
+		public static DotState GetEnabledCondition(this DotState dot)
 		{
-			return dot & Dot.EnableMask;
+			return dot & DotState.EnableMask;
 		}
 
-		public static Dot GetDiagGroupNumber(this Dot dot)
+		public static DotState GetDiagGroupNumber(this DotState dot)
 		{
-			return dot & Dot.DiagonalGroupMask;
+			return dot & DotState.DiagonalGroupMask;
 		}
 
-		public static Dot SetDiagonalGroupNumber(this Dot dot, int groupNumber)
+		public static DotState SetDiagonalGroupNumber(this DotState dot, int groupNumber)
 		{
-			return (Dot)((dot & ~Dot.DiagonalGroupMask) | (Dot)groupNumber);
+			return (DotState)((dot & ~DotState.DiagonalGroupMask) | (DotState)groupNumber);
 		}
 
-		public static Dot ClearGroupNumber(this Dot dot)
+		public static DotState ClearGroupNumber(this DotState dot)
 		{
-			return (Dot)(dot & ~Dot.DiagonalGroupMask);
+			return (DotState)(dot & ~DotState.DiagonalGroupMask);
 		}
 
 		static Helper()

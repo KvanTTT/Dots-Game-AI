@@ -8,12 +8,12 @@ namespace DotsGame.Shell
 	public class MoveEventArgs : EventArgs
 	{
 		public enmMoveState Action;
-		public Dot PlayerColor;
+		public DotState PlayerColor;
 		public short Pos;
 		public IEnumerable<short> ChainPoses;
 		public IEnumerable<short> SurPoses;
 
-		public MoveEventArgs(enmMoveState Action, Dot PlayerColor, short Pos, IEnumerable<short> chainPositions, IEnumerable<short> surroundPositions)
+		public MoveEventArgs(enmMoveState Action, DotState PlayerColor, short Pos, IEnumerable<short> chainPositions, IEnumerable<short> surroundPositions)
 		{
 			this.Action = Action;
 			this.PlayerColor = PlayerColor;

@@ -25,10 +25,10 @@ namespace DotsGame
 				chainPosition--;
 
 			// If put in own empty base.
-			if ((_dots[chainPosition] & Dot.Player) == (_dots[LastPosition] & Dot.Player))
+			if ((_dots[chainPosition] & DotState.Player) == (_dots[LastPosition] & DotState.Player))
 			{
 				// Подумать, т.к. здесь могут быть сложности.
-				_dots[LastPosition] &= ~Dot.EmptyBase;
+				_dots[LastPosition] &= ~DotState.EmptyBase;
 				int groupNumber;
 				if (GetInputDots(LastPosition) == 0)
 				{
@@ -36,7 +36,7 @@ namespace DotsGame
 					{
 						// Add new group
 						DiagonalLinkedGroupsCount++;
-						groupNumber = DiagonalLinkedGroupsCount << (int)Dot.DiagonalGroupMaskShift;
+						groupNumber = DiagonalLinkedGroupsCount << (int)DotState.DiagonalGroupMaskShift;
 					}
 					else
 						groupNumber = (int)_dots[LastPosition - 1].GetDiagGroupNumber();
@@ -64,7 +64,7 @@ namespace DotsGame
 
 			// Find first opponent dot.
 			chainPosition++;
-			var opponentEnableCondition = Dot.Putted | CurrentPlayer.NextPlayer();
+			var opponentEnableCondition = DotState.Putted | CurrentPlayer.NextPlayer();
 			var nextPlayer = CurrentPlayer.NextPlayer();
 			do
 			{
@@ -100,7 +100,7 @@ namespace DotsGame
 				{
 					// Add new group
 					DiagonalLinkedGroupsCount++;
-					groupNumber = DiagonalLinkedGroupsCount << (int)Dot.DiagonalGroupMaskShift;
+					groupNumber = DiagonalLinkedGroupsCount << (int)DotState.DiagonalGroupMaskShift;
 				}
 				else
 					groupNumber = (int)_dots[pos - 1].GetDiagGroupNumber();
@@ -124,9 +124,9 @@ namespace DotsGame
 			int pos;
 			var inputDotsCount = _inputChainDots.Count;
 
-			var dotColor = _dots[position] & Dot.Player;
+			var dotColor = _dots[position] & DotState.Player;
 			var enabledCondition = _dots[position].GetEnabledCondition();
-			Dot enemyPlayer = CurrentPlayer.NextPlayer();
+			DotState enemyPlayer = CurrentPlayer.NextPlayer();
 
 			List<int> negativeSquareDotsPositions = new List<int>();
 
@@ -174,7 +174,7 @@ namespace DotsGame
 						_chainDotsPositions.Add(new DotPosition(_chainPositions[j], _dots[_chainPositions[j]]));
 
 						// Mark surrounded dots by flag "Bound".
-						_dots[_chainPositions[j]] |= Dot.Bound;
+						_dots[_chainPositions[j]] |= DotState.Bound;
 						//_dots[_chainPositions[j]] &= ~Dot.DiagonalGroupMask;
 						_dots[_chainPositions[j]] = _dots[_chainPositions[j]].SetDiagonalGroupNumber(newGroup);
 
@@ -247,12 +247,12 @@ namespace DotsGame
 						for (var j = previousSuroundDotsCount; j < _surroundPositions.Count; j++)
 						{
 							// Clear tag.
-							_dots[_surroundPositions[j]] &= ~Dot.Tagged;
+							_dots[_surroundPositions[j]] &= ~DotState.Tagged;
 
 							// Save surrounded dot states for further rollback.
 							_surroundDotsPositions.Add(new DotPosition(_surroundPositions[j], _dots[_surroundPositions[j]]));
 
-							_dots[_surroundPositions[j]] &= ~Dot.DiagonalGroupMask;
+							_dots[_surroundPositions[j]] &= ~DotState.DiagonalGroupMask;
 							SetCaptureFreeState(_surroundPositions[j], dotColor);
 						}
 					}
@@ -262,25 +262,25 @@ namespace DotsGame
 						for (var j = previousChainDotsCount; j < _chainPositions.Count; j++)
 						{
 							// Clear "Bound" flag and set special flag "EmptyBound".
-							_dots[_chainPositions[j]] &= ~Dot.Bound;
-							_dots[_chainPositions[j]] |= Dot.EmptyBound;
+							_dots[_chainPositions[j]] &= ~DotState.Bound;
+							_dots[_chainPositions[j]] |= DotState.EmptyBound;
 						}
 
 						for (var j = previousSuroundDotsCount; j < _surroundPositions.Count; j++)
 						{
 							// Clear tag.
-							_dots[_surroundPositions[j]] &= ~Dot.Tagged;
+							_dots[_surroundPositions[j]] &= ~DotState.Tagged;
 
 							// Save surrounded dot states for further rollback.
 							_surroundDotsPositions.Add(new DotPosition(_surroundPositions[j], _dots[_surroundPositions[j]]));
 
-							_dots[_surroundPositions[j]] &= ~Dot.DiagonalGroupMask;
+							_dots[_surroundPositions[j]] &= ~DotState.DiagonalGroupMask;
 							// If dot is not putted in empty territory then set flag "EmptyBase"
-							if ((_dots[_surroundPositions[j]] & Dot.Putted) == 0)
-								_dots[_surroundPositions[j]] |= Dot.EmptyBase;
+							if ((_dots[_surroundPositions[j]] & DotState.Putted) == 0)
+								_dots[_surroundPositions[j]] |= DotState.EmptyBase;
 						}
 
-						if (dotColor == Dot.RedPlayer)
+						if (dotColor == DotState.RedPlayer)
 							RedSquare -= _lastSquareCaptureCount;
 						else
 							BlueSquare -= _lastSquareCaptureCount;
@@ -297,7 +297,7 @@ namespace DotsGame
 							foreach (var crosswise in crosswiseGroup.Value)
 							{
 								DiagonalLinkedGroupsCount++;
-								FillWithNewGroupNumber(crosswise[2], crosswiseGroup.Key, DiagonalLinkedGroupsCount << (int)Dot.DiagonalGroupMaskShift);
+								FillWithNewGroupNumber(crosswise[2], crosswiseGroup.Key, DiagonalLinkedGroupsCount << (int)DotState.DiagonalGroupMaskShift);
 							}
 						}
 					}
@@ -309,7 +309,7 @@ namespace DotsGame
 			{
 				pos = negativeSquareDotsPositions[j];
 
-				if (_dots[pos].GetDiagGroupNumber() != (Dot)newGroup)
+				if (_dots[pos].GetDiagGroupNumber() != (DotState)newGroup)
 				{
 					_chainDotsPositions.Add(new DotPosition(pos, _dots[pos]));
 					_dots[pos] = _dots[pos].SetDiagonalGroupNumber(newGroup);
@@ -319,7 +319,7 @@ namespace DotsGame
 				{
 					int newPos = pos + Field.VertHorizDeltas[i];
 					if (_dots[newPos].IsEnable(enabledCondition) &&
-						_dots[newPos].GetDiagGroupNumber() != (Dot)newGroup)
+						_dots[newPos].GetDiagGroupNumber() != (DotState)newGroup)
 					{
 						_chainDotsPositions.Add(new DotPosition(newPos, _dots[newPos]));
 						_dots[newPos] = _dots[newPos].SetDiagonalGroupNumber(newGroup);
@@ -351,7 +351,7 @@ namespace DotsGame
 			if (_dots[pos].GetEnabledCondition() == enableCond && !_dots[pos].IsTagged())
 			{
 				_surroundDotsPositions.Add(new DotPosition(pos, _dots[pos]));
-				_dots[pos] = _dots[pos].SetDiagonalGroupNumber(newGroupNumber) | Dot.Tagged;
+				_dots[pos] = _dots[pos].SetDiagonalGroupNumber(newGroupNumber) | DotState.Tagged;
 				_tempList.Add(pos);
 			}
 
@@ -367,21 +367,21 @@ namespace DotsGame
 					if (_dots[newPos].GetEnabledCondition() == enableCond && !_dots[newPos].IsTagged())
 					{
 						_surroundDotsPositions.Add(new DotPosition(newPos, _dots[newPos]));
-						_dots[newPos] = _dots[newPos].SetDiagonalGroupNumber(newGroupNumber) | Dot.Tagged;
+						_dots[newPos] = _dots[newPos].SetDiagonalGroupNumber(newGroupNumber) | DotState.Tagged;
 						_tempList.Add(newPos);
 					}
 				}
 			}
 
 			for (int i = lastSurroundDotsPositionsCount; i < _surroundDotsPositions.Count; i++)
-				_dots[_surroundDotsPositions[i].Position] &= ~Dot.Tagged;
+				_dots[_surroundDotsPositions[i].Position] &= ~DotState.Tagged;
 		}
 
 		private void FillWithNewGroupNumber(int pos, int oldGroupNumber, int newGroupNumber)
 		{
 			_tempList.Clear();
 
-			if (_dots[pos].GetDiagGroupNumber() == (Dot)oldGroupNumber)
+			if (_dots[pos].GetDiagGroupNumber() == (DotState)oldGroupNumber)
 			{
 				_surroundDotsPositions.Add(new DotPosition(pos, _dots[pos]));
 				_dots[pos] = _dots[pos].SetDiagonalGroupNumber(newGroupNumber);
@@ -396,7 +396,7 @@ namespace DotsGame
 				for (int i = 0; i < Field.DiagDeltas.Length; i++)
 				{
 					int newPos = pos + Field.DiagDeltas[i];
-					if (_dots[newPos].GetDiagGroupNumber() == (Dot)oldGroupNumber)
+					if (_dots[newPos].GetDiagGroupNumber() == (DotState)oldGroupNumber)
 					{
 						_surroundDotsPositions.Add(new DotPosition(newPos, _dots[newPos]));
 						_dots[newPos] = _dots[newPos].SetDiagonalGroupNumber(newGroupNumber);
@@ -417,11 +417,6 @@ namespace DotsGame
 
 		public FieldWithGroups(int width, int height, enmSurroundCondition surroundCondition = enmSurroundCondition.Standart)
 			: base(width, height, surroundCondition)
-		{
-		}
-
-		public FieldWithGroups(string pointsXtFileName)
-			: base(pointsXtFileName)
 		{
 		}
 

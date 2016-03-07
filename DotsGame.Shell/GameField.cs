@@ -82,11 +82,11 @@ namespace DotsGame.Shell
 
 		public void SetMoveNumber(int MoveNumber)
 		{
-			if (MoveNumber < Field.DotsSequanceStates.Count())
-				RollbackMoves(Field.DotsSequanceStates.Count() - MoveNumber);
+			if (MoveNumber < Field.States.Count())
+				RollbackMoves(Field.States.Count() - MoveNumber);
 			else
-				if (MoveNumber > Field.DotsSequanceStates.Count())
-					NextMoves(MoveNumber - Field.DotsSequanceStates.Count());
+				if (MoveNumber > Field.States.Count())
+					NextMoves(MoveNumber - Field.States.Count());
 		}
 
 		public void RollbackMoves(int Count)
@@ -99,7 +99,7 @@ namespace DotsGame.Shell
 		{
 			for (int i = 0; i < Count; i++)
 			{
-				int pos = InitSequance[Field.DotsSequanceStates.Count()];
+				int pos = InitSequance[Field.States.Count()];
 				int x, y;
 				Field.GetPosition(pos, out x, out y);
 				MakeMove(x, y);

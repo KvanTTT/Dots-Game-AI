@@ -42,7 +42,7 @@ namespace DotsGame.Shell
 		Brush CrosswiseStroke = Brushes.SpringGreen;
 		double PointCellRatio = 0.23;
 		double LineCellRatio = 0.14;
-
+        
 		int FieldWidth, FieldHeight;
 		GameField GameField;
 		Field Field;
@@ -110,7 +110,7 @@ namespace DotsGame.Shell
 			if (e.Action == enmMoveState.Add)
 			{
 				HashField.UpdateHash();
-				DrawState(Field.DotsSequanceStates.Last());
+				DrawState(Field.States.Last());
 			}
 			else
 				if (e.Action == enmMoveState.Remove)
@@ -144,7 +144,7 @@ namespace DotsGame.Shell
 			lblX.Content = x;
 			lblY.Content = y;
 			lblPos.Content = pos;
-			lblDiagGroup.Content = (int)Field[pos].GetDiagGroupNumber() >> (int)Dot.DiagonalGroupMaskShift;
+			lblDiagGroup.Content = (int)Field[pos].GetDiagGroupNumber() >> (int)DotState.DiagonalGroupMaskShift;
 		}
 
 		private void btnUnmakeMove_Click(object sender, RoutedEventArgs e)
@@ -181,8 +181,8 @@ namespace DotsGame.Shell
 			foreach (var group in analyzer.Groups)
 			{
 				var polygon = new Polygon { Stretch = Stretch.None };
-				polygon.Stroke = group.Player == Dot.RedPlayer ? Player1Stroke : Player2Stroke;
-				polygon.Fill = group.Player == Dot.RedPlayer ? Player1Fill : Player2Fill;
+				polygon.Stroke = group.Player == DotState.RedPlayer ? Player1Stroke : Player2Stroke;
+				polygon.Fill = group.Player == DotState.RedPlayer ? Player1Fill : Player2Fill;
 				polygon.StrokeMiterLimit = 1;
 				foreach (var pos in group.EnvelopePositions)
 					polygon.Points.Add(GetGraphicaPoint(pos));
@@ -207,25 +207,25 @@ namespace DotsGame.Shell
 			foreach (var crosswise in analyzer.Crosswises)
 			{
 				var polygon = new Polygon { Stretch = Stretch.None };
-				polygon.Stroke = CrosswiseStroke; ;
+				polygon.Stroke = CrosswiseStroke;
 				polygon.Fill = null;
 				int x, y;
 				Field.GetPosition(crosswise.Value.Position, out x, out y);
 
 				if (crosswise.Value.Orientation == enmCrosswiseOrientation.BottomRight)
 				{
-					polygon.Points.Add(GetGraphicaPoint(x, y));
-					polygon.Points.Add(GetGraphicaPoint(x + 1, y));
-					polygon.Points.Add(GetGraphicaPoint(x + 1, y + 1));
-					polygon.Points.Add(GetGraphicaPoint(x, y + 1));
+					polygon.Points.Add(GetGraphicalPoint(x, y));
+					polygon.Points.Add(GetGraphicalPoint(x + 1, y));
+					polygon.Points.Add(GetGraphicalPoint(x + 1, y + 1));
+					polygon.Points.Add(GetGraphicalPoint(x, y + 1));
 				}
 				else
 					if (crosswise.Value.Orientation == enmCrosswiseOrientation.BottomLeft)
 					{
-						polygon.Points.Add(GetGraphicaPoint(x, y));
-						polygon.Points.Add(GetGraphicaPoint(x - 1, y));
-						polygon.Points.Add(GetGraphicaPoint(x - 1, y + 1));
-						polygon.Points.Add(GetGraphicaPoint(x, y + 1));
+						polygon.Points.Add(GetGraphicalPoint(x, y));
+						polygon.Points.Add(GetGraphicalPoint(x - 1, y));
+						polygon.Points.Add(GetGraphicalPoint(x - 1, y + 1));
+						polygon.Points.Add(GetGraphicalPoint(x, y + 1));
 					}
 
 				CrosswisePolygons.Add(polygon);
@@ -360,7 +360,7 @@ namespace DotsGame.Shell
 				sliderMain.ValueChanged -= sliderMain_ValueChanged;
 				sliderMain.SmallChange = 1;
 				sliderMain.Minimum = 1;
-				sliderMain.Maximum = Field.DotsSequanceStates.Count();
+				sliderMain.Maximum = Field.States.Count();
 				sliderMain.Value = sliderMain.Maximum;
 				sliderMain.ValueChanged += sliderMain_ValueChanged;
 			}
@@ -491,7 +491,7 @@ namespace DotsGame.Shell
 				a += CellSize;
 			}
 
-			foreach (var P in Field.DotsSequanceStates)
+			foreach (var P in Field.States)
 				DrawState(P);
 		}
 
@@ -499,10 +499,10 @@ namespace DotsGame.Shell
 		{
 			int x, y;
 			Field.GetPosition(pos, out x, out y);
-			return GetGraphicaPoint(x, y);
+			return GetGraphicalPoint(x, y);
 		}
 
-		private Point GetGraphicaPoint(int x, int y)
+		private Point GetGraphicalPoint(int x, int y)
 		{
 			return new Point((x - 1) * CellSize + CellSizeDiv2, (y - 1) * CellSize + CellSizeDiv2);
 		}

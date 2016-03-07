@@ -1,0 +1,10 @@
+﻿<Window xmlns="https://github.com/perspex" Width="400" Height="120"  SizeToContent="WidthAndHeight">
+    <StackPanel Gap="10" Margin="10">
+      <TextBlock>Playdots (Vk) game Url or Id</TextBlock>
+      <TextBox Name="InputTextBox" ></TextBox>
+      <Grid ColumnDefinitions="*,10,*">
+        <Button Name="OkButton">OK</Button>
+        <Button Grid.Column="2" Name="CancelButton">Cancel</Button>
+      </Grid>
+    </StackPanel>
+</Window>

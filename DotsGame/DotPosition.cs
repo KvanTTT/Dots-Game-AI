@@ -9,7 +9,7 @@ namespace DotsGame
 	[StructLayout(LayoutKind.Sequential, Pack=1)]
 	public struct DotPosition
 	{
-		public Dot Dot
+		public DotState Dot
 		{
 			get;
 			set;
@@ -21,7 +21,7 @@ namespace DotsGame
 			set;
 		}
 
-		public DotPosition(int pos, Dot point)
+		public DotPosition(int pos, DotState point)
 			: this()
 		{
 			Position = (short)pos;

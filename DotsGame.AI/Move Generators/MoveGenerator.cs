@@ -20,7 +20,7 @@ namespace DotsGame.AI
 
 		#region Abstract
 		
-		public abstract void GenerateMoves(Dot player, int depth = 0);
+		public abstract void GenerateMoves(DotState player, int depth = 0);
 		public virtual void UpdateMoves()
 		{
 		}
