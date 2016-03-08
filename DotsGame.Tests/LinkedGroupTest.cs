@@ -1,9 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using DotsGame.AI;
 using NUnit.Framework;
-using DotsGame;
-using DotsGame.AI;
+using System.Linq;
 
 namespace DotsGame.Tests
 {
@@ -11,7 +8,7 @@ namespace DotsGame.Tests
     public class LinkedGroupTest
     {
         [Test]
-        public void EnvelopeOneDotTest()
+        public void Envelope_OneDot()
         {
             int startX = 16;
             int startY = 16;
@@ -29,7 +26,7 @@ namespace DotsGame.Tests
         }
 
         [Test]
-        public void EnvelopeTwoDotsTest()
+        public void Envelope_TwoDots()
         {
             int startX = 16;
             int startY = 16;
@@ -45,7 +42,7 @@ namespace DotsGame.Tests
         }
 
         [Test]
-        public void EnvelopeThreeDotsTest()
+        public void Envelope_ThreeDots()
         {
             int startX = 16;
             int startY = 16;
@@ -65,7 +62,7 @@ namespace DotsGame.Tests
         ///A test for BuildEnvelope
         ///</summary>
         [Test]
-        public void EnvelopeManyDotsTest()
+        public void Envelope_ManyDots()
         {
             int startX = 16;
             int startY = 16;
@@ -103,7 +100,7 @@ namespace DotsGame.Tests
         }
 
         [Test]
-        public void EnvelopeManyDotsTest2()
+        public void Envelope_ManyDots2()
         {
             int startX = 16;
             int startY = 16;

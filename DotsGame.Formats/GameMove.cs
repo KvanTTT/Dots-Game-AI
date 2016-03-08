@@ -14,7 +14,7 @@ namespace DotsGame
 
         public int Column { get; set; }
 
-        public static GameMove Root => new GameMove(-1, -1, -1);
+        public static readonly GameMove Root = new GameMove(-1, 0, 0);
 
         public GameMove(int playerNumber, int row, int column)
         {

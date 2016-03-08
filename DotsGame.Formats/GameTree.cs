@@ -98,19 +98,28 @@ namespace DotsGame
         public GameMovesDiff GetMovesDiff(GameTree neighborNode)
         {
             List<GameTree> parents = new List<GameTree>();
-            List<GameTree> neighborParents = new List<GameTree>();
 
             GameTree parent = this;
             do
             {
+                if (parent == neighborNode)
+                {
+                    return new GameMovesDiff(parents.Count, GameMovesDiff.EmptyMoves);
+                }
                 parents.Add(parent);
                 parent = parent.Parent;
             }
             while (parent != null);
 
+            List<GameTree> neighborParents = new List<GameTree>();
             GameTree neighborParent = neighborNode;
             do
             {
+                if (neighborParent == this)
+                {
+                    neighborParents.Reverse();
+                    return new GameMovesDiff(0, neighborParents.Select(tree => tree.Move).ToArray());
+                }
                 neighborParents.Add(neighborParent);
                 neighborParent = neighborParent.Parent;
             }
@@ -125,16 +134,25 @@ namespace DotsGame
                 neighborParentInd--;
             }
             parentInd++;
+            if (neighborParentInd > 0 && neighborParents[neighborParentInd].Move.IsRoot)
+            {
+                neighborParentInd--;
+            }
 
             int unmakeMovesCount = parentInd;
-            var makeMoves = new List<GameMove>();
-            for (int i = neighborParentInd; i >= 0; i--)
+            List<GameMove> makeMoves;
+            if (neighborParentInd >= 0)
             {
-                var move = neighborParents[i].GameMoves.First();
-                if (!move.IsRoot)
+                makeMoves = new List<GameMove>();
+                for (int i = neighborParentInd; i >= 0; i--)
                 {
+                    var move = neighborParents[i].GameMoves.First();
                     makeMoves.Add(move);
                 }
+            }
+            else
+            {
+                makeMoves = GameMovesDiff.EmptyMoves;
             }
 
             var result = new GameMovesDiff(unmakeMovesCount, makeMoves);

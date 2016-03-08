@@ -8,6 +8,8 @@ namespace DotsGame
 {
     public struct GameMovesDiff
     {
+        internal readonly static List<GameMove> EmptyMoves = new List<GameMove>();
+
         public int UnmakeMovesCount;
 
         public IList<GameMove> MakeMoves;
