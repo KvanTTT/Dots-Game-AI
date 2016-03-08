@@ -29,7 +29,7 @@ namespace DotsGame.AI
 			HashEntries = new List<ulong>(Field.DotsSequenceCount * 2);
 		}
 
-		public override void GenerateMoves(Dot player, int depth = 0)
+		public override void GenerateMoves(DotState player, int depth = 0)
 		{
 			HashEntries.Clear();
 			var curPlayer = Field.CurrentPlayer;
@@ -51,7 +51,7 @@ namespace DotsGame.AI
 			Field.CurrentPlayer = curPlayer;
 		}
 
-		private void ForcedAttack(Dot player, MovesSequence firstMovesSequence, MovesSequence curMovesSequence, int depth, bool reversed, bool firstReversed)
+		private void ForcedAttack(DotState player, MovesSequence firstMovesSequence, MovesSequence curMovesSequence, int depth, bool reversed, bool firstReversed)
 		{
 			int ind = reversed ? 1 : 0;
 			int ind2 = 1 - ind;
@@ -107,7 +107,7 @@ namespace DotsGame.AI
 			Field.UnmakeMove();
 		}
 
-		public List<MovesSequence> FindCapturesMoves(Dot player, int depth = 1, List<short> centerPositions = null, bool findWithLessDepth = true)
+		public List<MovesSequence> FindCapturesMoves(DotState player, int depth = 1, List<short> centerPositions = null, bool findWithLessDepth = true)
 		{
 			if (depth == 1)
 				return FindCapturesMovesDepthOne(player, centerPositions);
@@ -116,12 +116,12 @@ namespace DotsGame.AI
 			throw new NotImplementedException();
 		}
 
-		public List<MovesSequence> FindDefenceMoves(Dot player)
+		public List<MovesSequence> FindDefenceMoves(DotState player)
 		{
 			return FindCapturesMoves(player.NextPlayer(), 1, null);
 		}
 
-		private List<MovesSequence> FindCapturesMovesDepthOne(Dot player, List<short> centerPositions)
+		private List<MovesSequence> FindCapturesMovesDepthOne(DotState player, List<short> centerPositions)
 		{
 			var result = new List<MovesSequence>();
 			var visitedPositions = new HashSet<int>();
@@ -162,7 +162,7 @@ namespace DotsGame.AI
 			return result;
 		}
 
-		private List<MovesSequence> FindCapturesMovesDepthTwo(Dot player, bool findWithLessDepth, List<short> centerPositions)
+		private List<MovesSequence> FindCapturesMovesDepthTwo(DotState player, bool findWithLessDepth, List<short> centerPositions)
 		{
 			var result = new List<MovesSequence>();
 			var visitedPositions = new HashSet<int>();

@@ -22,7 +22,7 @@ namespace DotsGame
 	/// 11 - blue dot is putted.
 	/// </summary>
 	[Flags]
-	public enum Dot : int
+	public enum DotState : int
 	{
 		Player = 1 << 0,
 		Putted = 1 << 1,
@@ -41,9 +41,9 @@ namespace DotsGame
 		Empty = 0,
 		Invalid = 1,
 
-		EnableMask = Dot.Putted | Dot.Player,
-		BoundMask = Dot.Bound | Dot.Putted | Dot.Player,
-		AllowingMask = Dot.Putted,
+		EnableMask = DotState.Putted | DotState.Player,
+		BoundMask = DotState.Bound | DotState.Putted | DotState.Player,
+		AllowingMask = DotState.Putted,
 		SurroundCountMask = (1 << 8) | (1 << 9), // 2 bits are enough for base depth saving.
 		FirstSurroundLevel = 1 << 8,
 

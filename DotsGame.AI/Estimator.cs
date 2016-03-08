@@ -25,9 +25,9 @@ namespace DotsGame.AI
 
 		#region Public Methods
 
-		public float Estimate(Dot player)
+		public float Estimate(DotState player)
 		{
-			if (player == Dot.RedPlayer)
+			if (player == DotState.RedPlayer)
 				return (Field.RedCaptureCount - Field.BlueCaptureCount) +
 					   (Field.RedSquare - Field.BlueSquare) * AiSettings.SquareCoef;
 			else

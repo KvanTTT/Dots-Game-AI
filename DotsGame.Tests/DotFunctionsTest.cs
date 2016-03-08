@@ -9,206 +9,192 @@ using System.Reflection;
 
 namespace DotsGame.Tests
 {
-	/// <summary>
-	/// Summary description for FieldFunctionsTest
-	/// </summary>
-	[TestFixture]
-	public class DotFunctionsTest
-	{
-		private string DataFolderPath;
+    /// <summary>
+    /// Summary description for FieldFunctionsTest
+    /// </summary>
+    [TestFixture]
+    public class DotFunctionsTest
+    {
+        [Test]
+        public void IsRedDotTest()
+        {
+            GameMove[] moves = TestUtils.LoadMovesFromPointsXt("DotFunctionsTest.sav");
+            Field field = new Field(39, 32);
 
-		[SetUp]
-		public void Init()
-		{
-			DataFolderPath = Path.GetDirectoryName(Assembly.GetAssembly(typeof(FieldTests)).CodeBase).Replace(@"file:\", "") + @"\..\..\..\Data\";
-		}
+            foreach (var move in moves)
+            {
+                field.MakeMove(move.Column, move.Row);
+                if (field.DotsSequenceCount == 25)
+                {
+                    int pos = Field.GetPosition(13, 13);
 
-		[Test]
-		public void IsRedDotTest()
-		{
-			Field field = new Field(39, 32);
+                    Assert.IsTrue(field[pos].IsRedPutted());
+                    Assert.IsTrue(field[pos + 1].IsRedPutted());
+                    Assert.IsTrue(field[pos + 2].IsRedPutted());
+                    Assert.IsTrue(field[pos + 3].IsRedPutted());
+                }
+                else if (field.DotsSequenceCount == 58)
+                {
+                    int pos = Field.GetPosition(13, 13);
 
-			byte[] buffer;
-			using (var stream = new StreamReader(DataFolderPath + "DotFunctionsTest.sav"))
-			{
-				buffer = new byte[stream.BaseStream.Length];
-				stream.BaseStream.Read(buffer, 0, buffer.Length);
-			}
+                    Assert.IsTrue(field[pos].IsBluePutted());
+                    Assert.IsTrue(field[pos + 1].IsBluePutted());
+                    Assert.IsTrue(field[pos + 2].IsBluePutted());
+                    Assert.IsTrue(field[pos + 3].IsBluePutted());
+                    Assert.IsTrue(field[Field.GetPosition(13 - 3, 13 - 1)].IsBluePutted());
+                    Assert.IsTrue(field[Field.GetPosition(13 + 5, 13)].IsBluePutted());
 
-			for (var i = 58; i < buffer.Length; i += 13)
-			{
-				field.MakeMove(buffer[i] + 1, buffer[i + 1] + 1);
-				if (field.DotsSequenceCount == 25)
-				{
-					int pos = Field.GetPosition(13, 13);
+                    Assert.IsFalse(field[pos].IsRedPutted());
+                    Assert.IsFalse(field[pos + 1].IsRedPutted());
+                    Assert.IsFalse(field[pos + 2].IsRedPutted());
+                    Assert.IsFalse(field[pos + 3].IsRedPutted());
+                }
+            }
 
-					Assert.IsTrue(field[pos].IsRedPutted());
-					Assert.IsTrue(field[pos + 1].IsRedPutted());
-					Assert.IsTrue(field[pos + 2].IsRedPutted());
-					Assert.IsTrue(field[pos + 3].IsRedPutted());
-				}
-				else if (field.DotsSequenceCount == 58)
-				{
-					int pos = Field.GetPosition(13, 13);
+            Assert.AreEqual(0, field.RedCaptureCount);
+            Assert.AreEqual(16, field.BlueCaptureCount);
 
-					Assert.IsTrue(field[pos].IsBluePutted());
-					Assert.IsTrue(field[pos + 1].IsBluePutted());
-					Assert.IsTrue(field[pos + 2].IsBluePutted());
-					Assert.IsTrue(field[pos + 3].IsBluePutted());
-					Assert.IsTrue(field[Field.GetPosition(13 - 3, 13 - 1)].IsBluePutted());
-					Assert.IsTrue(field[Field.GetPosition(13 + 5, 13)].IsBluePutted());
+            field.UnmakeAllMoves();
 
-					Assert.IsFalse(field[pos].IsRedPutted());
-					Assert.IsFalse(field[pos + 1].IsRedPutted());
-					Assert.IsFalse(field[pos + 2].IsRedPutted());
-					Assert.IsFalse(field[pos + 3].IsRedPutted());
-				}
-			}
+            Assert.AreEqual(0, field.RedCaptureCount);
+            Assert.AreEqual(0, field.BlueCaptureCount);
+            Assert.IsTrue(field.IsEmpty);
+        }
 
-			Assert.AreEqual(0, field.RedCaptureCount);
-			Assert.AreEqual(16, field.BlueCaptureCount);
+        [Test]
+        public void GetNextPosTest()
+        {
+            int startX = 16;
+            int startY = 16;
 
-			field.UnmakeAllMoves();
+            int centerPos = Field.GetPosition(startX, startY);
+            int pos = centerPos - Field.RealWidth - 1;
 
-			Assert.AreEqual(0, field.RedCaptureCount);
-			Assert.AreEqual(0, field.BlueCaptureCount);
-			Assert.IsTrue(field.IsEmpty);
-		}
+            Field.GetNextPos(centerPos, ref pos);
+            Assert.AreEqual(centerPos - Field.RealWidth, pos);
 
-		[Test]
-		public void GetNextPosTest()
-		{
-			int startX = 16;
-			int startY = 16;
+            Field.GetNextPos(centerPos, ref pos);
+            Assert.AreEqual(centerPos - Field.RealWidth + 1, pos);
 
-			int centerPos = Field.GetPosition(startX, startY);
-			int pos = centerPos - Field.RealWidth - 1;
+            Field.GetNextPos(centerPos, ref pos);
+            Assert.AreEqual(centerPos + 1, pos);
 
-			Field.GetNextPos(centerPos, ref pos);
-			Assert.AreEqual(centerPos - Field.RealWidth, pos);
+            Field.GetNextPos(centerPos, ref pos);
+            Assert.AreEqual(centerPos + Field.RealWidth + 1, pos);
 
-			Field.GetNextPos(centerPos, ref pos);
-			Assert.AreEqual(centerPos - Field.RealWidth + 1, pos);
+            Field.GetNextPos(centerPos, ref pos);
+            Assert.AreEqual(centerPos + Field.RealWidth, pos);
 
-			Field.GetNextPos(centerPos, ref pos);
-			Assert.AreEqual(centerPos + 1, pos);
+            Field.GetNextPos(centerPos, ref pos);
+            Assert.AreEqual(centerPos + Field.RealWidth - 1, pos);
 
-			Field.GetNextPos(centerPos, ref pos);
-			Assert.AreEqual(centerPos + Field.RealWidth + 1, pos);
+            Field.GetNextPos(centerPos, ref pos);
+            Assert.AreEqual(centerPos - 1, pos);
 
-			Field.GetNextPos(centerPos, ref pos);
-			Assert.AreEqual(centerPos + Field.RealWidth, pos);
+            Field.GetNextPos(centerPos, ref pos);
+            Assert.AreEqual(centerPos - Field.RealWidth - 1, pos);
+        }
 
-			Field.GetNextPos(centerPos, ref pos);
-			Assert.AreEqual(centerPos + Field.RealWidth - 1, pos);
+        [Test]
+        public void GetFirstNextPosTest()
+        {
+            int startX = 16;
+            int startY = 16;
 
-			Field.GetNextPos(centerPos, ref pos);
-			Assert.AreEqual(centerPos - 1, pos);
+            int centerPos = Field.GetPosition(startX, startY);
+            int pos = centerPos - Field.RealWidth - 1;
+            int firstNextPos;
 
-			Field.GetNextPos(centerPos, ref pos);
-			Assert.AreEqual(centerPos - Field.RealWidth - 1, pos);
-		}
+            Field.GetNextPos(centerPos, ref pos);
+            firstNextPos = pos;
+            Field.GetFirstNextPos(centerPos, ref firstNextPos);
+            Assert.AreEqual(centerPos + Field.RealWidth + 1, firstNextPos);
 
-		[Test]
-		public void GetFirstNextPosTest()
-		{
-			int startX = 16;
-			int startY = 16;
+            Field.GetNextPos(centerPos, ref pos);
+            firstNextPos = pos;
+            Field.GetFirstNextPos(centerPos, ref firstNextPos);
+            Assert.AreEqual(centerPos + Field.RealWidth + 1, firstNextPos);
 
-			int centerPos = Field.GetPosition(startX, startY);
-			int pos = centerPos - Field.RealWidth - 1;
-			int firstNextPos;
+            Field.GetNextPos(centerPos, ref pos);
+            firstNextPos = pos;
+            Field.GetFirstNextPos(centerPos, ref firstNextPos);
+            Assert.AreEqual(centerPos + Field.RealWidth - 1, firstNextPos);
 
-			Field.GetNextPos(centerPos, ref pos);
-			firstNextPos = pos;
-			Field.GetFirstNextPos(centerPos, ref firstNextPos);
-			Assert.AreEqual(centerPos + Field.RealWidth + 1, firstNextPos);
+            Field.GetNextPos(centerPos, ref pos);
+            firstNextPos = pos;
+            Field.GetFirstNextPos(centerPos, ref firstNextPos);
+            Assert.AreEqual(centerPos + Field.RealWidth - 1, firstNextPos);
 
-			Field.GetNextPos(centerPos, ref pos);
-			firstNextPos = pos;
-			Field.GetFirstNextPos(centerPos, ref firstNextPos);
-			Assert.AreEqual(centerPos + Field.RealWidth + 1, firstNextPos);
+            Field.GetNextPos(centerPos, ref pos);
+            firstNextPos = pos;
+            Field.GetFirstNextPos(centerPos, ref firstNextPos);
+            Assert.AreEqual(centerPos - Field.RealWidth - 1, firstNextPos);
 
-			Field.GetNextPos(centerPos, ref pos);
-			firstNextPos = pos;
-			Field.GetFirstNextPos(centerPos, ref firstNextPos);
-			Assert.AreEqual(centerPos + Field.RealWidth - 1, firstNextPos);
+            Field.GetNextPos(centerPos, ref pos);
+            firstNextPos = pos;
+            Field.GetFirstNextPos(centerPos, ref firstNextPos);
+            Assert.AreEqual(centerPos - Field.RealWidth - 1, firstNextPos);
 
-			Field.GetNextPos(centerPos, ref pos);
-			firstNextPos = pos;
-			Field.GetFirstNextPos(centerPos, ref firstNextPos);
-			Assert.AreEqual(centerPos + Field.RealWidth - 1, firstNextPos);
+            Field.GetNextPos(centerPos, ref pos);
+            firstNextPos = pos;
+            Field.GetFirstNextPos(centerPos, ref firstNextPos);
+            Assert.AreEqual(centerPos - Field.RealWidth + 1, firstNextPos);
 
-			Field.GetNextPos(centerPos, ref pos);
-			firstNextPos = pos;
-			Field.GetFirstNextPos(centerPos, ref firstNextPos);
-			Assert.AreEqual(centerPos - Field.RealWidth - 1, firstNextPos);
+            Field.GetNextPos(centerPos, ref pos);
+            firstNextPos = pos;
+            Field.GetFirstNextPos(centerPos, ref firstNextPos);
+            Assert.AreEqual(centerPos - Field.RealWidth + 1, firstNextPos);
+        }
 
-			Field.GetNextPos(centerPos, ref pos);
-			firstNextPos = pos;
-			Field.GetFirstNextPos(centerPos, ref firstNextPos);
-			Assert.AreEqual(centerPos - Field.RealWidth - 1, firstNextPos);
+        [Test]
+        public void GetFirstNextPosCCWTest()
+        {
+            int startX = 16;
+            int startY = 16;
 
-			Field.GetNextPos(centerPos, ref pos);
-			firstNextPos = pos;
-			Field.GetFirstNextPos(centerPos, ref firstNextPos);
-			Assert.AreEqual(centerPos - Field.RealWidth + 1, firstNextPos);
+            int centerPos = Field.GetPosition(startX, startY);
+            int pos = centerPos - Field.RealWidth - 1;
+            int firstNextPos;
 
-			Field.GetNextPos(centerPos, ref pos);
-			firstNextPos = pos;
-			Field.GetFirstNextPos(centerPos, ref firstNextPos);
-			Assert.AreEqual(centerPos - Field.RealWidth + 1, firstNextPos);
-		}
+            Field.GetNextPos(centerPos, ref pos);
+            firstNextPos = pos;
+            Field.GetFirstNextPosCCW(centerPos, ref firstNextPos);
+            Assert.AreEqual(centerPos + Field.RealWidth - 1, firstNextPos);
 
-		[Test]
-		public void GetFirstNextPosCCWTest()
-		{
-			int startX = 16;
-			int startY = 16;
+            Field.GetNextPos(centerPos, ref pos);
+            firstNextPos = pos;
+            Field.GetFirstNextPosCCW(centerPos, ref firstNextPos);
+            Assert.AreEqual(centerPos - Field.RealWidth - 1, firstNextPos);
 
-			int centerPos = Field.GetPosition(startX, startY);
-			int pos = centerPos - Field.RealWidth - 1;
-			int firstNextPos;
+            Field.GetNextPos(centerPos, ref pos);
+            firstNextPos = pos;
+            Field.GetFirstNextPosCCW(centerPos, ref firstNextPos);
+            Assert.AreEqual(centerPos - Field.RealWidth - 1, firstNextPos);
 
-			Field.GetNextPos(centerPos, ref pos);
-			firstNextPos = pos;
-			Field.GetFirstNextPosCCW(centerPos, ref firstNextPos);
-			Assert.AreEqual(centerPos + Field.RealWidth - 1, firstNextPos);
+            Field.GetNextPos(centerPos, ref pos);
+            firstNextPos = pos;
+            Field.GetFirstNextPosCCW(centerPos, ref firstNextPos);
+            Assert.AreEqual(centerPos - Field.RealWidth + 1, firstNextPos);
 
-			Field.GetNextPos(centerPos, ref pos);
-			firstNextPos = pos;
-			Field.GetFirstNextPosCCW(centerPos, ref firstNextPos);
-			Assert.AreEqual(centerPos - Field.RealWidth - 1, firstNextPos);
+            Field.GetNextPos(centerPos, ref pos);
+            firstNextPos = pos;
+            Field.GetFirstNextPosCCW(centerPos, ref firstNextPos);
+            Assert.AreEqual(centerPos - Field.RealWidth + 1, firstNextPos);
 
-			Field.GetNextPos(centerPos, ref pos);
-			firstNextPos = pos;
-			Field.GetFirstNextPosCCW(centerPos, ref firstNextPos);
-			Assert.AreEqual(centerPos - Field.RealWidth - 1, firstNextPos);
+            Field.GetNextPos(centerPos, ref pos);
+            firstNextPos = pos;
+            Field.GetFirstNextPosCCW(centerPos, ref firstNextPos);
+            Assert.AreEqual(centerPos + Field.RealWidth + 1, firstNextPos);
 
-			Field.GetNextPos(centerPos, ref pos);
-			firstNextPos = pos;
-			Field.GetFirstNextPosCCW(centerPos, ref firstNextPos);
-			Assert.AreEqual(centerPos - Field.RealWidth + 1, firstNextPos);
+            Field.GetNextPos(centerPos, ref pos);
+            firstNextPos = pos;
+            Field.GetFirstNextPosCCW(centerPos, ref firstNextPos);
+            Assert.AreEqual(centerPos + Field.RealWidth + 1, firstNextPos);
 
-			Field.GetNextPos(centerPos, ref pos);
-			firstNextPos = pos;
-			Field.GetFirstNextPosCCW(centerPos, ref firstNextPos);
-			Assert.AreEqual(centerPos - Field.RealWidth + 1, firstNextPos);
-
-			Field.GetNextPos(centerPos, ref pos);
-			firstNextPos = pos;
-			Field.GetFirstNextPosCCW(centerPos, ref firstNextPos);
-			Assert.AreEqual(centerPos + Field.RealWidth + 1, firstNextPos);
-
-			Field.GetNextPos(centerPos, ref pos);
-			firstNextPos = pos;
-			Field.GetFirstNextPosCCW(centerPos, ref firstNextPos);
-			Assert.AreEqual(centerPos + Field.RealWidth + 1, firstNextPos);
-
-			Field.GetNextPos(centerPos, ref pos);
-			firstNextPos = pos;
-			Field.GetFirstNextPosCCW(centerPos, ref firstNextPos);
-			Assert.AreEqual(centerPos + Field.RealWidth - 1, firstNextPos);
-		}
-	}
+            Field.GetNextPos(centerPos, ref pos);
+            firstNextPos = pos;
+            Field.GetFirstNextPosCCW(centerPos, ref firstNextPos);
+            Assert.AreEqual(centerPos + Field.RealWidth - 1, firstNextPos);
+        }
+    }
 }

@@ -6,462 +6,446 @@ using System.Reflection;
 
 namespace DotsGame.Tests
 {
-	[TestFixture]
-	public class FieldTests
-	{
-		private string DataFolderPath;
-
-		[SetUp]
-		public void Init()
-		{
-			DataFolderPath = Path.GetDirectoryName(Assembly.GetAssembly(typeof(FieldTests)).CodeBase).Replace(@"file:\", "") + @"\..\..\..\Data\";
-		}
-
-		#region Tests
-		
-		[Test]
-		public virtual void SimpleSequenceTest()
-		{
-			SimpleSequenceTest(new Field(39, 32));
-		}
-
-		[Test]
-		public virtual void BlueSurroundFirstTest()
-		{
-			BlueSurroundFirstTest(new Field(39, 32));
-		}
-
-		[Test]
-		public virtual void OneBaseTest()
-		{
-			OneBaseTest(new Field(39, 32));
-		}
-
-		[Test]
-		public virtual void BaseInBaseTest()
-		{
-			BaseInBaseTest(new Field(39, 32));
-		}
-
-		[Test]
-		public virtual void ComplexBaseInBaseTest()
-		{
-			ComplexBaseInBaseTest(new Field(39, 32));
-		}
-
-		[Test]
-		public virtual void EmptyBaseTest()
-		{
-			EmptyBaseTest(new Field(39, 32));
-		}
-
-		[Test]
-		public virtual void BlueSurroundFirstInEmptyBase()
-		{
-			BlueSurroundFirstInEmptyBase(new Field(39, 32));
-		}
-
-		[Test]
-		public virtual void ThreeAdjacentBasesTest()
-		{
-			ThreeAdjacentBasesTest(new Field(39, 32));
-		}
-
-		[Test]
-		public virtual void BigEmptyBaseTest()
-		{
-			BigEmptyBaseTest(new Field(39, 32));
-		}
-
-		[Test]
-		public virtual void UCTBagEmptyBaseTest()
-		{
-			UCTBagEmptyBaseTest(new Field(39, 32));
-		}
-
-		[Test]
-		public virtual void VerylongGameTest()
-		{
-			VerylongGameTest(new Field(39, 32));
-		}
-
-		#endregion
-
-		#region Helpers
-
-		protected void SimpleSequenceTest(Field field)
-		{
-			int startX = 16;
-			int startY = 16;
-
-			field.MakeMove(startX, startY);
-			field.MakeMove(startX + 1, startY);
-			field.MakeMove(startX + 1, startY + 1);
-			field.MakeMove(startX, startY + 1);
-			field.UnmakeAllMoves();
-			Assert.IsTrue(field.IsEmpty);
-			Assert.AreEqual(0, field.RedCaptureCount + field.BlueCaptureCount);
-		}
-
-		protected void BlueSurroundFirstTest(Field field)
-		{
-			int startX = 16;
-			int startY = 16;
+    [TestFixture]
+    public class FieldTests
+    {
+        #region Tests
+
+        [Test]
+        public virtual void Play_SimpleSequence()
+        {
+            SimpleSequenceTest(new Field(39, 32));
+        }
+
+        [Test]
+        public virtual void Play_BlueSurroundFirst()
+        {
+            BlueSurroundFirstTest(new Field(39, 32));
+        }
+
+        [Test]
+        public virtual void Play_OneBase()
+        {
+            OneBaseTest(new Field(39, 32));
+        }
+
+        [Test]
+        public virtual void Play_BaseInBase()
+        {
+            BaseInBaseTest(new Field(39, 32));
+        }
+
+        [Test]
+        public virtual void Play_ComplexBaseInBase()
+        {
+            ComplexBaseInBaseTest(new Field(39, 32));
+        }
+
+        [Test]
+        public virtual void Play_EmptyBase()
+        {
+            EmptyBaseTest(new Field(39, 32));
+        }
+
+        [Test]
+        public virtual void Play_BlueSurroundFirstInEmptyBase()
+        {
+            BlueSurroundFirstInEmptyBase(new Field(39, 32));
+        }
+
+        [Test]
+        public virtual void Play_ThreeAdjacentBases()
+        {
+            ThreeAdjacentBasesTest(new Field(39, 32));
+        }
+
+        [Test]
+        public virtual void Play_BigEmptyBase()
+        {
+            BigEmptyBaseTest(new Field(39, 32));
+        }
+
+        [Test]
+        public virtual void Play_UCTBagEmptyBase()
+        {
+            UCTBagEmptyBaseTest(new Field(39, 32));
+        }
+
+        [Test]
+        public virtual void Play_VerylongGame()
+        {
+            VerylongGameTest(new Field(39, 32));
+        }
+
+        #endregion
+
+        #region Helpers
+
+        protected void SimpleSequenceTest(Field field)
+        {
+            int startX = 16;
+            int startY = 16;
+
+            field.MakeMove(startX, startY);
+            field.MakeMove(startX + 1, startY);
+            field.MakeMove(startX + 1, startY + 1);
+            field.MakeMove(startX, startY + 1);
+            field.UnmakeAllMoves();
+            Assert.IsTrue(field.IsEmpty);
+            Assert.AreEqual(0, field.RedCaptureCount + field.BlueCaptureCount);
+        }
+
+        protected void BlueSurroundFirstTest(Field field)
+        {
+            int startX = 16;
+            int startY = 16;
+
+            field.MakeMove(startX, startY);
+            field.MakeMove(startX - 1, startY);
+
+            field.MakeMove(startX + 1, startY + 1);
+            field.MakeMove(startX, startY + 1);
+
+            field.MakeMove(startX + 1, startY - 1);
+            field.MakeMove(startX, startY - 1);
 
-			field.MakeMove(startX, startY);
-			field.MakeMove(startX - 1, startY);
+            field.MakeMove(startX - 2, startY);
 
-			field.MakeMove(startX + 1, startY + 1);
-			field.MakeMove(startX, startY + 1);
+            field.MakeMove(startX + 1, startY);
 
-			field.MakeMove(startX + 1, startY - 1);
-			field.MakeMove(startX, startY - 1);
+            Assert.AreEqual(0, field.RedCaptureCount);
+            Assert.AreEqual(1, field.BlueCaptureCount);
 
-			field.MakeMove(startX - 2, startY);
+            field.UnmakeAllMoves();
 
-			field.MakeMove(startX + 1, startY);
+            Assert.IsTrue(field.IsEmpty);
+            Assert.AreEqual(0, field.RedCaptureCount + field.BlueCaptureCount);
+        }
 
-			Assert.AreEqual(0, field.RedCaptureCount);
-			Assert.AreEqual(1, field.BlueCaptureCount);
+        protected void OneBaseTest(Field field)
+        {
+            int startX = 16;
+            int startY = 16;
 
-			field.UnmakeAllMoves();
+            field.MakeMove(startX, startY);
+            field.MakeMove(startX + 1, startY);
+            field.MakeMove(startX + 1, startY + 1);
+            field.MakeMove(startX, startY + 1);
 
-			Assert.IsTrue(field.IsEmpty);
-			Assert.AreEqual(0, field.RedCaptureCount + field.BlueCaptureCount);
-		}
+            field.MakeMove(startX + 2, startY);
+            field.MakeMove(startX - 1, startY);
+            field.MakeMove(startX + 1, startY - 1);
 
-		protected void OneBaseTest(Field field)
-		{
-			int startX = 16;
-			int startY = 16;
+            Assert.AreEqual(1, field.RedCaptureCount);
 
-			field.MakeMove(startX, startY);
-			field.MakeMove(startX + 1, startY);
-			field.MakeMove(startX + 1, startY + 1);
-			field.MakeMove(startX, startY + 1);
+            field.UnmakeAllMoves();
 
-			field.MakeMove(startX + 2, startY);
-			field.MakeMove(startX - 1, startY);
-			field.MakeMove(startX + 1, startY - 1);
+            Assert.IsTrue(field.IsEmpty);
+            Assert.AreEqual(0, field.RedCaptureCount + field.BlueCaptureCount);
+        }
 
-			Assert.AreEqual(1, field.RedCaptureCount);
+        protected void BaseInBaseTest(Field field)
+        {
+            int startX = 16;
+            int startY = 16;
 
-			field.UnmakeAllMoves();
+            field.MakeMove(startX, startY);
+            field.MakeMove(startX + 1, startY);
 
-			Assert.IsTrue(field.IsEmpty);
-			Assert.AreEqual(0, field.RedCaptureCount + field.BlueCaptureCount);
-		}
+            field.MakeMove(startX + 2, startY);
+            field.MakeMove(startX + 2, startY + 1);
 
-		protected void BaseInBaseTest(Field field)
-		{
-			int startX = 16;
-			int startY = 16;
+            field.MakeMove(startX + 1, startY + 1);
+            field.MakeMove(startX + 3, startY);
 
-			field.MakeMove(startX, startY);
-			field.MakeMove(startX + 1, startY);
+            field.MakeMove(startX + 2, startY + 2);
+            field.MakeMove(startX + 2, startY - 1);
 
-			field.MakeMove(startX + 2, startY);
-			field.MakeMove(startX + 2, startY + 1);
+            Assert.AreEqual(0, field.RedCaptureCount);
+            Assert.AreEqual(1, field.BlueCaptureCount);
 
-			field.MakeMove(startX + 1, startY + 1);
-			field.MakeMove(startX + 3, startY);
+            field.MakeMove(startX + 3, startY + 1);
+            field.MakeMove(startX + 10, startY);
 
-			field.MakeMove(startX + 2, startY + 2);
-			field.MakeMove(startX + 2, startY - 1);
+            field.MakeMove(startX + 4, startY);
+            field.MakeMove(startX + 10, startY + 1);
 
-			Assert.AreEqual(0, field.RedCaptureCount);
-			Assert.AreEqual(1, field.BlueCaptureCount);
+            field.MakeMove(startX + 3, startY - 1);
+            field.MakeMove(startX + 10, startY + 2);
 
-			field.MakeMove(startX + 3, startY + 1);
-			field.MakeMove(startX + 10, startY);
+            field.MakeMove(startX + 2, startY - 2);
+            field.MakeMove(startX + 10, startY + 3);
 
-			field.MakeMove(startX + 4, startY);
-			field.MakeMove(startX + 10, startY + 1);
+            field.MakeMove(startX + 1, startY - 1);
+            field.MakeMove(startX + 10, startY + 4);
 
-			field.MakeMove(startX + 3, startY - 1);
-			field.MakeMove(startX + 10, startY + 2);
+            Assert.AreEqual(4, field.RedCaptureCount);
+            Assert.AreEqual(0, field.BlueCaptureCount);
 
-			field.MakeMove(startX + 2, startY - 2);
-			field.MakeMove(startX + 10, startY + 3);
+            field.UnmakeAllMoves();
 
-			field.MakeMove(startX + 1, startY - 1);
-			field.MakeMove(startX + 10, startY + 4);
+            Assert.IsTrue(field.IsEmpty);
+            Assert.AreEqual(0, field.RedCaptureCount + field.BlueCaptureCount);
+        }
 
-			Assert.AreEqual(4, field.RedCaptureCount);
-			Assert.AreEqual(0, field.BlueCaptureCount);
+        protected void ComplexBaseInBaseTest(Field field)
+        {
+            GameMove[] moves = TestUtils.LoadMovesFromPointsXt("DotFunctionsTest.sav");
 
-			field.UnmakeAllMoves();
+            foreach (var move in moves)
+            {
+                if (field.DotsSequenceCount == 24)
+                {
+                    field.MakeMove(move.Column, move.Row);
+                    Assert.AreEqual(1, field.RedCaptureCount);
+                    Assert.AreEqual(0, field.BlueCaptureCount);
+                }
+                else
+                    field.MakeMove(move.Column, move.Row);
+            }
 
-			Assert.IsTrue(field.IsEmpty);
-			Assert.AreEqual(0, field.RedCaptureCount + field.BlueCaptureCount);
-		}
+            Assert.AreEqual(0, field.RedCaptureCount);
+            Assert.AreEqual(16, field.BlueCaptureCount);
 
-		protected void ComplexBaseInBaseTest(Field field)
-		{
-			byte[] buffer;
-			using (var stream = new StreamReader(DataFolderPath + "DotFunctionsTest.sav"))
-			{
-				buffer = new byte[stream.BaseStream.Length];
-				stream.BaseStream.Read(buffer, 0, buffer.Length);
-			}
+            field.UnmakeAllMoves();
 
-			for (var i = 58; i < buffer.Length; i += 13)
-			{
-				if (field.DotsSequenceCount == 24)
-				{
-					field.MakeMove(buffer[i], buffer[i + 1]);
-					Assert.AreEqual(1, field.RedCaptureCount);
-					Assert.AreEqual(0, field.BlueCaptureCount);
-				}
-				else
-					field.MakeMove(buffer[i], buffer[i + 1]);
-			}
+            Assert.AreEqual(0, field.RedCaptureCount);
+            Assert.AreEqual(0, field.BlueCaptureCount);
+            Assert.IsTrue(field.IsEmpty);
+        }
 
-			Assert.AreEqual(0, field.RedCaptureCount);
-			Assert.AreEqual(16, field.BlueCaptureCount);
+        protected void EmptyBaseTest(Field field)
+        {
+            int startX = 16;
+            int startY = 16; ;
 
-			field.UnmakeAllMoves();
+            field.MakeMove(startX, startY);
+            field.MakeMove(startX - 1, startY);
 
-			Assert.AreEqual(0, field.RedCaptureCount);
-			Assert.AreEqual(0, field.BlueCaptureCount);
-			Assert.IsTrue(field.IsEmpty);
-		}
+            field.MakeMove(startX + 1, startY + 1);
+            field.MakeMove(startX, startY + 1);
 
-		protected void EmptyBaseTest(Field field)
-		{
-			int startX = 16;
-			int startY = 16; ;
+            field.MakeMove(startX + 2, startY);
+            field.MakeMove(startX - 2, startY);
 
-			field.MakeMove(startX, startY);
-			field.MakeMove(startX - 1, startY);
+            // Create empty base.
+            field.MakeMove(startX + 1, startY - 1);
 
-			field.MakeMove(startX + 1, startY + 1);
-			field.MakeMove(startX, startY + 1);
+            // Red Surround.
+            field.MakeMove(startX + 1, startY);
 
-			field.MakeMove(startX + 2, startY);
-			field.MakeMove(startX - 2, startY);
+            Assert.AreEqual(1, field.RedCaptureCount);
+            Assert.AreEqual(0, field.BlueCaptureCount);
 
-			// Create empty base.
-			field.MakeMove(startX + 1, startY - 1);
+            field.UnmakeAllMoves();
 
-			// Red Surround.
-			field.MakeMove(startX + 1, startY);
+            Assert.IsTrue(field.IsEmpty);
+            Assert.AreEqual(0, field.RedCaptureCount + field.BlueCaptureCount);
+        }
 
-			Assert.AreEqual(1, field.RedCaptureCount);
-			Assert.AreEqual(0, field.BlueCaptureCount);
+        protected void BlueSurroundFirstInEmptyBase(Field field)
+        {
+            int startX = 16;
+            int startY = 16;
 
-			field.UnmakeAllMoves();
+            field.MakeMove(startX, startY);
+            field.MakeMove(startX - 1, startY);
 
-			Assert.IsTrue(field.IsEmpty);
-			Assert.AreEqual(0, field.RedCaptureCount + field.BlueCaptureCount);
-		}
+            field.MakeMove(startX + 1, startY + 1);
+            field.MakeMove(startX, startY + 1);
 
-		protected void BlueSurroundFirstInEmptyBase(Field field)
-		{
-			int startX = 16;
-			int startY = 16;
+            field.MakeMove(startX + 1, startY - 1);
+            field.MakeMove(startX, startY - 1);
 
-			field.MakeMove(startX, startY);
-			field.MakeMove(startX - 1, startY);
+            field.MakeMove(startX + 2, startY);
+            field.MakeMove(startX + 1, startY);
 
-			field.MakeMove(startX + 1, startY + 1);
-			field.MakeMove(startX, startY + 1);
+            Assert.AreEqual(0, field.RedCaptureCount);
+            Assert.AreEqual(1, field.BlueCaptureCount);
 
-			field.MakeMove(startX + 1, startY - 1);
-			field.MakeMove(startX, startY - 1);
+            field.UnmakeAllMoves();
 
-			field.MakeMove(startX + 2, startY);
-			field.MakeMove(startX + 1, startY);
+            Assert.IsTrue(field.IsEmpty);
+            Assert.AreEqual(0, field.RedCaptureCount + field.BlueCaptureCount);
+        }
 
-			Assert.AreEqual(0, field.RedCaptureCount);
-			Assert.AreEqual(1, field.BlueCaptureCount);
+        protected void ThreeAdjacentBasesTest(Field field)
+        {
+            int startX = 16;
+            int startY = 16;
 
-			field.UnmakeAllMoves();
+            field.MakeMove(startX, startY);
+            field.MakeMove(startX + 1, startY);
 
-			Assert.IsTrue(field.IsEmpty);
-			Assert.AreEqual(0, field.RedCaptureCount + field.BlueCaptureCount);
-		}
+            field.MakeMove(startX + 1, startY + 1);
+            field.MakeMove(startX + 2, startY - 1);
 
-		protected void ThreeAdjacentBasesTest(Field field)
-		{
-			int startX = 16;
-			int startY = 16;
+            field.MakeMove(startX + 2, startY);
+            field.MakeMove(startX + 1, startY - 2);
 
-			field.MakeMove(startX, startY);
-			field.MakeMove(startX + 1, startY);
+            field.MakeMove(startX + 3, startY - 1);
+            field.MakeMove(startX, startY + 1);
 
-			field.MakeMove(startX + 1, startY + 1);
-			field.MakeMove(startX + 2, startY - 1);
+            field.MakeMove(startX + 2, startY - 2);
+            field.MakeMove(startX + 2, startY + 1);
 
-			field.MakeMove(startX + 2, startY);
-			field.MakeMove(startX + 1, startY - 2);
+            field.MakeMove(startX + 1, startY - 3);
+            field.MakeMove(startX + 3, startY - 2);
 
-			field.MakeMove(startX + 3, startY - 1);
-			field.MakeMove(startX, startY + 1);
+            field.MakeMove(startX, startY - 2);
+            field.MakeMove(startX, startY - 3);
 
-			field.MakeMove(startX + 2, startY - 2);
-			field.MakeMove(startX + 2, startY + 1);
+            field.MakeMove(startX + 1, startY - 1);
 
-			field.MakeMove(startX + 1, startY - 3);
-			field.MakeMove(startX + 3, startY - 2);
+            Assert.AreEqual(3, field.RedCaptureCount);
+            Assert.AreEqual(0, field.BlueCaptureCount);
 
-			field.MakeMove(startX, startY - 2);
-			field.MakeMove(startX, startY - 3);
+            field.UnmakeAllMoves();
 
-			field.MakeMove(startX + 1, startY - 1);
+            Assert.IsTrue(field.IsEmpty);
+            Assert.AreEqual(0, field.RedCaptureCount + field.BlueCaptureCount);
+        }
 
-			Assert.AreEqual(3, field.RedCaptureCount);
-			Assert.AreEqual(0, field.BlueCaptureCount);
+        protected void BigEmptyBaseTest(Field field)
+        {
+            int startX = 12;
+            int startY = 2;
 
-			field.UnmakeAllMoves();
+            // top chain.
+            field.MakeMove(startX, startY);
+            field.MakeMove(startX + 10, startY);
 
-			Assert.IsTrue(field.IsEmpty);
-			Assert.AreEqual(0, field.RedCaptureCount + field.BlueCaptureCount);
-		}
+            field.MakeMove(startX + 1, startY);
+            field.MakeMove(startX + 10, startY + 1);
 
-		protected void BigEmptyBaseTest(Field field)
-		{
-			int startX = 12;
-			int startY = 2;
+            field.MakeMove(startX + 2, startY);
+            field.MakeMove(startX + 10, startY + 2);
 
-			// top chain.
-			field.MakeMove(startX, startY);
-			field.MakeMove(startX + 10, startY);
+            field.MakeMove(startX + 3, startY);
+            field.MakeMove(startX + 10, startY + 3);
 
-			field.MakeMove(startX + 1, startY);
-			field.MakeMove(startX + 10, startY + 1);
+            field.MakeMove(startX + 4, startY);
+            field.MakeMove(startX + 10, startY + 4);
 
-			field.MakeMove(startX + 2, startY);
-			field.MakeMove(startX + 10, startY + 2);
+            // right chain.
+            field.MakeMove(startX + 5, startY + 1);
+            field.MakeMove(startX + 10, startY + 5);
 
-			field.MakeMove(startX + 3, startY);
-			field.MakeMove(startX + 10, startY + 3);
+            field.MakeMove(startX + 5, startY + 2);
+            field.MakeMove(startX + 10, startY + 6);
 
-			field.MakeMove(startX + 4, startY);
-			field.MakeMove(startX + 10, startY + 4);
+            field.MakeMove(startX + 5, startY + 3);
+            field.MakeMove(startX + 10, startY + 7);
 
-			// right chain.
-			field.MakeMove(startX + 5, startY + 1);
-			field.MakeMove(startX + 10, startY + 5);
+            field.MakeMove(startX + 5, startY + 4);
+            field.MakeMove(startX + 10, startY + 8);
 
-			field.MakeMove(startX + 5, startY + 2);
-			field.MakeMove(startX + 10, startY + 6);
+            // bottom chain.
+            field.MakeMove(startX + 4, startY + 5);
+            field.MakeMove(startX + 10, startY + 9);
 
-			field.MakeMove(startX + 5, startY + 3);
-			field.MakeMove(startX + 10, startY + 7);
+            field.MakeMove(startX + 3, startY + 5);
+            field.MakeMove(startX + 10, startY + 10);
 
-			field.MakeMove(startX + 5, startY + 4);
-			field.MakeMove(startX + 10, startY + 8);
+            field.MakeMove(startX + 2, startY + 5);
+            field.MakeMove(startX + 10, startY + 11);
 
-			// bottom chain.
-			field.MakeMove(startX + 4, startY + 5);
-			field.MakeMove(startX + 10, startY + 9);
+            field.MakeMove(startX + 1, startY + 5);
+            field.MakeMove(startX + 10, startY + 12);
 
-			field.MakeMove(startX + 3, startY + 5);
-			field.MakeMove(startX + 10, startY + 10);
+            field.MakeMove(startX, startY + 5);
+            field.MakeMove(startX + 10, startY + 13);
 
-			field.MakeMove(startX + 2, startY + 5);
-			field.MakeMove(startX + 10, startY + 11);
+            field.MakeMove(startX - 1, startY + 5);
+            field.MakeMove(startX + 10, startY + 14);
 
-			field.MakeMove(startX + 1, startY + 5);
-			field.MakeMove(startX + 10, startY + 12);
+            // left chain.
+            field.MakeMove(startX - 2, startY + 4);
+            field.MakeMove(startX + 10, startY + 15);
 
-			field.MakeMove(startX, startY + 5);
-			field.MakeMove(startX + 10, startY + 13);
+            field.MakeMove(startX - 2, startY + 3);
+            field.MakeMove(startX + 10, startY + 16);
 
-			field.MakeMove(startX - 1, startY + 5);
-			field.MakeMove(startX + 10, startY + 14);
+            field.MakeMove(startX - 2, startY + 2);
+            field.MakeMove(startX + 10, startY + 17);
 
-			// left chain.
-			field.MakeMove(startX - 2, startY + 4);
-			field.MakeMove(startX + 10, startY + 15);
+            field.MakeMove(startX - 1, startY + 1);
+            field.MakeMove(startX + 10, startY + 18);
 
-			field.MakeMove(startX - 2, startY + 3);
-			field.MakeMove(startX + 10, startY + 16);
+            // center.
+            Assert.IsTrue(field.MakeMove(startX, startY + 3));
+            field.MakeMove(startX + 10, startY + 19);
 
-			field.MakeMove(startX - 2, startY + 2);
-			field.MakeMove(startX + 10, startY + 17);
+            Assert.IsTrue(field.MakeMove(startX + 2, startY + 2));
+            field.MakeMove(startX + 10, startY + 20);
 
-			field.MakeMove(startX - 1, startY + 1);
-			field.MakeMove(startX + 10, startY + 18);
+            Assert.IsTrue(field.MakeMove(startX + 2, startY + 3));
+            field.MakeMove(startX + 10, startY + 21);
 
-			// center.
-			Assert.IsTrue(field.MakeMove(startX, startY + 3));
-			field.MakeMove(startX + 10, startY + 19);
+            Assert.IsTrue(field.MakeMove(startX + 3, startY + 3));
 
-			Assert.IsTrue(field.MakeMove(startX + 2, startY + 2));
-			field.MakeMove(startX + 10, startY + 20);
+            // blue final.
+            field.MakeMove(startX + 3, startY + 2);
 
-			Assert.IsTrue(field.MakeMove(startX + 2, startY + 3));
-			field.MakeMove(startX + 10, startY + 21);
+            Assert.AreEqual(1, field.RedCaptureCount);
+            Assert.AreEqual(0, field.BlueCaptureCount);
 
-			Assert.IsTrue(field.MakeMove(startX + 3, startY + 3));
+            field.UnmakeAllMoves();
 
-			// blue final.
-			field.MakeMove(startX + 3, startY + 2);
+            Assert.IsTrue(field.IsEmpty);
+            Assert.AreEqual(0, field.RedCaptureCount + field.BlueCaptureCount);
+        }
 
-			Assert.AreEqual(1, field.RedCaptureCount);
-			Assert.AreEqual(0, field.BlueCaptureCount);
+        protected void UCTBagEmptyBaseTest(Field field)
+        {
+            int startX = 16;
+            int startY = 16;
 
-			field.UnmakeAllMoves();
+            field.MakeMove(startX + 2, startY + 2, DotState.RedPlayer);
 
-			Assert.IsTrue(field.IsEmpty);
-			Assert.AreEqual(0, field.RedCaptureCount + field.BlueCaptureCount);
-		}
+            field.MakeMove(startX + 2, startY, DotState.RedPlayer);
+            field.MakeMove(startX + 3, startY, DotState.RedPlayer);
+            field.MakeMove(startX + 4, startY, DotState.RedPlayer);
 
-		protected void UCTBagEmptyBaseTest(Field field)
-		{
-			int startX = 16;
-			int startY = 16;
+            field.MakeMove(startX + 5, startY + 1, DotState.RedPlayer);
+            field.MakeMove(startX + 5, startY + 2, DotState.RedPlayer);
+            field.MakeMove(startX + 5, startY + 3, DotState.RedPlayer);
 
-			field.MakeMove(startX + 2, startY + 2, Dot.RedPlayer);
+            field.MakeMove(startX + 4, startY + 4, DotState.RedPlayer);
+            field.MakeMove(startX + 3, startY + 4, DotState.RedPlayer);
+            field.MakeMove(startX + 2, startY + 4, DotState.RedPlayer);
+            field.MakeMove(startX + 1, startY + 4, DotState.RedPlayer);
 
-			field.MakeMove(startX + 2, startY, Dot.RedPlayer);
-			field.MakeMove(startX + 3, startY, Dot.RedPlayer);
-			field.MakeMove(startX + 4, startY, Dot.RedPlayer);
+            field.MakeMove(startX, startY + 3, DotState.RedPlayer);
+            field.MakeMove(startX, startY + 2, DotState.RedPlayer);
+            field.MakeMove(startX + 1, startY + 1, DotState.RedPlayer);
 
-			field.MakeMove(startX + 5, startY + 1, Dot.RedPlayer);
-			field.MakeMove(startX + 5, startY + 2, Dot.RedPlayer);
-			field.MakeMove(startX + 5, startY + 3, Dot.RedPlayer);
+            // Put opponent point.
+            field.MakeMove(startX + 4, startY + 1, DotState.BluePlayer);
 
-			field.MakeMove(startX + 4, startY + 4, Dot.RedPlayer);
-			field.MakeMove(startX + 3, startY + 4, Dot.RedPlayer);
-			field.MakeMove(startX + 2, startY + 4, Dot.RedPlayer);
-			field.MakeMove(startX + 1, startY + 4, Dot.RedPlayer);
+            Assert.AreEqual(1, field.RedCaptureCount);
+            Assert.AreEqual(0, field.BlueCaptureCount);
+        }
 
-			field.MakeMove(startX, startY + 3, Dot.RedPlayer);
-			field.MakeMove(startX, startY + 2, Dot.RedPlayer);
-			field.MakeMove(startX + 1, startY + 1, Dot.RedPlayer);
+        protected void VerylongGameTest(Field field)
+        {
+            GameMove[] moves = TestUtils.LoadMovesFromPointsXt("VeryLongGame.sav");
 
-			// Put opponent point.
-			field.MakeMove(startX + 4, startY + 1, Dot.BluePlayer);
+            foreach (var move in moves)
+            {
+                Assert.IsTrue(field.MakeMove(move.Column, move.Row));
+            }
 
-			Assert.AreEqual(1, field.RedCaptureCount);
-			Assert.AreEqual(0, field.BlueCaptureCount);
-		}
+            Assert.AreEqual(179, field.RedCaptureCount);
+            Assert.AreEqual(20, field.BlueCaptureCount);
 
-		protected void VerylongGameTest(Field field)
-		{
-			byte[] buffer;
-			using (var stream = new StreamReader(DataFolderPath + "VeryLongGame.sav"))
-			{
-				buffer = new byte[stream.BaseStream.Length];
-				stream.BaseStream.Read(buffer, 0, buffer.Length);
-			}
-			
-			for (var i = 58; i < buffer.Length; i += 13)
-				Assert.IsTrue(field.MakeMove(buffer[i] + 1, buffer[i + 1] + 1));
+            field.UnmakeAllMoves();
 
-			Assert.AreEqual(179, field.RedCaptureCount);
-			Assert.AreEqual(20, field.BlueCaptureCount);
+            Assert.AreEqual(0, field.RedCaptureCount);
+            Assert.AreEqual(0, field.BlueCaptureCount);
+            Assert.IsTrue(field.IsEmpty);
+        }
 
-			field.UnmakeAllMoves();
-
-			Assert.AreEqual(0, field.RedCaptureCount);
-			Assert.AreEqual(0, field.BlueCaptureCount);
-			Assert.IsTrue(field.IsEmpty);
-		}
-
-		#endregion
-	}
+        #endregion
+    }
 }

@@ -9,12 +9,6 @@ namespace DotsGame.AI
 {
 	public class AlphaBetaHashAlgoritm
 	{
-		#region Fields
-
-		private ushort CurrentMove_;
-
-		#endregion
-
 		#region Constructors
 
 		public AlphaBetaHashAlgoritm(Field field, MoveGenerator moveGenerator = null, Estimator estimator = null,
@@ -47,7 +41,7 @@ namespace DotsGame.AI
 			return SearchBestMove(depth, Field.CurrentPlayer, -AiSettings.InfinityScore, AiSettings.InfinityScore);
 		}
 
-		public int SearchBestMove(byte depth, Dot player, float alpha, float beta)
+		public int SearchBestMove(byte depth, DotState player, float alpha, float beta)
 		{
 			int bestMove = 0;
 
@@ -56,7 +50,7 @@ namespace DotsGame.AI
 
 			MoveGenerator.MaxDepth = depth;
 			MoveGenerator.GenerateMoves(player, depth);
-			Dot nextPlayer = player.NextPlayer();
+			DotState nextPlayer = player.NextPlayer();
 
 			foreach (var move in MoveGenerator.Moves)
 			{
@@ -85,7 +79,7 @@ namespace DotsGame.AI
 
 		#region Helpers
 
-		private float EvaluatePosition(byte depth, Dot player, float alpha, float beta, ulong key)
+		private float EvaluatePosition(byte depth, DotState player, float alpha, float beta, ulong key)
 		{
 			float oldAlpha = alpha;
 
@@ -97,7 +91,7 @@ namespace DotsGame.AI
 				return Estimator.Estimate(player);
 
 			MoveGenerator.GenerateMoves(player, depth);
-			Dot nextPlayer = player.NextPlayer();
+			DotState nextPlayer = player.NextPlayer();
 
 			foreach (var move in MoveGenerator.Moves)
 			{
@@ -127,7 +121,7 @@ namespace DotsGame.AI
 			return alpha;
 		}
 
-		private unsafe float CheckCollision(Dot player, byte depth, float alpha, float beta, ulong key)
+		private unsafe float CheckCollision(DotState player, byte depth, float alpha, float beta, ulong key)
 		{
 			fixed (HashEntry* hashEntry = &TranspositionTable.HashEntries_[key % AiSettings.HashTableSize])
 			{

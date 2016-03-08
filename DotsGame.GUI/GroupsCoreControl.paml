@@ -1,0 +1,12 @@
+﻿<UserControl xmlns="https://github.com/perspex">
+  <StackPanel>
+    <CheckBox>Strong Groups</CheckBox>
+    <CheckBox>Fragile Groups</CheckBox>
+    <StackPanel Orientation="Horizontal">
+      <CheckBox>
+        Max Linked Distance
+      </CheckBox>
+      <TextBox Width="100">3</TextBox>
+    </StackPanel>
+  </StackPanel>
+</UserControl>

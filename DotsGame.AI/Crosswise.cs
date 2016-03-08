@@ -10,7 +10,7 @@ namespace DotsGame.AI
 	{
 		#region Readonly & Fields
 
-		public readonly Dot Player;
+		public readonly DotState Player;
 		public readonly int Position;
 		public readonly enmCrosswiseOrientation Orientation;
 		public readonly int Number;
@@ -19,7 +19,7 @@ namespace DotsGame.AI
 
 		#region Constructors
 
-		public Crosswise(Dot player, int pos, enmCrosswiseOrientation orientation, int number)
+		public Crosswise(DotState player, int pos, enmCrosswiseOrientation orientation, int number)
 		{
 			Player = player;
 			Position = pos;
