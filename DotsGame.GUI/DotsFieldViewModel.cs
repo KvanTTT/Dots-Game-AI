@@ -27,8 +27,8 @@ namespace DotsGame.GUI
 
         private GameTreeViewModel _gameTreeViewModel;
 
-        public double CellSize { get; set; } = 20;
-        public double LineThickness { get; set; } = 1;
+        public double CellSize { get; set; } = 19;
+        public double LineThickness { get; set; } = 0.75;
         public double DotRadius { get; set; } = 5;
         public double FieldMargin { get; set; } = 10;
 

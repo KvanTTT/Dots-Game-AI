@@ -188,6 +188,7 @@
     <Compile Include="OpenPlaydotsGame.paml.cs">
       <DependentUpon>OpenPlaydotsGame.paml</DependentUpon>
     </Compile>
+    <Compile Include="TreeLineDirection.cs" />
     <EmbeddedResource Include="App.paml" />
     <Compile Include="App.paml.cs">
       <DependentUpon>App.paml</DependentUpon>

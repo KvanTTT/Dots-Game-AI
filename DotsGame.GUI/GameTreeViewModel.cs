@@ -25,15 +25,22 @@ namespace DotsGame.GUI
         private bool _autoUpdate;
         private Timer _autoupdateGameTimer;
 
-        private double _dotSize = 30;
-        private double _dotSpace = 45;
+        private double _dotSize = 23;
+        private double _dotSpace = 32;
         private double _padding = 30;
 
         private Rectangle _selectedTreeRect;
         private GameTree _previousSelectedGameTree;
         private GameTree _selectedGameTree;
         private GameTree[,] _gameTreesOnCanvas;
-        private Dictionary<GameTree, Tuple<int, int>> _gameTreesPositions;
+        private Dictionary<GameTree, Tuple<int, int>> _gameTreesPositions = new Dictionary<GameTree, Tuple<int, int>>();
+
+        private Dictionary<long, Ellipse> _moveCircles = new Dictionary<long, Ellipse>();
+        private Dictionary<long, Ellipse> _newMoveCircles;
+        private Dictionary<long, Line> _treeLines = new Dictionary<long, Line>();
+        private Dictionary<long, Line> _newTreeLines;
+        private Dictionary<long, TextBlock> _moveLabels = new Dictionary<long, TextBlock>();
+        private Dictionary<long, TextBlock> _newMoveLabels;
 
         public ReactiveCommand<object> PrevMoveCommand { get; } = ReactiveCommand.Create();
 
@@ -96,6 +103,20 @@ namespace DotsGame.GUI
             get
             {
                 return _padding + _dotSpace * 4.5;
+            }
+        }
+
+        private bool _showLabels = true;
+        public bool ShowLabels
+        {
+            get
+            {
+                return _showLabels;
+            }
+            set
+            {
+                this.RaiseAndSetIfChanged(ref _showLabels, value);
+                Refresh();
             }
         }
 
@@ -349,12 +370,10 @@ namespace DotsGame.GUI
 
         private void Refresh()
         {
-            _gameTreeCanvas.Children.Clear();
-
             int maxSequenceLength = _gameInfo.GameTree.GetMaxSequenceLength();
             int maxSequenceWidth = _gameInfo.GameTree.GetMaxSequenceWidth();
             _gameTreesOnCanvas = new GameTree[maxSequenceWidth, maxSequenceLength];
-            _gameTreesPositions = new Dictionary<GameTree, Tuple<int, int>>();
+            _gameTreesPositions.Clear();
             double width = _padding + (maxSequenceLength - 1) * _dotSpace + _padding;
             double height = _padding + (maxSequenceWidth - 1) * _dotSpace + _padding;
 
@@ -390,8 +409,10 @@ namespace DotsGame.GUI
             {
                 var pos = _gameTreesPositions[_selectedGameTree];
                 double left = _padding + pos.Item1 * _dotSpace;
+                double top = _padding + pos.Item2 * _dotSpace;
                 Dispatcher.UIThread.InvokeAsync(() => 
-                    _canvasScrollViewer.Offset = _canvasScrollViewer.Offset.WithX(left - _canvasScrollViewer.DesiredSize.Width / 2));
+                    _canvasScrollViewer.Offset = new Vector(
+                        left - _canvasScrollViewer.DesiredSize.Width / 2, top - _canvasScrollViewer.DesiredSize.Height / 2));
             }
         }
 
@@ -413,7 +434,18 @@ namespace DotsGame.GUI
 
         private void RefreshMoves()
         {
+            _newMoveCircles = new Dictionary<long, Ellipse>();
+            _newTreeLines = new Dictionary<long, Line>();
+            _newMoveLabels = new Dictionary<long, TextBlock>();
+
             RefreshMoves(_gameInfo.GameTree, 0, 0, 0);
+
+            _gameTreeCanvas.Children.RemoveAll(_moveCircles.Select(moveCircle => moveCircle.Value));
+            _gameTreeCanvas.Children.RemoveAll(_treeLines.Select(treeLine => treeLine.Value));
+            _gameTreeCanvas.Children.RemoveAll(_moveLabels.Select(moveLabel => moveLabel.Value));
+            _moveCircles = _newMoveCircles;
+            _treeLines = _newTreeLines;
+            _moveLabels = _newMoveLabels;
         }
 
         private int RefreshMoves(GameTree gameTree, int xOffset, int yOffset, int currentNumber)
@@ -440,82 +472,148 @@ namespace DotsGame.GUI
 
         private void DrawMove(GameMove gameMove, int xOffset, int yOffset, int currentNumber)
         {
-            Brush fill;
-            if (gameMove.IsRoot)
+            double left = _padding + xOffset * _dotSpace - _dotSize / 2;
+            double top = _padding + yOffset * _dotSpace - _dotSize / 2;
+            long hash = GetMoveHashCode(xOffset, yOffset, gameMove.PlayerNumber);
+            Ellipse circle;
+            if (_moveCircles.TryGetValue(hash, out circle))
             {
-                fill = Brushes.Green;
+                _moveCircles.Remove(hash);
             }
             else
             {
-                fill = gameMove.PlayerNumber == 0 ? Brushes.Blue : Brushes.Red;
+                Brush fill;
+                if (gameMove.IsRoot)
+                {
+                    fill = Brushes.Green;
+                }
+                else
+                {
+                    fill = gameMove.PlayerNumber == 0 ? Brushes.Blue : Brushes.Red;
+                }
+                circle = new Ellipse()
+                {
+                    [Canvas.LeftProperty] = left,
+                    [Canvas.TopProperty] = top,
+                    Width = _dotSize,
+                    Height = _dotSize,
+                    ZIndex = 10,
+                    Fill = fill,
+                };
+                _gameTreeCanvas.Children.Add(circle);
             }
-            double left = _padding + xOffset * _dotSpace - _dotSize / 2;
-            double top = _padding + yOffset * _dotSpace - _dotSize / 2;
-            var circle = new Ellipse()
-            {
-                [Canvas.LeftProperty] = left,
-                [Canvas.TopProperty] = top,
-                Width = _dotSize,
-                Height = _dotSize,
-                ZIndex = 10,
-                Fill = fill,
-            };
-            
-            var textBlock = new TextBlock()
-            {
-                [Canvas.LeftProperty] = left,
-                [Canvas.TopProperty] = top + 3,
-                Text = currentNumber.ToString(),
-                Width = _dotSize,
-                Height = _dotSize,
-                TextAlignment = TextAlignment.Center,
-                VerticalAlignment = Perspex.Layout.VerticalAlignment.Center,
-                Foreground = Brushes.White,
-                ZIndex = 15
-            };
+            _newMoveCircles[hash] = circle;
 
-            _gameTreeCanvas.Children.Add(circle);
-            _gameTreeCanvas.Children.Add(textBlock);
+            if (_showLabels)
+            {
+                long textBlockHash = GetLabelHashCode(xOffset, yOffset, currentNumber);
+                TextBlock textBlock;
+                if (_moveLabels.TryGetValue(textBlockHash, out textBlock))
+                {
+                    _moveLabels.Remove(textBlockHash);
+                }
+                else
+                {
+                    textBlock = new TextBlock()
+                    {
+                        [Canvas.LeftProperty] = left,
+                        [Canvas.TopProperty] = top + 3,
+                        Text = currentNumber.ToString(),
+                        Width = _dotSize,
+                        Height = _dotSize,
+                        TextAlignment = TextAlignment.Center,
+                        VerticalAlignment = Perspex.Layout.VerticalAlignment.Center,
+                        Foreground = Brushes.White,
+                        FontSize = 11,
+                        ZIndex = 15
+                    };
+                    _gameTreeCanvas.Children.Add(textBlock);
+                }
+                _newMoveLabels[textBlockHash] = textBlock;
+            }
         }
 
         private void DrawLine(int prevYOffset, int xOffset, int yOffset)
         {
-            Line line;
-            Brush stroke = Brushes.Black;
-            int zIndex = 5;
             if (yOffset == prevYOffset)
             {
-                line = new Line()
-                {
-                    StartPoint = new Point(_padding + (xOffset - 1) * _dotSpace, _padding + yOffset * _dotSpace),
-                    EndPoint = new Point(_padding + xOffset * _dotSpace, _padding + yOffset * _dotSpace),
-                    Stroke = stroke,
-                    ZIndex = zIndex
-                };
-                _gameTreeCanvas.Children.Add(line);
+                // Draw horizontal line
+                UpdateLine(xOffset - 1, yOffset, TreeLineDirection.Horizontal, 1);
             }
             else
             {
                 if (yOffset - prevYOffset > 1)
                 {
-                    line = new Line()
+                    int newYOffset = prevYOffset;
+                    for (int i = yOffset - 1; i > prevYOffset; i--)
                     {
-                        StartPoint = new Point(_padding + (xOffset - 1) * _dotSpace, _padding + prevYOffset * _dotSpace),
-                        EndPoint = new Point(_padding + (xOffset - 1) * _dotSpace, _padding + (yOffset - 1) * _dotSpace),
-                        Stroke = stroke,
-                        ZIndex = zIndex
-                    };
-                    _gameTreeCanvas.Children.Add(line);
+                        if (_gameTreesOnCanvas[i, xOffset] != null)
+                        {
+                            newYOffset = i - 1;
+                            break;
+                        }
+                    }
+                    // Draw vertical line
+                    UpdateLine(xOffset - 1, newYOffset, TreeLineDirection.Vertical, yOffset - 1 - newYOffset);
                 }
-                line = new Line()
+                // Draw diagonal line
+                UpdateLine(xOffset - 1, yOffset - 1, TreeLineDirection.Diagonal, 1);
+            }
+        }
+
+        private void UpdateLine(int x, int y, TreeLineDirection dir, int length)
+        {
+            Line line;
+            long hash = GetLineHashCode(x, y, dir, length);
+            if (_treeLines.TryGetValue(hash, out line))
+            {
+                _treeLines.Remove(hash);
+            }
+            else
+            {
+                int x2 = x, y2 = y;
+                for (int i = 0; i < length; i++)
                 {
-                    StartPoint = new Point(_padding + (xOffset - 1) * _dotSpace, _padding + (yOffset - 1) * _dotSpace),
-                    EndPoint = new Point(_padding + xOffset * _dotSpace, _padding + yOffset * _dotSpace),
-                    Stroke = stroke,
-                    ZIndex = zIndex
+                    switch (dir)
+                    {
+                        case TreeLineDirection.Horizontal:
+                            x2++;
+                            break;
+                        case TreeLineDirection.Vertical:
+                            y2++;
+                            break;
+                        case TreeLineDirection.Diagonal:
+                            x2++;
+                            y2++;
+                            break;
+                    }
+                }
+
+                line = new Line
+                {
+                    StartPoint = new Point(_padding + x * _dotSpace, _padding + y * _dotSpace),
+                    EndPoint = new Point(_padding + x2 * _dotSpace, _padding + y2 * _dotSpace),
+                    Stroke = Brushes.Black,
+                    ZIndex = 5
                 };
                 _gameTreeCanvas.Children.Add(line);
             }
+            _newTreeLines[hash] = line;
+        }
+
+        private long GetMoveHashCode(int x, int y, int playerNumber)
+        {
+            return (((long)x * 4096 + y) * 4096 + playerNumber + 1);
+        }
+
+        private long GetLineHashCode(int x, int y, TreeLineDirection lineDir, int length)
+        {
+            return ((((long)x * 4096) + y) * 4096 + (int)lineDir) * 4 + length;
+        }
+
+        private long GetLabelHashCode(int x, int y, int number)
+        {
+            return (((long)x * 4096 + y) * 4096 + number);
         }
     }
 }
