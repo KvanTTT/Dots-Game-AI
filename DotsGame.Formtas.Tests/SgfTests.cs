@@ -52,8 +52,9 @@ namespace DotsGame.Formtas.Tests
                 (;GM[40]FF[4]AP[Drago:4.22.02]SZ[19]CA[UTF-8]
                 (;B[jj];W[kh])
                 (;B[gi]
-                (;W[fm])
-                (;W[mj];B[ki]))
+                 (;W[fm])
+                 (;W[mj];B[ki])
+                )
                 (;B[pl];W[pi]))";
             var parser = new SgfParser();
             var gameInfo = parser.Parse(Encoding.UTF8.GetBytes(sgfData));

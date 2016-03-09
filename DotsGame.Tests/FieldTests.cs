@@ -77,6 +77,34 @@ namespace DotsGame.Tests
             VerylongGameTest(new Field(39, 32));
         }
 
+        [Test]
+        public void Play_SurrondBaseAndEmptyBase()
+        {
+            var field = new Field(39, 32);
+            int startX = 16;
+            int startY = 16;
+
+            field.MakeMove(startX + 2, startY, DotState.RedPlayer);
+            field.MakeMove(startX + 1, startY + 1, DotState.RedPlayer);
+            field.MakeMove(startX + 3, startY + 1, DotState.RedPlayer);
+            field.MakeMove(startX, startY + 2, DotState.RedPlayer);
+            field.MakeMove(startX + 1, startY + 3, DotState.RedPlayer);
+
+            field.MakeMove(startX + 1, startY + 2, DotState.BluePlayer);
+            field.MakeMove(startX + 2, startY + 2, DotState.RedPlayer);
+            Assert.IsTrue(field.MakeMove(startX + 2, startY + 1, DotState.BluePlayer));
+            Assert.AreEqual(2, field.RedCaptureCount);
+
+            field.UnmakeMove();
+            field.UnmakeMove();
+            field.UnmakeMove();
+
+            field.MakeMove(startX + 2, startY + 1, DotState.BluePlayer);
+            field.MakeMove(startX + 2, startY + 2, DotState.RedPlayer);
+            Assert.IsTrue(field.MakeMove(startX + 1, startY + 2, DotState.BluePlayer));
+            Assert.AreEqual(2, field.RedCaptureCount);
+        }
+
         #endregion
 
         #region Helpers

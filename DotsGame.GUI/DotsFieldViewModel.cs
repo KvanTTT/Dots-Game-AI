@@ -248,15 +248,15 @@ namespace DotsGame.GUI
 
             if (state.Base != null && state.Base.LastCaptureCount != 0)
             {
-                var positions = state.Base.ChainDotPositions;
+                List<short> positions = state.Base.ChainPositions;
                 var polygonPoints = new List<Point>(positions.Count);
-                foreach (DotPosition dotPos in positions)
+                foreach (short chainPos in positions)
                 {
-                    var baseDot = _dotShapes.FirstOrDefault(dot => (short)dot.Tag == dotPos.Position);
+                    var baseDot = _dotShapes.FirstOrDefault(dot => (short)dot.Tag == chainPos);
                     baseDot.ZIndex = dotZIndex;
-                    polygonPoints.Add(GetGraphicalPoint(dotPos.Position));
+                    polygonPoints.Add(GetGraphicalPoint(chainPos));
                 }
-                bool redBaseColor = positions.Last().Dot.IsRealRedPlayer();
+                bool redBaseColor = state.Base.ChainDotPositions.Last().Dot.IsRealRedPlayer();
                 var basePolygon = new Polygon
                 {
                     Fill = new SolidColorBrush(redBaseColor ? Player1BaseColor : Player2BaseColor),
