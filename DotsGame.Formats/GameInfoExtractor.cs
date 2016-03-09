@@ -24,6 +24,7 @@ namespace DotsGame.Formats
 
         public GameInfo DetectFormatAndOpen(string fileUrlOrPath, out bool fromCache)
         {
+            fileUrlOrPath = fileUrlOrPath.Trim();
             GameInfo result = null;
             long vkId;
             byte[] data = null;

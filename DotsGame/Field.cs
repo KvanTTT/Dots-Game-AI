@@ -917,8 +917,8 @@ namespace DotsGame
                     Move = new DotPosition(position, oldDot),
                     Base = _chainDotsPositions.Count == 0 && _surroundDotsPositions.Count == 0 ? null :
                             new Base(LastMoveCaptureCount, LastMoveFreedCount,
-                                new List<DotPosition>(_chainDotsPositions), new List<DotPosition>(_surroundDotsPositions),
-                                new List<short>(_chainPositions), new List<short>(_surroundPositions), oldRedSquare, oldBlueSquare),
+                            new List<DotPosition>(_chainDotsPositions), new List<DotPosition>(_surroundDotsPositions),
+                            new List<short>(_chainPositions), new List<short>(_surroundPositions), oldRedSquare, oldBlueSquare),
                     DiagonalGroupCount = oldDiagonalLinkedGroupsCount
                 });
                 LastState = _dotsSequenceStates[_dotsSequenceStates.Count - 1];
@@ -962,7 +962,7 @@ namespace DotsGame
                     OldRedCaptureCount = RedCaptureCount;
                     OldBlueCaptureCount = BlueCaptureCount;
 
-                    SubCapturedFreedCount(CurrentPlayer.NextPlayer());
+                    SubCapturedFreedCount(_dots[LastState.Move.Position].GetPlayer());
 
                     _chainDotsPositions = LastState.Base.ChainDotPositions;
                     _surroundDotsPositions = LastState.Base.SurrroundDotPositions;
