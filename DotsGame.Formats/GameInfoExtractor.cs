@@ -16,6 +16,11 @@ namespace DotsGame.Formats
 
         private static Tuple<string, GameInfo> CachedGameInfo = new Tuple<string, GameInfo>(null, null);
 
+        public static void InvalidateCache()
+        {
+            CachedGameInfo = new Tuple<string, GameInfo>(null, null);
+        }
+
         public GameInfo DetectFormatAndOpen(string fileUrlOrPath)
         {
             bool fromCache;

@@ -210,6 +210,7 @@ namespace DotsGame.GUI
             ResetCommand.Subscribe(_ =>
             {
                 FileName = "";
+                GameInfoExtractor.InvalidateCache();
                 GameInfo = new GameInfo();
                 _dotsFieldViewModel.Field = new Field(39, 32);
                 UpdateSelectedGameTree(GameInfo.GetDefaultLastTree());
@@ -238,10 +239,10 @@ namespace DotsGame.GUI
                     bool uiThread = !(state is string && (string)state == "timer");
                     AddMoves(gameInfo.GameTree.GetDefaultSequence(), uiThread);
                 }
-                if (_autoUpdate)
-                {
-                    _autoupdateGameTimer.Change(500, Timeout.Infinite);
-                }
+            }
+            if (_autoUpdate)
+            {
+                _autoupdateGameTimer.Change(500, Timeout.Infinite);
             }
         }
 
