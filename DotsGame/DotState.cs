@@ -31,10 +31,10 @@ namespace DotsGame
         RealPlayer = 1 << DotConstants.RealPlayerShift,
         RealPutted = 1 << DotConstants.RealPuttedShift,
 
-        RedPlayer = 0,
-        BluePlayer = 1,
-        RedRealPlayer = 0 << DotConstants.RealPlayerShift,
-        BlueRealPlayer = 1 << DotConstants.RealPlayerShift,
+        Player0 = 0,
+        Player1 = 1,
+        RealPlayer0 = 0 << DotConstants.RealPlayerShift,
+        RealPlayer1 = 1 << DotConstants.RealPlayerShift,
         Empty = 0,
         Invalid = 1,
 

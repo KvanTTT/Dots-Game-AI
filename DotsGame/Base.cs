@@ -9,8 +9,8 @@ namespace DotsGame
     {
         public readonly int LastCaptureCount;
         public readonly int LastFreedCount;
-        public readonly int RedSquare;
-        public readonly int BlueSquare;
+        public readonly int Player0Square;
+        public readonly int Player1Square;
         public readonly List<short> ChainPositions;
         public readonly List<short> SurroundPositions;
         public readonly List<DotPosition> ChainDotPositions;
@@ -30,8 +30,8 @@ namespace DotsGame
             SurrroundDotPositions = surPointPoses;
             ChainPositions = chainPositions;
             SurroundPositions = surroundPoistions;
-            RedSquare = redSquare;
-            BlueSquare = blueSquare;
+            Player0Square = redSquare;
+            Player1Square = blueSquare;
         }
 
         public override string ToString()

@@ -40,8 +40,8 @@ namespace DotsGame.Formtas.Tests
             GameInfo info = extractor.DetectFormatAndOpen(fileNameOrPath);
             Assert.IsTrue(info.FromUrl);
             Assert.AreEqual(new DateTime(2016, 02, 08, 13, 49, 30), info.Date);
-            Assert.AreEqual("Сергей Чернобровин", info.Player2Name);
-            Assert.AreEqual("Ксюша Димарчук", info.Player1Name);
+            Assert.AreEqual("Сергей Чернобровин", info.Player1Name);
+            Assert.AreEqual("Ксюша Димарчук", info.Player2Name);
             Assert.AreEqual("без территории, с заземлением, двойной скрест в центре, 25 сек на ход, 4 мин на партию", info.Description);
         }
 
@@ -100,8 +100,8 @@ namespace DotsGame.Formtas.Tests
             Assert.AreEqual(Encoding.UTF8, gameInfo.Encoding);
             Assert.AreEqual(39, gameInfo.Width);
             Assert.AreEqual(32, gameInfo.Height);
-            Assert.AreEqual("Первый игрок", gameInfo.Player2Name); // TODO: Fix
-            Assert.AreEqual("Второй игрок", gameInfo.Player1Name);
+            Assert.AreEqual("Первый игрок", gameInfo.Player1Name);
+            Assert.AreEqual("Второй игрок", gameInfo.Player2Name);
             GameTree nextTree = gameInfo.GameTree;
             Assert.IsTrue(nextTree.Move.IsRoot);
             nextTree = nextTree.Childs.First();

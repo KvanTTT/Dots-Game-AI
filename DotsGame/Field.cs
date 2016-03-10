@@ -104,25 +104,25 @@ namespace DotsGame
             }
         }
 
-        public int RedCaptureCount
+        public int Player0CaptureCount
         {
             get;
             private set;
         }
 
-        public int BlueCaptureCount
+        public int Player1CaptureCount
         {
             get;
             private set;
         }
 
-        public int OldRedCaptureCount
+        public int OldPlayer0CaptureCount
         {
             get;
             private set;
         }
 
-        public int OldBlueCaptureCount
+        public int OldPlayer1CaptureCount
         {
             get;
             private set;
@@ -150,13 +150,13 @@ namespace DotsGame
             }
         }
 
-        public int RedSquare
+        public int Player0Square
         {
             get;
             protected set;
         }
 
-        public int BlueSquare
+        public int Player1Square
         {
             get;
             protected set;
@@ -507,7 +507,7 @@ namespace DotsGame
                     // Find array of dots, bounded by ChainPositions
                     AddCapturedDots(_inputSurroundedDots[i], dotColor);
 
-                    // Changing "RedCapturedCount" and "BlackCaptureCount".
+                    // Changing "Player0CapturedCount" and "BlackCaptureCount".
                     AddCapturedFreedCount(dotColor);
 
                     // If capture not empty base or turned on an option "Surround all".
@@ -547,10 +547,10 @@ namespace DotsGame
                                 _dots[_surroundPositions[j]] |= DotState.EmptyBase;
                         }
 
-                        if (dotColor == DotState.RedPlayer)
-                            RedSquare -= _lastSquareCaptureCount;
+                        if (dotColor == DotState.Player0)
+                            Player0Square -= _lastSquareCaptureCount;
                         else
-                            BlueSquare -= _lastSquareCaptureCount;
+                            Player1Square -= _lastSquareCaptureCount;
 
                         _chainPositions.RemoveRange(previousChainDotsCount, _chainPositions.Count - previousChainDotsCount);
                         _surroundPositions.RemoveRange(previousSuroundDotsCount, _surroundPositions.Count - previousSuroundDotsCount);
@@ -639,43 +639,43 @@ namespace DotsGame
 
         protected void AddCapturedFreedCount(DotState dotColor)
         {
-            if (dotColor == DotState.RedPlayer)
+            if (dotColor == DotState.Player0)
             {
-                RedCaptureCount += _lastBaseCaptureCount;
-                BlueCaptureCount -= _lastBaseFreedCount;
-                RedSquare += _lastSquareCaptureCount;
-                BlueSquare -= _lastSquareFreedCount;
+                Player0CaptureCount += _lastBaseCaptureCount;
+                Player1CaptureCount -= _lastBaseFreedCount;
+                Player0Square += _lastSquareCaptureCount;
+                Player1Square -= _lastSquareFreedCount;
             }
             else
             {
-                BlueCaptureCount += _lastBaseCaptureCount;
-                RedCaptureCount -= _lastBaseFreedCount;
-                BlueSquare += _lastSquareCaptureCount;
-                RedSquare -= _lastSquareFreedCount;
+                Player1CaptureCount += _lastBaseCaptureCount;
+                Player0CaptureCount -= _lastBaseFreedCount;
+                Player1Square += _lastSquareCaptureCount;
+                Player0Square -= _lastSquareFreedCount;
             }
         }
 
         private void SubCapturedFreedCount(DotState dotColor)
         {
-            if (dotColor == DotState.RedPlayer)
+            if (dotColor == DotState.Player0)
             {
                 if (LastMoveCaptureCount > 0)
                 {
-                    RedCaptureCount -= LastMoveCaptureCount;
-                    BlueCaptureCount += LastMoveFreedCount;
+                    Player0CaptureCount -= LastMoveCaptureCount;
+                    Player1CaptureCount += LastMoveFreedCount;
                 }
                 else
-                    BlueCaptureCount += LastMoveCaptureCount;
+                    Player1CaptureCount += LastMoveCaptureCount;
             }
             else
             {
                 if (LastMoveCaptureCount > 0)
                 {
-                    BlueCaptureCount -= LastMoveCaptureCount;
-                    RedCaptureCount += LastMoveFreedCount;
+                    Player1CaptureCount -= LastMoveCaptureCount;
+                    Player0CaptureCount += LastMoveFreedCount;
                 }
                 else
-                    RedCaptureCount += LastMoveCaptureCount;
+                    Player0CaptureCount += LastMoveCaptureCount;
             }
         }
 
@@ -872,10 +872,10 @@ namespace DotsGame
             }
         }
 
-        public bool MakeMove(int x, int y, DotState color)
+        public bool MakeMove(int x, int y, int playerNumber)
         {
             DotState oldCurrentPlayer = CurrentPlayer;
-            CurrentPlayer = color;
+            CurrentPlayer = (DotState)playerNumber;
             if (MakeMove(y * RealWidth + x))
                 return true;
             else
@@ -903,10 +903,10 @@ namespace DotsGame
                 _surroundDotsPositions.Clear();
                 LastMoveCaptureCount = 0;
                 LastMoveFreedCount = 0;
-                OldRedCaptureCount = RedCaptureCount;
-                OldBlueCaptureCount = BlueCaptureCount;
-                var oldRedSquare = RedSquare;
-                var oldBlueSquare = BlueSquare;
+                OldPlayer0CaptureCount = Player0CaptureCount;
+                OldPlayer1CaptureCount = Player1CaptureCount;
+                var oldPlayer0Square = Player0Square;
+                var oldPlayer1Square = Player1Square;
                 var oldDiagonalLinkedGroupsCount = DiagonalLinkedGroupsCount;
 
                 CheckClosure();
@@ -918,7 +918,7 @@ namespace DotsGame
                     Base = _chainDotsPositions.Count == 0 && _surroundDotsPositions.Count == 0 ? null :
                             new Base(LastMoveCaptureCount, LastMoveFreedCount,
                             new List<DotPosition>(_chainDotsPositions), new List<DotPosition>(_surroundDotsPositions),
-                            new List<short>(_chainPositions), new List<short>(_surroundPositions), oldRedSquare, oldBlueSquare),
+                            new List<short>(_chainPositions), new List<short>(_surroundPositions), oldPlayer0Square, oldPlayer1Square),
                     DiagonalGroupCount = oldDiagonalLinkedGroupsCount
                 });
                 LastState = _dotsSequenceStates[_dotsSequenceStates.Count - 1];
@@ -959,8 +959,8 @@ namespace DotsGame
                     LastMoveCaptureCount = LastState.Base.LastCaptureCount;
                     LastMoveFreedCount = LastState.Base.LastFreedCount;
 
-                    OldRedCaptureCount = RedCaptureCount;
-                    OldBlueCaptureCount = BlueCaptureCount;
+                    OldPlayer0CaptureCount = Player0CaptureCount;
+                    OldPlayer1CaptureCount = Player1CaptureCount;
 
                     SubCapturedFreedCount(_dots[LastState.Move.Position].GetPlayer());
 
@@ -968,8 +968,8 @@ namespace DotsGame
                     _surroundDotsPositions = LastState.Base.SurrroundDotPositions;
                     _chainPositions = LastState.Base.ChainPositions;
                     _surroundPositions = LastState.Base.SurroundPositions;
-                    RedSquare = LastState.Base.RedSquare;
-                    BlueSquare = LastState.Base.BlueSquare;
+                    Player0Square = LastState.Base.Player0Square;
+                    Player1Square = LastState.Base.Player1Square;
                 }
                 else
                 {
@@ -1018,12 +1018,12 @@ namespace DotsGame
             result._chainPositions = new List<short>(_chainPositions);
             result._surroundPositions = new List<short>(_surroundPositions);
             result._emptyBaseCreated = _emptyBaseCreated;
-            result.RedCaptureCount = RedCaptureCount;
-            result.BlueCaptureCount = BlueCaptureCount;
-            result.OldRedCaptureCount = OldRedCaptureCount;
-            result.OldBlueCaptureCount = OldBlueCaptureCount;
-            result.RedSquare = RedSquare;
-            result.BlueSquare = BlueSquare;
+            result.Player0CaptureCount = Player0CaptureCount;
+            result.Player1CaptureCount = Player1CaptureCount;
+            result.OldPlayer0CaptureCount = OldPlayer0CaptureCount;
+            result.OldPlayer1CaptureCount = OldPlayer1CaptureCount;
+            result.Player0Square = Player0Square;
+            result.Player1Square = Player1Square;
             result.CurrentPlayer = CurrentPlayer;
             result.LastPosition = LastPosition;
             //result.LastBaseCaptureCount_ = LastBaseCaptureCount_;

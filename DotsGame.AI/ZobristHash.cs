@@ -30,8 +30,8 @@ namespace DotsGame.AI
 
 			CaptureCountOffset_ = field.RealDotsCount * 2;
 			HashTable_ = new ulong[CaptureCountOffset_ + Field.RealWidth * 2];
-			Key ^= HashTable_[CaptureCountOffset_ + Field.RedCaptureCount % Field.RealWidth];
-			Key ^= HashTable_[CaptureCountOffset_ + Field.RealWidth + Field.BlueCaptureCount % Field.RealWidth];
+			Key ^= HashTable_[CaptureCountOffset_ + Field.Player0CaptureCount % Field.RealWidth];
+			Key ^= HashTable_[CaptureCountOffset_ + Field.RealWidth + Field.Player1CaptureCount % Field.RealWidth];
 			FillWithRandomValues();
 			Key = 0;
 		}
@@ -45,7 +45,7 @@ namespace DotsGame.AI
 			if (Field.LastMoveState == enmMoveState.Add)
 			{
 				int pos = Field.LastPosition;
-				if (Field.CurrentPlayer == DotState.RedPlayer)
+				if (Field.CurrentPlayer == DotState.Player0)
 					pos *= 2;
 				Key ^= HashTable_[pos];
 				
@@ -58,7 +58,7 @@ namespace DotsGame.AI
 					UpdateLastBaseHash();
 
 				int pos = Field.LastPosition;
-				if (Field.CurrentPlayer == DotState.BluePlayer)
+				if (Field.CurrentPlayer == DotState.Player1)
 					pos *= 2;
 				Key ^= HashTable_[pos];
 			}
@@ -101,8 +101,8 @@ namespace DotsGame.AI
 		/// </summary>
 		private void UpdateLastBaseHash()
 		{
-			bool isRed = !((Field.CurrentPlayer == DotState.RedPlayer && Field.LastMoveState == enmMoveState.Add)
-				|| (Field.CurrentPlayer == DotState.BluePlayer && Field.LastMoveState == enmMoveState.Remove)) ? true : false;
+			bool isRed = !((Field.CurrentPlayer == DotState.Player0 && Field.LastMoveState == enmMoveState.Add)
+				|| (Field.CurrentPlayer == DotState.Player1 && Field.LastMoveState == enmMoveState.Remove)) ? true : false;
 			if (Field.LastMoveCaptureCount < 0)
 				isRed = !isRed;
 			if (isRed)
@@ -113,7 +113,7 @@ namespace DotsGame.AI
 					{
 						if (Field[surroundPos].IsRealPutted())
 						{
-							if (Field[surroundPos].IsRealBluePlayer())
+							if (Field[surroundPos].IsRealPlayer1())
 							{
 								Key ^= HashTable_[surroundPos * 2];
 								Key ^= HashTable_[surroundPos];
@@ -142,7 +142,7 @@ namespace DotsGame.AI
 					{
 						if (Field[surroundPos].IsRealPutted())
 						{
-							if (Field[surroundPos].IsRealRedPlayer())
+							if (Field[surroundPos].IsRealPlayer0())
 							{
 								Key ^= HashTable_[surroundPos];
 								Key ^= HashTable_[surroundPos * 2];
@@ -166,10 +166,10 @@ namespace DotsGame.AI
 					}
 				}
 
-			Key ^= HashTable_[CaptureCountOffset_ + Field.OldRedCaptureCount % Field.RealWidth];
-			Key ^= HashTable_[CaptureCountOffset_ + Field.RedCaptureCount % Field.RealWidth];
-			Key ^= HashTable_[CaptureCountOffset_ + Field.RealWidth + Field.OldBlueCaptureCount % Field.RealWidth];
-			Key ^= HashTable_[CaptureCountOffset_ + Field.RealWidth + Field.BlueCaptureCount % Field.RealWidth];
+			Key ^= HashTable_[CaptureCountOffset_ + Field.OldPlayer0CaptureCount % Field.RealWidth];
+			Key ^= HashTable_[CaptureCountOffset_ + Field.Player0CaptureCount % Field.RealWidth];
+			Key ^= HashTable_[CaptureCountOffset_ + Field.RealWidth + Field.OldPlayer1CaptureCount % Field.RealWidth];
+			Key ^= HashTable_[CaptureCountOffset_ + Field.RealWidth + Field.Player1CaptureCount % Field.RealWidth];
 		}
 
 		#endregion

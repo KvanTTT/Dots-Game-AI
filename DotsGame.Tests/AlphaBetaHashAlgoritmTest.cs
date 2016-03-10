@@ -32,14 +32,14 @@ namespace DotsGame.Tests
 
             var alphaBetaAlgoritm = new AlphaBetaAlgoritm(field);
             stopwatch.Start();
-            int alphaBetaBestMove = alphaBetaAlgoritm.SearchBestMove(depth, DotState.RedPlayer, -AiSettings.InfinityScore, AiSettings.InfinityScore);
+            int alphaBetaBestMove = alphaBetaAlgoritm.SearchBestMove(depth, DotState.Player0, -AiSettings.InfinityScore, AiSettings.InfinityScore);
             stopwatch.Stop();
             TimeSpan alphaBetaElapsed = stopwatch.Elapsed;
             stopwatch.Reset();
 
             var alphaBetaHashAlgoritm = new AlphaBetaHashAlgoritm(field);
             stopwatch.Start();
-            int alphaBetaHashBestMove = alphaBetaHashAlgoritm.SearchBestMove((byte)depth, DotState.RedPlayer, -AiSettings.InfinityScore, AiSettings.InfinityScore);
+            int alphaBetaHashBestMove = alphaBetaHashAlgoritm.SearchBestMove((byte)depth, DotState.Player0, -AiSettings.InfinityScore, AiSettings.InfinityScore);
             stopwatch.Stop();
             TimeSpan alphaBetaHashElapsed = stopwatch.Elapsed;
 

@@ -49,10 +49,10 @@ namespace DotsGame.Tests
 
             field.MakeMove(startX + 2, startY + 1);
 
-            field.MakeMove(startX + 3, startY, DotState.RedPlayer);
+            field.MakeMove(startX + 3, startY, 0);
 
             var moveGenerator = new ForcedAttackMoveGenerator(field);
-            var CapturesMoves = moveGenerator.FindCapturesMoves(DotState.RedPlayer, 2);
+            var CapturesMoves = moveGenerator.FindCapturesMoves(0, 2);
 
             Assert.AreEqual(1, CapturesMoves.Count);
             Assert.AreEqual(Field.GetPosition(startX + 1, startY - 1), CapturesMoves[0].CapturePositions[0]);
@@ -69,20 +69,20 @@ namespace DotsGame.Tests
             int startY = 16;
             var field = new FieldWithGroups(39, 32);
 
-            field.MakeMove(startX, startY, DotState.RedPlayer);
-            field.MakeMove(startX - 1, startY + 1, DotState.RedPlayer);
-            field.MakeMove(startX, startY + 2, DotState.RedPlayer);
+            field.MakeMove(startX, startY, 0);
+            field.MakeMove(startX - 1, startY + 1, 0);
+            field.MakeMove(startX, startY + 2, 0);
 
-            field.MakeMove(startX + 2, startY, DotState.RedPlayer);
-            field.MakeMove(startX + 3, startY + 1, DotState.RedPlayer);
-            field.MakeMove(startX + 2, startY + 2, DotState.RedPlayer);
+            field.MakeMove(startX + 2, startY, 0);
+            field.MakeMove(startX + 3, startY + 1, 0);
+            field.MakeMove(startX + 2, startY + 2, 0);
 
-            field.MakeMove(startX, startY + 1, DotState.BluePlayer);
-            field.MakeMove(startX + 1, startY + 1, DotState.BluePlayer);
-            field.MakeMove(startX + 2, startY + 1, DotState.BluePlayer);
+            field.MakeMove(startX, startY + 1, 1);
+            field.MakeMove(startX + 1, startY + 1, 1);
+            field.MakeMove(startX + 2, startY + 1, 1);
 
             var moveGenerator = new ForcedAttackMoveGenerator(field);
-            var CapturesMoves = moveGenerator.FindCapturesMoves(DotState.RedPlayer, 2);
+            var CapturesMoves = moveGenerator.FindCapturesMoves(0, 2);
 
             Assert.AreEqual(4, CapturesMoves.Count);
             Assert.AreEqual(8, CapturesMoves[0].ChainPositions.Count);
@@ -106,21 +106,21 @@ namespace DotsGame.Tests
 
             field.MakeMove(startX + 2, startY + 1);
 
-            field.MakeMove(startX + 3, startY, DotState.RedPlayer);
+            field.MakeMove(startX + 3, startY, 0);
 
-            field.MakeMove(startX + 5, startY - 4, DotState.RedPlayer);
+            field.MakeMove(startX + 5, startY - 4, 0);
             //field.MakeMove(startX + 3, startY - 2, Dot.RedPlayer);
 
             var moveGenerator = new ForcedAttackMoveGenerator(field);
-            moveGenerator.GenerateMoves(DotState.RedPlayer);
+            moveGenerator.GenerateMoves(0);
 
             var result = moveGenerator.HashEntries.Select(entry => DotsGame.AI.Helper.HashEntryToString(entry)).ToList();
             Assert.AreEqual(Field.GetPosition(startX + 1, startY - 1), moveGenerator.HashEntries[0].GetMove());
             Assert.AreEqual(13, moveGenerator.HashEntries[0].GetDepth());
 
-            field.MakeMove(startX + 1, startY - 1, DotState.RedPlayer);
-            field.MakeMove(startX + 2, startY - 1, DotState.BluePlayer);
-            moveGenerator.GenerateMoves(DotState.RedPlayer);
+            field.MakeMove(startX + 1, startY - 1, 0);
+            field.MakeMove(startX + 2, startY - 1, 1);
+            moveGenerator.GenerateMoves(0);
 
             result = moveGenerator.HashEntries.Select(entry => DotsGame.AI.Helper.HashEntryToString(entry)).ToList();
             Assert.AreEqual(Field.GetPosition(startX + 2, startY - 2), moveGenerator.HashEntries[0].GetMove());

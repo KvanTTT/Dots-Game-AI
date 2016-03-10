@@ -21,7 +21,7 @@ namespace DotsGame.Formats
             result.Player1Name = Encoding.Default.GetString(data, 11, 9).TrimEnd();
             result.Player2Name = Encoding.Default.GetString(data, 20, 9).TrimEnd();
 
-            var playerNumber = 1;
+            int playerNumber = 0;
             for (var i = 58; i < data.Length; i += 13)
             {
                 var newGameTree = new GameTree();

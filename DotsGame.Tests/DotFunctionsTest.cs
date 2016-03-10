@@ -28,36 +28,36 @@ namespace DotsGame.Tests
                 {
                     int pos = Field.GetPosition(13, 13);
 
-                    Assert.IsTrue(field[pos].IsRedPutted());
-                    Assert.IsTrue(field[pos + 1].IsRedPutted());
-                    Assert.IsTrue(field[pos + 2].IsRedPutted());
-                    Assert.IsTrue(field[pos + 3].IsRedPutted());
+                    Assert.IsTrue(field[pos].IsPlayer0Putted());
+                    Assert.IsTrue(field[pos + 1].IsPlayer0Putted());
+                    Assert.IsTrue(field[pos + 2].IsPlayer0Putted());
+                    Assert.IsTrue(field[pos + 3].IsPlayer0Putted());
                 }
                 else if (field.DotsSequenceCount == 58)
                 {
                     int pos = Field.GetPosition(13, 13);
 
-                    Assert.IsTrue(field[pos].IsBluePutted());
-                    Assert.IsTrue(field[pos + 1].IsBluePutted());
-                    Assert.IsTrue(field[pos + 2].IsBluePutted());
-                    Assert.IsTrue(field[pos + 3].IsBluePutted());
-                    Assert.IsTrue(field[Field.GetPosition(13 - 3, 13 - 1)].IsBluePutted());
-                    Assert.IsTrue(field[Field.GetPosition(13 + 5, 13)].IsBluePutted());
+                    Assert.IsTrue(field[pos].IsPlayer1Putted());
+                    Assert.IsTrue(field[pos + 1].IsPlayer1Putted());
+                    Assert.IsTrue(field[pos + 2].IsPlayer1Putted());
+                    Assert.IsTrue(field[pos + 3].IsPlayer1Putted());
+                    Assert.IsTrue(field[Field.GetPosition(13 - 3, 13 - 1)].IsPlayer1Putted());
+                    Assert.IsTrue(field[Field.GetPosition(13 + 5, 13)].IsPlayer1Putted());
 
-                    Assert.IsFalse(field[pos].IsRedPutted());
-                    Assert.IsFalse(field[pos + 1].IsRedPutted());
-                    Assert.IsFalse(field[pos + 2].IsRedPutted());
-                    Assert.IsFalse(field[pos + 3].IsRedPutted());
+                    Assert.IsFalse(field[pos].IsPlayer0Putted());
+                    Assert.IsFalse(field[pos + 1].IsPlayer0Putted());
+                    Assert.IsFalse(field[pos + 2].IsPlayer0Putted());
+                    Assert.IsFalse(field[pos + 3].IsPlayer0Putted());
                 }
             }
 
-            Assert.AreEqual(0, field.RedCaptureCount);
-            Assert.AreEqual(16, field.BlueCaptureCount);
+            Assert.AreEqual(0, field.Player0CaptureCount);
+            Assert.AreEqual(16, field.Player1CaptureCount);
 
             field.UnmakeAllMoves();
 
-            Assert.AreEqual(0, field.RedCaptureCount);
-            Assert.AreEqual(0, field.BlueCaptureCount);
+            Assert.AreEqual(0, field.Player0CaptureCount);
+            Assert.AreEqual(0, field.Player1CaptureCount);
             Assert.IsTrue(field.IsEmpty);
         }
 
