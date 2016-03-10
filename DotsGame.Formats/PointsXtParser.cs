@@ -47,7 +47,7 @@ namespace DotsGame.Formats
             return result;
         }
 
-        public byte[] Save(GameInfo gameInfo)
+        public byte[] Serialize(GameInfo gameInfo)
         {
             throw new NotImplementedException();
         }

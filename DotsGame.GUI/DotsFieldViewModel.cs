@@ -149,7 +149,7 @@ namespace DotsGame.GUI
             {
                 AddLastMoveState();
                 UpdateInfo();
-                _gameTreeViewModel.AddMove(new GameMove((int)Field.CurrentPlayer, fieldPosY, fieldPosX));
+                _gameTreeViewModel.AddMove(new GameMove((int)Field.CurrentPlayer.NextPlayer(), fieldPosY, fieldPosX));
             }
         }
 

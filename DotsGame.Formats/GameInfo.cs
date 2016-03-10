@@ -12,35 +12,28 @@ namespace DotsGame
 
         public GameType GameType { get; set; }
 
-        public string AppName { get; set; }
+        public string AppName { get; set; } = "Dots Game AI";
 
-        public Encoding Encoding { get; set; }
+        public int Width { get; set; } = 39;
 
-        public int Width { get; set; }
+        public int Height { get; set; } = 32;
 
-        public int Height { get; set; }
+        public string Player1Name { get; set; } = "";
 
-        public string Player1Name { get; set; }
+        public string Player2Name { get; set; } = "";
 
-        public string Player2Name { get; set; }
-
-        public DateTime Date { get; set; }
+        public DateTime Date { get; set; } = DateTime.Now;
 
         public GameTree GameTree { get; set; }
 
-        public string Description { get; set; }
+        public string Description { get; set; } = "";
 
-        public string Rules { get; set; }
+        public string Rules { get; set; } = "";
 
         public GameInfo()
         {
             GameTree = new GameTree();
             GameTree.AddMove(GameMove.Root);
-        }
-
-        public GameInfo(IList<GameMove> moves)
-        {
-            GameTree = new GameTree();
         }
 
         public GameTree GetDefaultLastTree()

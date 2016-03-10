@@ -1,4 +1,5 @@
 ﻿using DotsGame.Formats;
+using DotsGame.Sgf;
 using Perspex;
 using Perspex.Controls;
 using Perspex.Controls.Shapes;
@@ -7,6 +8,7 @@ using Perspex.Threading;
 using ReactiveUI;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading;
@@ -127,7 +129,7 @@ namespace DotsGame.GUI
             _gameTreeCanvas = gameTreeUserControl.Find<Canvas>("GameTreeCanvas");
             _canvasScrollViewer = gameTreeUserControl.Find<ScrollViewer>("GameTreeScrollViewer");
             _dotsFieldViewModel = dotsFieldViewModel;
-            GameInfo = new GameInfo();
+            GameInfo = new GameInfo() { Width = dotsFieldViewModel.Field.Width, Height = dotsFieldViewModel.Field.Height };
             _gameTreeCanvas.PointerPressed += _gameTreeCanvas_PointerPressed;
             _gameTreeCanvas.KeyDown += _gameTreeCanvas_KeyDown;
             _gameTreeCanvas.KeyUp += _gameTreeCanvas_KeyUp;
@@ -212,14 +214,22 @@ namespace DotsGame.GUI
                 FileName = "";
                 GameInfoExtractor.InvalidateCache();
                 GameInfo = new GameInfo();
-                _dotsFieldViewModel.Field = new Field(39, 32);
+                _dotsFieldViewModel.Field = new Field(GameInfo.Width, GameInfo.Height);
                 UpdateSelectedGameTree(GameInfo.GetDefaultLastTree());
                 ScrollToSelectedGameTree();
             });
 
-            SaveCommand.Subscribe(_ =>
+            SaveCommand.Subscribe(async _ =>
             {
-                //new SaveFileDialog();
+                var saveSgfDialog = new SaveFileDialog();
+                saveSgfDialog.Filters.Add(new FileDialogFilter() { Name = "Smart Game Format", Extensions = new List<string>() { "sgf" } });
+                string fileName = await saveSgfDialog.ShowAsync();
+                if (fileName != null)
+                {
+                    var parser = new SgfParser { NewLines = true };
+                    byte[] serialized = parser.Serialize(GameInfo);
+                    File.WriteAllBytes(fileName, serialized);
+                }
             });
 
             UpdateCommand.Subscribe(UpdateGame);
