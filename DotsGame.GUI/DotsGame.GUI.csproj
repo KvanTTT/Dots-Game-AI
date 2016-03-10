@@ -34,86 +34,83 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="EntityFramework, Version=5.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
-      <HintPath>..\packages\EntityFramework.5.0.0\lib\net45\EntityFramework.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
     <Reference Include="Perspex.Animation, Version=0.0.0.1, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Perspex.9999.0.1238-nightly\lib\portable-windows8+net45\Perspex.Animation.dll</HintPath>
+      <HintPath>..\packages\Perspex.9999.0.1269-nightly\lib\portable-windows8+net45\Perspex.Animation.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="Perspex.Application, Version=0.0.0.1, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Perspex.9999.0.1238-nightly\lib\portable-windows8+net45\Perspex.Application.dll</HintPath>
+      <HintPath>..\packages\Perspex.9999.0.1269-nightly\lib\portable-windows8+net45\Perspex.Application.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="Perspex.Base, Version=0.0.0.1, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Perspex.9999.0.1238-nightly\lib\portable-windows8+net45\Perspex.Base.dll</HintPath>
+      <HintPath>..\packages\Perspex.9999.0.1269-nightly\lib\portable-windows8+net45\Perspex.Base.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="Perspex.Cairo, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Perspex.Desktop.9999.0.1238-nightly\lib\net45\Perspex.Cairo.dll</HintPath>
+      <HintPath>..\packages\Perspex.Desktop.9999.0.1269-nightly\lib\net45\Perspex.Cairo.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="Perspex.Controls, Version=0.0.0.1, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Perspex.9999.0.1238-nightly\lib\portable-windows8+net45\Perspex.Controls.dll</HintPath>
+      <HintPath>..\packages\Perspex.9999.0.1269-nightly\lib\portable-windows8+net45\Perspex.Controls.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="Perspex.Diagnostics, Version=0.0.0.1, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Perspex.9999.0.1238-nightly\lib\portable-windows8+net45\Perspex.Diagnostics.dll</HintPath>
+      <HintPath>..\packages\Perspex.9999.0.1269-nightly\lib\portable-windows8+net45\Perspex.Diagnostics.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="Perspex.Direct2D1, Version=0.0.0.1, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Perspex.Desktop.9999.0.1238-nightly\lib\net45\Perspex.Direct2D1.dll</HintPath>
+      <HintPath>..\packages\Perspex.Desktop.9999.0.1269-nightly\lib\net45\Perspex.Direct2D1.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="Perspex.Gtk, Version=1.0.5908.29972, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Perspex.Desktop.9999.0.1238-nightly\lib\net45\Perspex.Gtk.dll</HintPath>
-      <Private>True</Private>
+    <Reference Include="Perspex.Gtk">
+      <HintPath>..\packages\Perspex.Desktop.9999.0.1269-nightly\lib\net45\Perspex.Gtk.dll</HintPath>
     </Reference>
     <Reference Include="Perspex.HtmlRenderer, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Perspex.9999.0.1238-nightly\lib\portable-windows8+net45\Perspex.HtmlRenderer.dll</HintPath>
+      <HintPath>..\packages\Perspex.9999.0.1269-nightly\lib\portable-windows8+net45\Perspex.HtmlRenderer.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="Perspex.Input, Version=0.0.0.1, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Perspex.9999.0.1238-nightly\lib\portable-windows8+net45\Perspex.Input.dll</HintPath>
+      <HintPath>..\packages\Perspex.9999.0.1269-nightly\lib\portable-windows8+net45\Perspex.Input.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="Perspex.Interactivity, Version=0.0.0.1, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Perspex.9999.0.1238-nightly\lib\portable-windows8+net45\Perspex.Interactivity.dll</HintPath>
+      <HintPath>..\packages\Perspex.9999.0.1269-nightly\lib\portable-windows8+net45\Perspex.Interactivity.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="Perspex.Layout, Version=0.0.0.1, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Perspex.9999.0.1238-nightly\lib\portable-windows8+net45\Perspex.Layout.dll</HintPath>
+      <HintPath>..\packages\Perspex.9999.0.1269-nightly\lib\portable-windows8+net45\Perspex.Layout.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="Perspex.Markup, Version=0.0.0.1, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Perspex.9999.0.1238-nightly\lib\portable-windows8+net45\Perspex.Markup.dll</HintPath>
+      <HintPath>..\packages\Perspex.9999.0.1269-nightly\lib\portable-windows8+net45\Perspex.Markup.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="Perspex.Markup.Xaml, Version=0.0.0.1, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Perspex.9999.0.1238-nightly\lib\portable-windows8+net45\Perspex.Markup.Xaml.dll</HintPath>
+      <HintPath>..\packages\Perspex.9999.0.1269-nightly\lib\portable-windows8+net45\Perspex.Markup.Xaml.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="Perspex.ReactiveUI, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Perspex.9999.0.1238-nightly\lib\portable-windows8+net45\Perspex.ReactiveUI.dll</HintPath>
+      <HintPath>..\packages\Perspex.9999.0.1269-nightly\lib\portable-windows8+net45\Perspex.ReactiveUI.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="Perspex.SceneGraph, Version=0.0.0.1, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Perspex.9999.0.1238-nightly\lib\portable-windows8+net45\Perspex.SceneGraph.dll</HintPath>
+      <HintPath>..\packages\Perspex.9999.0.1269-nightly\lib\portable-windows8+net45\Perspex.SceneGraph.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="Perspex.Styling, Version=0.0.0.1, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Perspex.9999.0.1238-nightly\lib\portable-windows8+net45\Perspex.Styling.dll</HintPath>
+      <HintPath>..\packages\Perspex.9999.0.1269-nightly\lib\portable-windows8+net45\Perspex.Styling.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="Perspex.Themes.Default, Version=0.0.0.1, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Perspex.9999.0.1238-nightly\lib\portable-windows8+net45\Perspex.Themes.Default.dll</HintPath>
+      <HintPath>..\packages\Perspex.9999.0.1269-nightly\lib\portable-windows8+net45\Perspex.Themes.Default.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="Perspex.Win32, Version=0.0.0.1, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Perspex.Desktop.9999.0.1238-nightly\lib\net45\Perspex.Win32.dll</HintPath>
+      <HintPath>..\packages\Perspex.Desktop.9999.0.1269-nightly\lib\net45\Perspex.Win32.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="PresentationCore" />
+    <Reference Include="PresentationFramework" />
     <Reference Include="Serilog, Version=1.5.0.0, Culture=neutral, PublicKeyToken=24c2f752a8e58a10, processorArchitecture=MSIL">
       <HintPath>..\packages\Serilog.1.5.14\lib\net45\Serilog.dll</HintPath>
       <Private>True</Private>
@@ -134,9 +131,8 @@
       <HintPath>..\packages\SharpDX.DXGI.3.0.1\lib\net45\SharpDX.DXGI.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="Splat, Version=1.6.2.0, Culture=neutral, processorArchitecture=MSIL">
+    <Reference Include="Splat">
       <HintPath>..\packages\Splat.1.6.2\lib\Net45\Splat.dll</HintPath>
-      <Private>True</Private>
     </Reference>
     <Reference Include="Sprache, Version=2.0.0.50, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\Sprache.2.0.0.50\lib\portable-net4+netcore45+win8+wp8+sl5+MonoAndroid+Xamarin.iOS10+MonoTouch\Sprache.dll</HintPath>
@@ -176,47 +172,57 @@
     <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="BasicCore.paml.cs">
-      <DependentUpon>BasicCoreControl.paml</DependentUpon>
+    <Compile Include="BasicCore.xaml.cs">
+      <DependentUpon>BasicCoreControl.xaml</DependentUpon>
     </Compile>
     <Compile Include="CoreControlFactory.cs" />
     <Compile Include="DotsFieldViewModel.cs" />
-    <Compile Include="GameTreeControl.paml.cs">
-      <DependentUpon>GameTreeControl.paml</DependentUpon>
+    <Compile Include="GameTreeControl.xaml.cs">
+      <DependentUpon>GameTreeControl.xaml</DependentUpon>
     </Compile>
     <Compile Include="GameTreeViewModel.cs" />
-    <Compile Include="OpenPlaydotsGame.paml.cs">
-      <DependentUpon>OpenPlaydotsGame.paml</DependentUpon>
+    <Compile Include="OpenPlaydotsGame.xaml.cs">
+      <DependentUpon>OpenPlaydotsGame.xaml</DependentUpon>
     </Compile>
     <Compile Include="TreeLineDirection.cs" />
-    <EmbeddedResource Include="App.paml" />
-    <Compile Include="App.paml.cs">
-      <DependentUpon>App.paml</DependentUpon>
-    </Compile>
-    <EmbeddedResource Include="MainWindow.paml">
+    <EmbeddedResource Include="App.xaml">
       <SubType>Designer</SubType>
     </EmbeddedResource>
-    <Compile Include="DotsFieldGameControl.paml.cs">
-      <DependentUpon>DotsFieldGameControl.paml</DependentUpon>
+    <Compile Include="App.xaml.cs">
+      <DependentUpon>App.xaml</DependentUpon>
     </Compile>
-    <Compile Include="GroupsCoreControl.paml.cs">
-      <DependentUpon>GroupsCoreControl.paml</DependentUpon>
+    <EmbeddedResource Include="MainWindow.xaml">
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <Compile Include="DotsFieldGameControl.xaml.cs">
+      <DependentUpon>DotsFieldGameControl.xaml</DependentUpon>
     </Compile>
-    <Compile Include="MainWindow.paml.cs">
-      <DependentUpon>MainWindow.paml</DependentUpon>
+    <Compile Include="GroupsCoreControl.xaml.cs">
+      <DependentUpon>GroupsCoreControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="MainWindow.xaml.cs">
+      <DependentUpon>MainWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="MainWindowViewModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="BasicCoreControl.paml" />
-    <EmbeddedResource Include="GroupsCoreControl.paml" />
-    <EmbeddedResource Include="DotsFieldGameControl.paml">
+    <EmbeddedResource Include="BasicCoreControl.xaml">
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="GroupsCoreControl.xaml">
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="DotsFieldGameControl.xaml">
       <SubType>Designer</SubType>
     </EmbeddedResource>
     <None Include="app.config" />
-    <EmbeddedResource Include="GameTreeControl.paml" />
-    <EmbeddedResource Include="OpenPlaydotsGame.paml" />
+    <EmbeddedResource Include="GameTreeControl.xaml">
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="OpenPlaydotsGame.xaml">
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
     <None Include="packages.config">
       <SubType>Designer</SubType>
     </None>
