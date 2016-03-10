@@ -34,7 +34,7 @@ namespace DotsGame
 
         public static DotState NextPlayer(this DotState player)
         {
-            return (player & DotState.Player) == DotState.RedPlayer ? DotState.BluePlayer : DotState.RedPlayer;
+            return (player & DotState.Player) == DotState.Player0 ? DotState.Player1 : DotState.Player0;
         }
 
         public static bool IsPlayerPutted(this DotState dot, DotState player)
@@ -42,14 +42,14 @@ namespace DotsGame
             return (dot & DotState.EnableMask) == (DotState.Putted | player);
         }
 
-        public static bool IsRedPutted(this DotState dot)
+        public static bool IsPlayer0Putted(this DotState dot)
         {
-            return (dot & DotState.EnableMask) == (DotState.Putted | DotState.RedPlayer);
+            return (dot & DotState.EnableMask) == (DotState.Putted | DotState.Player0);
         }
 
-        public static bool IsBluePutted(this DotState dot)
+        public static bool IsPlayer1Putted(this DotState dot)
         {
-            return (dot & DotState.EnableMask) == (DotState.Putted | DotState.BluePlayer);
+            return (dot & DotState.EnableMask) == (DotState.Putted | DotState.Player1);
         }
 
         public static bool IsZeroSurroundLevel(this DotState dot)
@@ -77,14 +77,14 @@ namespace DotsGame
             return (dot & DotState.RealPutted) == DotState.RealPutted;
         }
 
-        public static bool IsRealRedPlayer(this DotState dot)
+        public static bool IsRealPlayer0(this DotState dot)
         {
-            return (dot & DotState.RealPlayer) == DotState.RedRealPlayer;
+            return (dot & DotState.RealPlayer) == DotState.RealPlayer0;
         }
 
-        public static bool IsRealBluePlayer(this DotState dot)
+        public static bool IsRealPlayer1(this DotState dot)
         {
-            return (dot & DotState.RealPlayer) == DotState.BlueRealPlayer;
+            return (dot & DotState.RealPlayer) == DotState.RealPlayer1;
         }
 
         public static bool IsEnable(this DotState dot, DotState enableCondition)

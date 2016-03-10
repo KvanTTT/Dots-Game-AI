@@ -121,8 +121,8 @@ namespace DotsGame.Shell
 					OneMoveShapes.Remove(e.Pos);
 				}
 			lblDotsCount.Content = Field.DotsSequenceCount.ToString();
-			lblRedCaptureCount.Content = Field.RedCaptureCount.ToString() + "," + Field.RedSquare.ToString();
-			lblBlueCaptureCount.Content = Field.BlueCaptureCount.ToString() + "," + Field.BlueSquare.ToString();
+			lblRedCaptureCount.Content = Field.Player0CaptureCount.ToString() + "," + Field.Player0Square.ToString();
+			lblBlueCaptureCount.Content = Field.Player1CaptureCount.ToString() + "," + Field.Player1Square.ToString();
 			tbHash.Text = HashField.Key.ToString();
 		}
 
@@ -181,8 +181,8 @@ namespace DotsGame.Shell
 			foreach (var group in analyzer.Groups)
 			{
 				var polygon = new Polygon { Stretch = Stretch.None };
-				polygon.Stroke = group.Player == DotState.RedPlayer ? Player1Stroke : Player2Stroke;
-				polygon.Fill = group.Player == DotState.RedPlayer ? Player1Fill : Player2Fill;
+				polygon.Stroke = group.Player == DotState.Player0 ? Player1Stroke : Player2Stroke;
+				polygon.Fill = group.Player == DotState.Player0 ? Player1Fill : Player2Fill;
 				polygon.StrokeMiterLimit = 1;
 				foreach (var pos in group.EnvelopePositions)
 					polygon.Points.Add(GetGraphicaPoint(pos));
@@ -377,7 +377,7 @@ namespace DotsGame.Shell
 
 			Ellipse E = new Ellipse
 			{
-				Fill = Field[State.Move.Position].IsRealRedPlayer() ? Player1Stroke : Player2Stroke,
+				Fill = Field[State.Move.Position].IsRealPlayer0() ? Player1Stroke : Player2Stroke,
 				Width = Radius * 2,
 				Height = Radius * 2,
 				Stretch = Stretch.Uniform
@@ -397,7 +397,7 @@ namespace DotsGame.Shell
 					GraphicsPoints.Add(GetGraphicaPoint(PointPos));
 
 				polygon = new Polygon { StrokeThickness = LineCellRatio * CellSize, Points = GraphicsPoints, Stretch = Stretch.None };
-				if (Field[chainPositions.Last()].IsRedPutted())
+				if (Field[chainPositions.Last()].IsPlayer0Putted())
 				{
 					polygon.Fill = Player1Fill;
 					polygon.Stroke = Player1Stroke;
@@ -414,7 +414,7 @@ namespace DotsGame.Shell
 
 			var player = Field.CurrentPlayer.NextPlayer();
 			Brush stroke;
-			if (Field[State.Move.Position].IsRedPutted())
+			if (Field[State.Move.Position].IsPlayer0Putted())
 				stroke = Player1Stroke;
 			else
 				stroke = Player2Stroke;

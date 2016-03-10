@@ -8,20 +8,24 @@ namespace DotsGame.Sgf
 {
     public class SgfParser : IDotsGameFormatParser
     {
-        private readonly Encoding DefaultEncoding = Encoding.Default;
+        private const string Indent = "  ";
+
         private GameInfo _gameInfo;
         private int _currentDataPos;
-        private byte[] _data;
         private GameTree _oldGameTree, _currentGameTree;
         private int _commentNumber;
+        private byte[] _data;
+        private Encoding _encoding = Encoding.UTF8;
+
+        public bool NewLines { get; set; }
 
         public GameInfo Parse(byte[] data)
         {
             _gameInfo = new GameInfo();
-            _data = data;
             _currentDataPos = 0;
+            _oldGameTree = _currentGameTree = null;
             _commentNumber = 0;
-            _gameInfo.Encoding = Encoding.UTF8;
+            _data = data;
 
             SkipSpaces();
             bool atLeastOneGameTreeShouldBeSpecified = false;
@@ -54,10 +58,37 @@ namespace DotsGame.Sgf
             return _gameInfo;
         }
 
-        public byte[] Save(GameInfo gameInfo)
+        public byte[] Serialize(GameInfo gameInfo)
         {
-            throw new NotImplementedException();
+            var builder = new StringBuilder("(;");
+            builder.Append("AP[" + gameInfo.AppName + "]");
+            builder.Append("GM[" + (int)gameInfo.GameType + "]");
+            builder.Append("FF[" + 4 + "]");
+            builder.Append("CA[" + Encoding.UTF8.HeaderName.ToUpperInvariant() + "]");
+            builder.Append("SZ[" + gameInfo.Width + (gameInfo.Width == gameInfo.Height ? "" : ":" + gameInfo.Height)  + "]");
+            if (!string.IsNullOrEmpty(gameInfo.Rules))
+            {
+                builder.Append("RU[" + gameInfo.Rules + "]");
+            }
+            builder.Append("PB[" + gameInfo.Player1Name + "]");
+            builder.Append("PW[" + gameInfo.Player2Name + "]");
+            //builder.Append("BR[" +  + "]");
+            //builder.Append("BW[" +  + "]");
+            builder.Append("DT[" + gameInfo.Date.ToString("u").Replace("Z", "") + "]");
+            //builder.Append("EV[" +  +"]");
+            if (!string.IsNullOrEmpty(gameInfo.Description))
+            {
+                builder.Append("C[" + gameInfo.Description + "]");
+            }
+
+            Serialize(gameInfo.GameTree, builder, 0);
+
+            builder.Append(")");
+
+            return Encoding.UTF8.GetBytes(builder.ToString());
         }
+
+        #region Parse
 
         private GameTree ParseGameTree(out bool ignoreParent)
         {
@@ -121,7 +152,7 @@ namespace DotsGame.Sgf
                     _currentDataPos++;
                 }
             }
-            string propertyId = DefaultEncoding.GetString(_data, propertyIdStartInd, _currentDataPos - propertyIdStartInd);
+            string propertyId = _encoding.GetString(_data, propertyIdStartInd, _currentDataPos - propertyIdStartInd);
 
             SkipSpaces();
             bool atLeastOneValueSpecified = false;
@@ -153,7 +184,7 @@ namespace DotsGame.Sgf
         // https://en.wikipedia.org/wiki/Smart_Game_Format
         private void ProcessProperty(string id, byte[] propertyValue)
         {
-            string stringValue = _gameInfo.Encoding.GetString(propertyValue);
+            string stringValue = _encoding.GetString(propertyValue);
             switch (id)
             {
                 case "AP":
@@ -171,7 +202,7 @@ namespace DotsGame.Sgf
                 case "CA":
                     try
                     {
-                        _gameInfo.Encoding = Encoding.GetEncoding(stringValue);
+                        _encoding = Encoding.GetEncoding(stringValue);
                     }
                     catch
                     {
@@ -228,11 +259,11 @@ namespace DotsGame.Sgf
                     break;
 
                 case "PB":
-                    _gameInfo.Player2Name = stringValue;
+                    _gameInfo.Player1Name = stringValue;
                     break;
 
                 case "PW":
-                    _gameInfo.Player1Name = stringValue;
+                    _gameInfo.Player2Name = stringValue;
                     break;
 
                 case "RU":
@@ -306,5 +337,62 @@ namespace DotsGame.Sgf
                 return false;
             }
         }
+
+        #endregion
+
+        #region Serialize
+
+        private void Serialize(GameTree gameTree, StringBuilder builder, int level)
+        {
+            if (!gameTree.Move.IsRoot)
+            {
+                builder.Append(";");
+                foreach (var gameMove in gameTree.GameMoves)
+                {
+                    string color = gameMove.PlayerNumber == 0 ? "B" : "W";
+                    builder.Append(color + "[" + IntToChar(gameMove.Column) + IntToChar(gameMove.Row) + "]");
+                }
+            }
+            if (gameTree.Childs.Count == 1)
+            {
+                Serialize(gameTree.Childs.First(), builder, 0);
+            }
+            else if (gameTree.Childs.Count > 0)
+            {
+                string spaces = null;
+                foreach (var child in gameTree.Childs)
+                {
+                    if (NewLines)
+                    {
+                        spaces = string.Concat(Enumerable.Repeat(Indent, level));
+                        builder.AppendLine();
+                        builder.Append(spaces);
+                    }
+                    builder.Append("(");
+                    Serialize(child, builder, level + 1);
+                    if (NewLines && child.Childs.Count > 1)
+                    {
+                        builder.AppendLine();
+                        builder.Append(spaces);
+                    }
+                    builder.Append(")");
+                }
+            }
+        }
+
+        private char IntToChar(int i)
+        {
+            if (i - 1 >= 0 && i - 1 <= 'z' - 'a')
+            {
+                return (char)(i - 1 + 'a');
+            }
+            if (i - 27 >= 0 && i - 27 <= 'Z' - 'A')
+            {
+                return (char)(i - 27 + 'A');
+            }
+            throw new Exception($"Too mouch position: {i}");
+        }
+
+        #endregion
     }
 }

@@ -278,10 +278,10 @@ namespace DotsGame
                                 _dots[_surroundPositions[j]] |= DotState.EmptyBase;
                         }
 
-                        if (dotColor == DotState.RedPlayer)
-                            RedSquare -= _lastSquareCaptureCount;
+                        if (dotColor == DotState.Player0)
+                            Player0Square -= _lastSquareCaptureCount;
                         else
-                            BlueSquare -= _lastSquareCaptureCount;
+                            Player1Square -= _lastSquareCaptureCount;
 
                         _chainPositions.RemoveRange(previousChainDotsCount, _chainPositions.Count - previousChainDotsCount);
                         _surroundPositions.RemoveRange(previousSuroundDotsCount, _surroundPositions.Count - previousSuroundDotsCount);

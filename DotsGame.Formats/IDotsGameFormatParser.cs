@@ -10,6 +10,6 @@ namespace DotsGame
     {
         GameInfo Parse(byte[] text);
 
-        byte[] Save(GameInfo gameInfo);
+        byte[] Serialize(GameInfo gameInfo);
     }
 }

@@ -27,12 +27,12 @@ namespace DotsGame.AI
 
 		public float Estimate(DotState player)
 		{
-			if (player == DotState.RedPlayer)
-				return (Field.RedCaptureCount - Field.BlueCaptureCount) +
-					   (Field.RedSquare - Field.BlueSquare) * AiSettings.SquareCoef;
+			if (player == DotState.Player0)
+				return (Field.Player0CaptureCount - Field.Player1CaptureCount) +
+					   (Field.Player0Square - Field.Player1Square) * AiSettings.SquareCoef;
 			else
-				return (Field.BlueCaptureCount - Field.RedCaptureCount) +
-					   (Field.BlueSquare - Field.RedSquare) * AiSettings.SquareCoef;
+				return (Field.Player1CaptureCount - Field.Player0CaptureCount) +
+					   (Field.Player1Square - Field.Player0Square) * AiSettings.SquareCoef;
 		}
 
 		#endregion

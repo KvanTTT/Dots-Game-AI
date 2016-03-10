@@ -32,8 +32,8 @@ namespace DotsGame.GUI
         public double DotRadius { get; set; } = 5;
         public double FieldMargin { get; set; } = 10;
 
-        public Color Player1Color { get; set; } = Color.FromRgb(255, 0, 0);
-        public Color Player2Color { get; set; } = Color.FromRgb(0, 0, 255);
+        public Color Player1Color { get; set; } = Color.FromRgb(0, 0, 255);
+        public Color Player2Color { get; set; } = Color.FromRgb(255, 0, 0);
         public Color Player1BaseColor { get; private set; }
         public Color Player2BaseColor { get; private set; }
 
@@ -107,8 +107,7 @@ namespace DotsGame.GUI
 
         public void MakeMoves(GameMove move)
         {
-            if (!move.IsRoot && _field.MakeMove(move.Column, move.Row,
-                move.PlayerNumber == 0 ? DotState.BluePlayer : DotState.RedPlayer))
+            if (!move.IsRoot && _field.MakeMove(move.Column, move.Row, move.PlayerNumber))
             {
                 AddLastMoveState();
                 UpdateInfo();
@@ -119,7 +118,7 @@ namespace DotsGame.GUI
         {
             foreach (var move in moves)
             {
-                if (!move.IsRoot && _field.MakeMove(move.Column, move.Row, move.PlayerNumber == 0 ? DotState.BluePlayer : DotState.RedPlayer))
+                if (!move.IsRoot && _field.MakeMove(move.Column, move.Row, move.PlayerNumber))
                 {
                     AddLastMoveState();
                 }
@@ -150,15 +149,15 @@ namespace DotsGame.GUI
             {
                 AddLastMoveState();
                 UpdateInfo();
-                _gameTreeViewModel.AddMove(new GameMove(Field.CurrentPlayer == DotState.RedPlayer ? 0 : 1, fieldPosY, fieldPosX));
+                _gameTreeViewModel.AddMove(new GameMove((int)Field.CurrentPlayer.NextPlayer(), fieldPosY, fieldPosX));
             }
         }
 
         private void UpdateInfo()
         {
             UpdateLastMoveMarker();
-            Player1Score = _field.RedCaptureCount;
-            Player2Score = _field.BlueCaptureCount;
+            Player1Score = _field.Player0CaptureCount;
+            Player2Score = _field.Player1CaptureCount;
         }
 
         private void RefreshField()
@@ -234,7 +233,7 @@ namespace DotsGame.GUI
             DotState dotState = _field[pos];
             var dotCircle = new Ellipse
             {
-                Fill = new SolidColorBrush(dotState.IsRealRedPlayer() ? Player1Color : Player2Color),
+                Fill = new SolidColorBrush(dotState.IsRealPlayer0() ? Player1Color : Player2Color),
                 Width = DotRadius * 2,
                 Height = DotRadius * 2,
                 [Canvas.LeftProperty] = point.X - DotRadius,
@@ -256,7 +255,7 @@ namespace DotsGame.GUI
                     baseDot.ZIndex = dotZIndex;
                     polygonPoints.Add(GetGraphicalPoint(chainPos));
                 }
-                bool redBaseColor = state.Base.ChainDotPositions.Last().Dot.IsRealRedPlayer();
+                bool redBaseColor = state.Base.ChainDotPositions.Last().Dot.IsRealPlayer0();
                 var basePolygon = new Polygon
                 {
                     Fill = new SolidColorBrush(redBaseColor ? Player1BaseColor : Player2BaseColor),

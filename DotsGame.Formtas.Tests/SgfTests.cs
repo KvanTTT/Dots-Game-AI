@@ -12,14 +12,33 @@ namespace DotsGame.Formtas.Tests
     [TestFixture]
     public class SgfTests
     {
+        private string SimpleCrosswiseSgf = "(;AP[Спортивные Точки (playdots.ru)]GM[40]FF[4]CA[UTF-8]SZ[39:32]DT[2016-03-10 21:13:42]RU[russian]PB[Первый игрок]PW[Второй игрок];B[bE];W[cE];B[cD];W[bD])";
+        private string TreeSgf = @"
+                (;GM[40]FF[4]AP[Drago:4.22.02]SZ[19]CA[UTF-8]
+                (;B[jj];W[kh])
+                (;B[gi]
+                 (;W[fm])
+                 (;W[mj];B[ki])
+                )
+                (;B[pl];W[pi]))";
+
         [Test]
-        public void Parse_SgfSimpleCrosswise()
+        public void Parse_SimpleCrosswiseSgf()
         {
-            var testData = "(;AP[Спортивные Точки (playdots.ru)]GM[40]FF[4]CA[UTF-8]SZ[39:32]RU[russian]PB[Первый игрок]PW[Второй игрок];B[bE];W[cE];B[cD];W[bD])";
             var parser = new SgfParser();
-            var gameInfo = parser.Parse(Encoding.UTF8.GetBytes(testData));
+            GameInfo gameInfo = parser.Parse(Encoding.UTF8.GetBytes(SimpleCrosswiseSgf));
             CheckCrosswise(gameInfo);
             Assert.IsFalse(gameInfo.FromUrl);
+        }
+
+        [Test]
+        public void Serialize_SimpleCrosswiseSgf()
+        {
+            var parser = new SgfParser();
+            GameInfo gameInfo = parser.Parse(Encoding.UTF8.GetBytes(SimpleCrosswiseSgf));
+            byte[] serialzied = parser.Serialize(gameInfo);
+            GameInfo deserialized = parser.Parse(serialzied);
+            CheckCrosswise(deserialized);
         }
 
         [TestCase("5547")]
@@ -28,7 +47,7 @@ namespace DotsGame.Formtas.Tests
         {
             var extractor = new GameInfoExtractor();
             GameInfo info = extractor.DetectFormatAndOpen(fileNameOrPath);
-            CheckCrosswise(info);
+            CheckCrosswise(info, false);
             Assert.IsTrue(info.FromUrl);
         }
 
@@ -40,25 +59,60 @@ namespace DotsGame.Formtas.Tests
             GameInfo info = extractor.DetectFormatAndOpen(fileNameOrPath);
             Assert.IsTrue(info.FromUrl);
             Assert.AreEqual(new DateTime(2016, 02, 08, 13, 49, 30), info.Date);
-            Assert.AreEqual("Сергей Чернобровин", info.Player2Name);
-            Assert.AreEqual("Ксюша Димарчук", info.Player1Name);
+            Assert.AreEqual("Сергей Чернобровин", info.Player1Name);
+            Assert.AreEqual("Ксюша Димарчук", info.Player2Name);
             Assert.AreEqual("без территории, с заземлением, двойной скрест в центре, 25 сек на ход, 4 мин на партию", info.Description);
         }
 
         [Test]
         public void Parse_SgfTree()
         {
-            string sgfData = @"
-                (;GM[40]FF[4]AP[Drago:4.22.02]SZ[19]CA[UTF-8]
-                (;B[jj];W[kh])
-                (;B[gi]
-                 (;W[fm])
-                 (;W[mj];B[ki])
-                )
-                (;B[pl];W[pi]))";
             var parser = new SgfParser();
-            var gameInfo = parser.Parse(Encoding.UTF8.GetBytes(sgfData));
+            var gameInfo = parser.Parse(Encoding.UTF8.GetBytes(TreeSgf));
+            CheckTree(gameInfo);
+        }
 
+        [Test]
+        public void Serialzie_SgfTree()
+        {
+            var parser = new SgfParser { NewLines = true };
+            GameInfo gameInfo = parser.Parse(Encoding.UTF8.GetBytes(TreeSgf));
+            byte[] serialized = parser.Serialize(gameInfo);
+            GameInfo deserialized = parser.Parse(serialized);
+            CheckTree(deserialized);
+        }
+
+        private static void CheckCrosswise(GameInfo gameInfo, bool checkDate = true)
+        {
+            Assert.AreEqual("Спортивные Точки (playdots.ru)", gameInfo.AppName);
+            if (checkDate)
+            {
+                Assert.AreEqual(new DateTime(2016, 03, 10, 21, 13, 42), gameInfo.Date);
+            }
+            Assert.AreEqual(GameType.Kropki, gameInfo.GameType);
+            Assert.AreEqual(39, gameInfo.Width);
+            Assert.AreEqual(32, gameInfo.Height);
+            Assert.AreEqual("Первый игрок", gameInfo.Player1Name);
+            Assert.AreEqual("Второй игрок", gameInfo.Player2Name);
+            GameTree nextTree = gameInfo.GameTree;
+            Assert.IsTrue(nextTree.Move.IsRoot);
+            nextTree = nextTree.Childs.First();
+            Assert.AreEqual(31, nextTree.Move.Row);
+            Assert.AreEqual(2, nextTree.Move.Column);
+            nextTree = nextTree.Childs.First();
+            Assert.AreEqual(31, nextTree.Move.Row);
+            Assert.AreEqual(3, nextTree.Move.Column);
+            nextTree = nextTree.Childs.First();
+            Assert.AreEqual(30, nextTree.Move.Row);
+            Assert.AreEqual(3, nextTree.Move.Column);
+            nextTree = nextTree.Childs.First();
+            Assert.AreEqual(30, nextTree.Move.Row);
+            Assert.AreEqual(2, nextTree.Move.Column);
+            Assert.AreEqual(0, nextTree.Childs.Count);
+        }
+
+        private static void CheckTree(GameInfo gameInfo)
+        {
             Assert.AreEqual(19, gameInfo.Width);
             Assert.AreEqual(19, gameInfo.Height);
             GameTree tree = gameInfo.GameTree;
@@ -91,32 +145,6 @@ namespace DotsGame.Formtas.Tests
             Assert.AreEqual(9, tree.Childs[0].Move.Row);
             Assert.AreEqual(16, tree.Childs[0].Move.Column);
             Assert.AreEqual(tree, tree.Childs[0].Parent);
-        }
-
-        private static void CheckCrosswise(GameInfo gameInfo)
-        {
-            Assert.AreEqual("Спортивные Точки (playdots.ru)", gameInfo.AppName);
-            Assert.AreEqual(GameType.Kropki, gameInfo.GameType);
-            Assert.AreEqual(Encoding.UTF8, gameInfo.Encoding);
-            Assert.AreEqual(39, gameInfo.Width);
-            Assert.AreEqual(32, gameInfo.Height);
-            Assert.AreEqual("Первый игрок", gameInfo.Player2Name); // TODO: Fix
-            Assert.AreEqual("Второй игрок", gameInfo.Player1Name);
-            GameTree nextTree = gameInfo.GameTree;
-            Assert.IsTrue(nextTree.Move.IsRoot);
-            nextTree = nextTree.Childs.First();
-            Assert.AreEqual(31, nextTree.Move.Row);
-            Assert.AreEqual(2, nextTree.Move.Column);
-            nextTree = nextTree.Childs.First();
-            Assert.AreEqual(31, nextTree.Move.Row);
-            Assert.AreEqual(3, nextTree.Move.Column);
-            nextTree = nextTree.Childs.First();
-            Assert.AreEqual(30, nextTree.Move.Row);
-            Assert.AreEqual(3, nextTree.Move.Column);
-            nextTree = nextTree.Childs.First();
-            Assert.AreEqual(30, nextTree.Move.Row);
-            Assert.AreEqual(2, nextTree.Move.Column);
-            Assert.AreEqual(0, nextTree.Childs.Count);
         }
     }
 }
