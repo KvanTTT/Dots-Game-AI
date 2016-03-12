@@ -4,6 +4,6 @@ install:
     - nuget sources add -Name Perspex -Source https://www.myget.org/F/perspex-nightly/api/v2
     - nuget restore DotsGame.sln
 script:
-    - xbuild /p:Configuration=Release DotsGame.sln /p:TargetFrameworkVersion="v4.6.1"
+    - xbuild /p:Configuration=Release DotsGame.sln /p:TargetFrameworkVersion="v4.5"
     - mono ./packages/NUnit.ConsoleRunner.*/tools/nunit3-console.exe ./DotsGame.Tests/bin/Release/DotsGame.Tests.dll
     - mono ./packages/NUnit.ConsoleRunner.*/tools/nunit3-console.exe ./DotsGame.Formtas.Tests/bin/Release/DotsGame.Formtas.Tests.dll
