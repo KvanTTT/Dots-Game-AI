@@ -1,0 +1,6 @@
+language: csharp
+solution: DotsGame.sln
+script:
+    - xbuild /p:Configuration=Release DotsGame.sln
+    - mono ./packages/NUnit.ConsoleRunner.*/tools/nunit3-console.exe ./DotsGame.Tests/bin/Release/DotsGame.Tests.dll
+    - mono ./packages/NUnit.ConsoleRunner.*/tools/nunit3-console.exe ./DotsGame.Formtas.Tests/bin/Release/DotsGame.Formtas.Tests.dll
