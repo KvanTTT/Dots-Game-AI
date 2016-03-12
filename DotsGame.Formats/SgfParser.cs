@@ -270,6 +270,9 @@ namespace DotsGame.Sgf
                     _gameInfo.Rules = stringValue;
                     break;
 
+                case "MN":
+                    break;
+
                 case "B":
                 case "W":
                     _currentGameTree.GameMoves.Add(new GameMove(id == "B" ? 0 : 1,

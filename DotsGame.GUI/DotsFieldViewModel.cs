@@ -145,11 +145,23 @@ namespace DotsGame.GUI
             pos = pos / CellSize;
             int fieldPosX = (int)Math.Round(pos.X) + 1;
             int fieldPosY = (int)Math.Round(pos.Y) + 1;
-            if (_field.MakeMove(fieldPosX, fieldPosY))
+            if (e.MouseButton == Perspex.Input.MouseButton.Left)
             {
-                AddLastMoveState();
-                UpdateInfo();
-                _gameTreeViewModel.AddMove(new GameMove((int)Field.CurrentPlayer.NextPlayer(), fieldPosY, fieldPosX));
+                if (_field.MakeMove(fieldPosX, fieldPosY))
+                {
+                    AddLastMoveState();
+                    UpdateInfo();
+                    _gameTreeViewModel.AddMove(new GameMove((int)Field.CurrentPlayer.NextPlayer(), fieldPosY, fieldPosX));
+                }
+            }
+            else if (e.MouseButton == Perspex.Input.MouseButton.Right)
+            {
+                int lastX, lastY;
+                Field.GetPosition(_field.LastMakedPosition, out lastX, out lastY);
+                if (fieldPosX == lastX && fieldPosY == lastY)
+                {
+                    _gameTreeViewModel.PrevMoveCommand.Execute(null);
+                }
             }
         }
 

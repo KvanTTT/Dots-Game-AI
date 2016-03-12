@@ -62,9 +62,11 @@ namespace DotsGame
         {
             var result = new State();
             if (Base != null)
+            {
                 result.Base = new Base(Base.LastCaptureCount, Base.LastFreedCount,
                     new List<DotPosition>(Base.ChainDotPositions), new List<DotPosition>(Base.SurrroundDotPositions),
                     new List<short>(Base.ChainPositions), new List<short>(Base.SurroundPositions), Base.Player0Square, Base.Player1Square);
+            }
             result.Move = Move;
             result.DiagonalGroupCount = DiagonalGroupCount;
             return result;

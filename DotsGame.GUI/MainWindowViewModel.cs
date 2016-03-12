@@ -1,5 +1,6 @@
 ﻿using DotsGame.AI;
 using Perspex.Controls;
+using ReactiveUI;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -9,15 +10,8 @@ using System.Threading.Tasks;
 
 namespace DotsGame.GUI
 {
-    public class MainWindowViewModel : INotifyPropertyChanged
+    public class MainWindowViewModel : ReactiveObject
     {
-        public event PropertyChangedEventHandler PropertyChanged;
-
-        protected virtual void OnPropertyChanged(string propertyName)
-        {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
-        }
-
         private CoreType _selectedCoreType;
         private UserControl _coreCotnrol;
 
@@ -49,9 +43,7 @@ namespace DotsGame.GUI
             set
             {
                 _coreCotnrol = value;
-                OnPropertyChanged("CoreControl");
             }
-
         }
     }
 }

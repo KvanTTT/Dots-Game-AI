@@ -14,6 +14,8 @@ namespace DotsGame
 
         public GameTree Parent { get; set; }
 
+        public int Number { get; set; } = -1;
+
         public string Comment { get; set; }
 
         public GameMove Move => GameMoves.First();

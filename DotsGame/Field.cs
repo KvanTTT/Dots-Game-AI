@@ -224,6 +224,14 @@ namespace DotsGame
             private set;
         }
 
+        public int LastMakedPosition
+        {
+            get
+            {
+                return _dotsSequenceStates.Count > 0 ? _dotsSequenceStates.Last().Move.Position : 0;
+            }
+        }
+
         #endregion
 
         #region Constructors
@@ -912,7 +920,7 @@ namespace DotsGame
                 CheckClosure();
 
                 // Save current state for rollback.
-                _dotsSequenceStates.Add(new State()
+                _dotsSequenceStates.Add(new State
                 {
                     Move = new DotPosition(position, oldDot),
                     Base = _chainDotsPositions.Count == 0 && _surroundDotsPositions.Count == 0 ? null :

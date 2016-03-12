@@ -22,9 +22,10 @@ namespace DotsGame.Formats
             result.Player2Name = Encoding.Default.GetString(data, 20, 9).TrimEnd();
 
             int playerNumber = 0;
+            int currentNumber = 1;
             for (var i = 58; i < data.Length; i += 13)
             {
-                var newGameTree = new GameTree();
+                var newGameTree = new GameTree { Number = currentNumber++ };
                 if (rootGameTree == null)
                 {
                     newGameTree.Parent = result.GameTree;

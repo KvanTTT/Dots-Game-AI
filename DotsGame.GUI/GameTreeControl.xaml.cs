@@ -5,6 +5,8 @@ namespace DotsGame.GUI
 {
     public class GameTreeControl : UserControl
     {
+        internal readonly GameTreeViewModel GameTreeViewModel;
+
         public GameTreeControl()
             : this(null)
         {
@@ -13,9 +15,9 @@ namespace DotsGame.GUI
         public GameTreeControl(DotsFieldViewModel dotsFieldViewModel)
         {
             this.InitializeComponent();
-            var gameTreeViewModel = new GameTreeViewModel(this, dotsFieldViewModel);
-            this.DataContext = gameTreeViewModel;
-            dotsFieldViewModel.GameTreeViewModel = gameTreeViewModel;
+            GameTreeViewModel = new GameTreeViewModel(this, dotsFieldViewModel);
+            this.DataContext = GameTreeViewModel;
+            dotsFieldViewModel.GameTreeViewModel = GameTreeViewModel;
         }
 
         private void InitializeComponent()

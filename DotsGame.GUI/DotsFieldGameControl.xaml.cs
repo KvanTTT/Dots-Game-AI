@@ -1,6 +1,7 @@
 ﻿using Perspex;
 using Perspex.Controls;
 using Perspex.Controls.Shapes;
+using Perspex.Input;
 using Perspex.Markup.Xaml;
 using Perspex.Media;
 using System;
@@ -10,15 +11,18 @@ namespace DotsGame.GUI
 {
     public class DotsFieldGameControl : UserControl
     {
+        internal readonly GameTreeControl GameTreeControl;
+
         public DotsFieldGameControl()
         {
             this.InitializeComponent();
-            var canvas = this.Find<Canvas>("CanvasField");
+            var _canvas = this.Find<Canvas>("CanvasField");
             var expander = this.Find<Expander>("GameTreeExpander");
-            var dotsFieldViewModel = new DotsFieldViewModel(canvas);
+            var dotsFieldViewModel = new DotsFieldViewModel(_canvas);
             this.DataContext = dotsFieldViewModel;
 
-            expander.Content = new GameTreeControl(dotsFieldViewModel);
+            GameTreeControl = new GameTreeControl(dotsFieldViewModel);
+            expander.Content = GameTreeControl;
         }
 
         private void InitializeComponent()

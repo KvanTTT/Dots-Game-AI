@@ -10,7 +10,7 @@ namespace DotsGame
     {
         public bool FromUrl { get; set; }
 
-        public GameType GameType { get; set; }
+        public GameType GameType { get; set; } = GameType.Kropki;
 
         public string AppName { get; set; } = "Dots Game AI";
 
@@ -32,7 +32,7 @@ namespace DotsGame
 
         public GameInfo()
         {
-            GameTree = new GameTree();
+            GameTree = new GameTree() { Number = 0 };
             GameTree.AddMove(GameMove.Root);
         }
 

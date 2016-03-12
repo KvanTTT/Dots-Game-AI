@@ -9,8 +9,7 @@
       <TextBlock Text="{Binding Path=Player2Name}" Foreground="{Binding Path=Player2Brush}" Width="200" TextWrapping="NoWrap" TextAlignment="Right" />
     </StackPanel>
     <ScrollViewer Grid.Row="1" >
-        <Canvas Name="CanvasField" Margin="10" VerticalAlignment="Center">
-        </Canvas>
+            <Canvas Name="CanvasField" Margin="10" VerticalAlignment="Center"/>
     </ScrollViewer>
     <Expander Grid.Row="2" Header="Game Tree" Name="GameTreeExpander" >
     </Expander>

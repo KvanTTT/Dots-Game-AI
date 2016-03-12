@@ -131,8 +131,6 @@ namespace DotsGame.GUI
             _dotsFieldViewModel = dotsFieldViewModel;
             GameInfo = new GameInfo() { Width = dotsFieldViewModel.Field.Width, Height = dotsFieldViewModel.Field.Height };
             _gameTreeCanvas.PointerPressed += _gameTreeCanvas_PointerPressed;
-            _gameTreeCanvas.KeyDown += _gameTreeCanvas_KeyDown;
-            _gameTreeCanvas.KeyUp += _gameTreeCanvas_KeyUp;
 
             PrevMoveCommand.Subscribe(_ =>
             {
@@ -237,6 +235,10 @@ namespace DotsGame.GUI
             UpdateSelectedGameTree(GameInfo.GameTree);
         }
 
+        internal void GameTreeCanvas_KeyUp(object sender, Perspex.Input.KeyEventArgs e)
+        {
+        }
+
         private void UpdateGame(object state)
         {
             if (!string.IsNullOrEmpty(FileName))
@@ -254,14 +256,6 @@ namespace DotsGame.GUI
             {
                 _autoupdateGameTimer.Change(500, Timeout.Infinite);
             }
-        }
-
-        private void _gameTreeCanvas_KeyUp(object sender, Perspex.Input.KeyEventArgs e)
-        {
-        }
-
-        private void _gameTreeCanvas_KeyDown(object sender, Perspex.Input.KeyEventArgs e)
-        {
         }
 
         private void _gameTreeCanvas_PointerPressed(object sender, Perspex.Input.PointerPressedEventArgs e)

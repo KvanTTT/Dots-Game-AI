@@ -1,8 +1,8 @@
 ﻿<Window xmlns="https://github.com/perspex"
         xmlns:DotsGUI="clr-namespace:DotsGame.GUI;assembly=DotsGame.GUI" Title="Dots Game AI" Width="1366" Height="768">
   <Grid ColumnDefinitions="3*,1*" RowDefinitions="*,Auto">
-    <DotsGUI:DotsFieldGameControl />
-    <StackPanel Grid.Column="1" >
+    <DotsGUI:DotsFieldGameControl Grid.Column="0"  Name="DotsField"/>
+    <StackPanel Grid.Column="1">
       <TextBlock>Core</TextBlock>
       <DropDown SelectedItem="{Binding SelectedCoreType, Mode=TwoWay}" Items="{Binding CoreTypes}">
       </DropDown>
