@@ -11,7 +11,7 @@ namespace DotsGame.AI
         {
             switch (coreType)
             {
-                case CoreType.BasicCore:
+                case CoreType.SgfCore:
                     return new BasicCore(field);
                 case CoreType.GroupsCore:
                     return new GroupsCore(field);

@@ -14,16 +14,12 @@ namespace DotsGame
 
         public int Column { get; set; }
 
-        public static readonly GameMove Root = new GameMove(-1, 0, 0);
-
         public GameMove(int playerNumber, int row, int column)
         {
             PlayerNumber = playerNumber;
             Row = row;
             Column = column;
         }
-
-        public bool IsRoot => PlayerNumber == -1;
 
         public bool Equals(GameMove other)
         {
@@ -38,8 +34,13 @@ namespace DotsGame
             }
             else
             {
-                return $"{Row}:{Column},{(PlayerNumber == 0 ? "Blue" : "Red")}";
+                return $"{Row}:{Column},{(PlayerNumber == 0 ? "Player0" : "Player1")}";
             }
+        }
+
+        public override int GetHashCode()
+        {
+            return PlayerNumber ^ Row ^ Column;
         }
     }
 }

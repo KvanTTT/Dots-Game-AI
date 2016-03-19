@@ -1,4 +1,5 @@
-﻿using System;
+﻿using DotsGame.Formats;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -16,6 +17,7 @@ namespace DotsGame.Sgf
         private int _commentNumber;
         private byte[] _data;
         private Encoding _encoding = Encoding.UTF8;
+        private int _fileFormat = 4;
 
         public bool NewLines { get; set; }
 
@@ -72,10 +74,32 @@ namespace DotsGame.Sgf
             }
             builder.Append("PB[" + gameInfo.Player1Name + "]");
             builder.Append("PW[" + gameInfo.Player2Name + "]");
-            //builder.Append("BR[" +  + "]");
-            //builder.Append("BW[" +  + "]");
-            builder.Append("DT[" + gameInfo.Date.ToString("u").Replace("Z", "") + "]");
-            //builder.Append("EV[" +  +"]");
+            builder.Append("BR[" + gameInfo.Player1Rank + ", " + gameInfo.Player1Rating + "]");
+            builder.Append("WR[" + gameInfo.Player2Rank + ", " + gameInfo.Player2Rating + "]");
+            if (gameInfo.Date != DateTime.MinValue)
+            {
+                builder.Append("DT[" + gameInfo.Date.ToString("u").Replace("Z", "") + "]");
+            }
+            if (!string.IsNullOrEmpty(gameInfo.Event))
+            {
+                builder.Append("EV[" + gameInfo.Event + "]");
+            }
+            if (gameInfo.WinReason != WinReason.Unknown)
+            {
+                builder.Append("RE[" + gameInfo.Result + "]");
+            }
+            if (!string.IsNullOrEmpty(gameInfo.Source))
+            {
+                builder.Append("SO[" + gameInfo.Source + "]");
+            }
+            if (gameInfo.TimeLimits != TimeSpan.MinValue)
+            {
+                builder.Append("TM[" + gameInfo.TimeLimits.TotalSeconds + "]");
+            }
+            if (!string.IsNullOrEmpty(gameInfo.OverTime))
+            {
+                builder.Append("OT[" + gameInfo.OverTime + "]");
+            }
             if (!string.IsNullOrEmpty(gameInfo.Description))
             {
                 builder.Append("C[" + gameInfo.Description + "]");
@@ -155,7 +179,7 @@ namespace DotsGame.Sgf
             string propertyId = _encoding.GetString(_data, propertyIdStartInd, _currentDataPos - propertyIdStartInd);
 
             SkipSpaces();
-            bool atLeastOneValueSpecified = false;
+            int propertyValueNumber = 0;
             while (Accept('['))
             {
                 int propertyValueStartInd = _currentDataPos;
@@ -170,21 +194,32 @@ namespace DotsGame.Sgf
                     _currentDataPos++;
                 }
 
-                ProcessProperty(propertyId, propertyValue.ToArray());
+                ProcessProperty(propertyId, propertyValue.ToArray(), propertyValueNumber++);
+
                 Expect(']');
                 SkipSpaces();
-                atLeastOneValueSpecified = true;
             }
-            if (!atLeastOneValueSpecified)
+
+            if (propertyId == "B" || propertyId == "W")
+            {
+                var newGameTree = new GameTree();
+                _currentGameTree.Childs.Add(newGameTree);
+                _oldGameTree = _currentGameTree;
+                _currentGameTree = newGameTree;
+                _currentGameTree.Parent = _oldGameTree;
+            }
+
+            if (propertyValueNumber == 0)
             {
                 throw new Exception("At least one property should be specified");
             }
         }
 
         // https://en.wikipedia.org/wiki/Smart_Game_Format
-        private void ProcessProperty(string id, byte[] propertyValue)
+        private void ProcessProperty(string id, byte[] propertyValue, int propertyValueNumber)
         {
             string stringValue = _encoding.GetString(propertyValue);
+            string[] strs;
             switch (id)
             {
                 case "AP":
@@ -211,12 +246,10 @@ namespace DotsGame.Sgf
                     break;
 
                 case "DT":
-                    try
+                    DateTime dateTime;
+                    if (DateTime.TryParse(stringValue, out dateTime))
                     {
-                        _gameInfo.Date = DateTime.Parse(stringValue);
-                    }
-                    catch
-                    {
+                        _gameInfo.Date = dateTime;
                     }
                     break;
 
@@ -231,7 +264,16 @@ namespace DotsGame.Sgf
                     }
                     break;
 
+                case "EV":
+                    _gameInfo.Event = stringValue;
+                    break;
+
                 case "FF": // FileFormat == 4
+                    _fileFormat = int.Parse(stringValue);
+                    break;
+
+                case "RE":
+                    _gameInfo.Result = stringValue;
                     break;
 
                 case "SZ":
@@ -258,6 +300,18 @@ namespace DotsGame.Sgf
                     }
                     break;
 
+                case "TM":
+                    double doubleValue;
+                    if (double.TryParse(stringValue, out doubleValue))
+                    {
+                        _gameInfo.TimeLimits = TimeSpan.FromSeconds(doubleValue);
+                    }
+                    break;
+
+                case "OT":
+                    _gameInfo.OverTime = stringValue;
+                    break;
+
                 case "PB":
                     _gameInfo.Player1Name = stringValue;
                     break;
@@ -266,28 +320,80 @@ namespace DotsGame.Sgf
                     _gameInfo.Player2Name = stringValue;
                     break;
 
+                case "BR":
+                case "WR":
+                    strs = stringValue.Replace(" ", "").Split(',');
+                    Rank rank;
+                    if (Enum.TryParse(strs[0], true, out rank))
+                    {
+                        if (id == "BR")
+                        {
+                            _gameInfo.Player1Rank = rank;
+                        }
+                        else
+                        {
+                            _gameInfo.Player2Rank = rank;
+                        }
+                    }
+                    if (strs.Length > 1)
+                    {
+                        int rating;
+                        if (int.TryParse(strs[1], out rating))
+                        {
+                            if (id == "BR")
+                            {
+                                _gameInfo.Player1Rating = rating;
+                            }
+                            else
+                            {
+                                _gameInfo.Player2Rating = rating;
+                            }
+                        }
+                    }
+                    break;
+
                 case "RU":
                     _gameInfo.Rules = stringValue;
+                    break;
+
+                case "SO":
+                    _gameInfo.Source = stringValue;
                     break;
 
                 case "MN":
                     break;
 
+                case "AB":
+                case "AW":
+                    _gameInfo.GameTree.AddMove(GetGameMove(id[1], stringValue[0], stringValue[1]));
+                    break;
+
                 case "B":
                 case "W":
-                    _currentGameTree.GameMoves.Add(new GameMove(id == "B" ? 0 : 1,
-                        CharToIntMove(stringValue[1]), CharToIntMove(stringValue[0])));
-                    var newGameTree = new GameTree();
-                    _currentGameTree.Childs.Add(newGameTree);
-                    _oldGameTree = _currentGameTree;
-                    _currentGameTree = newGameTree;
-                    _currentGameTree.Parent = _oldGameTree;
+                    if (stringValue[0] != '.')
+                    {
+                        _currentGameTree.GameMoves.Add(GetGameMove(id[0], stringValue[0], stringValue[1]));
+                    }
+                    else
+                    {
+                        string opponentColor = id == "B" ? "W" : "B";
+                        int moveCount = stringValue.Length - 1;
+                        for (int i = 1; i < moveCount; i += 2)
+                        {
+                            _currentGameTree.GameMoves.Add(GetGameMove(opponentColor[0], stringValue[i], stringValue[i + 1]));
+                        }
+                    }
                     break;
 
                 default:
                     // Unknown property.
                     break;
             }
+        }
+
+        private GameMove GetGameMove(char c, char x, char y)
+        {
+            return new GameMove(ColorToNumber(c), CharToIntMove(y), CharToIntMove(x));
         }
 
         private int CharToIntMove(char c)
@@ -347,15 +453,12 @@ namespace DotsGame.Sgf
 
         private void Serialize(GameTree gameTree, StringBuilder builder, int level)
         {
-            if (!gameTree.Move.IsRoot)
+            if (!gameTree.Root)
             {
                 builder.Append(";");
-                foreach (var gameMove in gameTree.GameMoves)
-                {
-                    string color = gameMove.PlayerNumber == 0 ? "B" : "W";
-                    builder.Append(color + "[" + IntToChar(gameMove.Column) + IntToChar(gameMove.Row) + "]");
-                }
             }
+            AppendMoves(builder, gameTree);
+
             if (gameTree.Childs.Count == 1)
             {
                 Serialize(gameTree.Childs.First(), builder, 0);
@@ -371,14 +474,37 @@ namespace DotsGame.Sgf
                         builder.AppendLine();
                         builder.Append(spaces);
                     }
-                    builder.Append("(");
+                    builder.Append('(');
                     Serialize(child, builder, level + 1);
                     if (NewLines && child.Childs.Count > 1)
                     {
                         builder.AppendLine();
                         builder.Append(spaces);
                     }
-                    builder.Append(")");
+                    builder.Append(')');
+                }
+            }
+        }
+
+        private void AppendMoves(StringBuilder builder, GameTree gameTree)
+        {
+            for (int i = 0; i < 2; i++)
+            {
+                bool colorAppended = false;
+                foreach (var gameMove in gameTree.GameMoves)
+                {
+                    if (gameMove.PlayerNumber == i)
+                    {
+                        if (!colorAppended)
+                        {
+                            builder.Append((gameTree.Root ? "A" : "") + NumberToColor(i));
+                            colorAppended = true;
+                        }
+                        builder.Append('[');
+                        builder.Append(IntToChar(gameMove.Column));
+                        builder.Append(IntToChar(gameMove.Row));
+                        builder.Append(']');
+                    }
                 }
             }
         }
@@ -393,7 +519,17 @@ namespace DotsGame.Sgf
             {
                 return (char)(i - 27 + 'A');
             }
-            throw new Exception($"Too mouch position: {i}");
+            throw new Exception($"Too much position: {i}");
+        }
+
+        private char NumberToColor(int number)
+        {
+            return number == 0 ? 'B' : 'W';
+        }
+
+        private int ColorToNumber(char color)
+        {
+            return color == 'B' ? 0 : 1;
         }
 
         #endregion
