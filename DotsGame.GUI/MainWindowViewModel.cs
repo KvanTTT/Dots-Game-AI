@@ -30,7 +30,7 @@ namespace DotsGame.GUI
 
         public CoreType[] CoreTypes => new CoreType[]
         {
-            CoreType.BasicCore,
+            CoreType.SgfCore,
             CoreType.GroupsCore
         };
         
@@ -42,7 +42,7 @@ namespace DotsGame.GUI
             }
             set
             {
-                _coreCotnrol = value;
+                this.RaiseAndSetIfChanged(ref _coreCotnrol, value);
             }
         }
     }

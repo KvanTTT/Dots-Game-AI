@@ -41,8 +41,10 @@ namespace DotsGame.GUI
 
         public GameTreeViewModel GameTreeViewModel
         {
-            get { return _gameTreeViewModel; }
-            set { _gameTreeViewModel = value; }
+            get
+            {
+                return _gameTreeViewModel ?? (_gameTreeViewModel = ServiceLocator.GameTreeViewModel);
+            }
         }
 
         public DotsFieldViewModel(Canvas canvas, Field field = null)
@@ -107,7 +109,7 @@ namespace DotsGame.GUI
 
         public void MakeMoves(GameMove move)
         {
-            if (!move.IsRoot && _field.MakeMove(move.Column, move.Row, move.PlayerNumber))
+            if (_field.MakeMove(move.Column, move.Row, move.PlayerNumber))
             {
                 AddLastMoveState();
                 UpdateInfo();
@@ -118,7 +120,7 @@ namespace DotsGame.GUI
         {
             foreach (var move in moves)
             {
-                if (!move.IsRoot && _field.MakeMove(move.Column, move.Row, move.PlayerNumber))
+                if (_field.MakeMove(move.Column, move.Row, move.PlayerNumber))
                 {
                     AddLastMoveState();
                 }
@@ -139,6 +141,12 @@ namespace DotsGame.GUI
             UpdateInfo();
         }
 
+        public void ClearMoveMarker()
+        {
+            _canvasField.Children.Remove(_lastMoveMarker);
+            _lastMoveMarker = null;
+        }
+
         private void CanvasField_PointerPressed(object sender, Perspex.Input.PointerPressedEventArgs e)
         {
             var pos = e.GetPosition(_canvasField) - new Point(FieldMargin, FieldMargin);
@@ -151,7 +159,7 @@ namespace DotsGame.GUI
                 {
                     AddLastMoveState();
                     UpdateInfo();
-                    _gameTreeViewModel.AddMove(new GameMove((int)Field.CurrentPlayer.NextPlayer(), fieldPosY, fieldPosX));
+                    GameTreeViewModel.AddMove(new GameMove((int)Field.CurrentPlayer.NextPlayer(), fieldPosY, fieldPosX));
                 }
             }
             else if (e.MouseButton == Perspex.Input.MouseButton.Right)
@@ -160,7 +168,7 @@ namespace DotsGame.GUI
                 Field.GetPosition(_field.LastMakedPosition, out lastX, out lastY);
                 if (fieldPosX == lastX && fieldPosY == lastY)
                 {
-                    _gameTreeViewModel.PrevMoveCommand.Execute(null);
+                    GameTreeViewModel.PrevMoveCommand.Execute(null);
                 }
             }
         }

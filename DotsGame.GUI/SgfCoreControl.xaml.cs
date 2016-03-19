@@ -3,11 +3,12 @@ using Perspex.Markup.Xaml;
 
 namespace DotsGame.GUI
 {
-    public class BasicCoreControl : UserControl
+    public class SgfCoreControl : UserControl
     {
-        public BasicCoreControl()
+        public SgfCoreControl()
         {
             this.InitializeComponent();
+            this.DataContext = ServiceLocator.BasicCoreControViewModel;
         }
 
         private void InitializeComponent()

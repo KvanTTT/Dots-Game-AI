@@ -36,6 +36,7 @@ namespace DotsGame.GUI
         private GameTree _selectedGameTree;
         private GameTree[,] _gameTreesOnCanvas;
         private Dictionary<GameTree, Tuple<int, int>> _gameTreesPositions = new Dictionary<GameTree, Tuple<int, int>>();
+        int _prevMovesCount;
 
         private Dictionary<long, Ellipse> _moveCircles = new Dictionary<long, Ellipse>();
         private Dictionary<long, Ellipse> _newMoveCircles;
@@ -43,6 +44,8 @@ namespace DotsGame.GUI
         private Dictionary<long, Line> _newTreeLines;
         private Dictionary<long, TextBlock> _moveLabels = new Dictionary<long, TextBlock>();
         private Dictionary<long, TextBlock> _newMoveLabels;
+
+        private bool _showLabels = true;
 
         public ReactiveCommand<object> PrevMoveCommand { get; } = ReactiveCommand.Create();
 
@@ -63,6 +66,14 @@ namespace DotsGame.GUI
         public ReactiveCommand<object> SaveCommand { get; } = ReactiveCommand.Create();
 
         public ReactiveCommand<object> UpdateCommand { get; } = ReactiveCommand.Create();
+
+        public DotsFieldViewModel DotsFieldViewModel
+        {
+            get
+            {
+                return _dotsFieldViewModel ?? (_dotsFieldViewModel = ServiceLocator.DotsFieldViewModel);
+            }
+        }
 
         public string FileName
         {
@@ -107,8 +118,7 @@ namespace DotsGame.GUI
                 return _padding + _dotSpace * 4.5;
             }
         }
-
-        private bool _showLabels = true;
+        
         public bool ShowLabels
         {
             get
@@ -122,14 +132,13 @@ namespace DotsGame.GUI
             }
         }
 
-        public GameTreeViewModel(UserControl gameTreeUserControl, DotsFieldViewModel dotsFieldViewModel)
+        public GameTreeViewModel(UserControl gameTreeUserControl)
         {
             _autoupdateGameTimer = new Timer(UpdateGame, "timer", Timeout.Infinite, Timeout.Infinite);
             _gameTreeUserControl = gameTreeUserControl;
             _gameTreeCanvas = gameTreeUserControl.Find<Canvas>("GameTreeCanvas");
             _canvasScrollViewer = gameTreeUserControl.Find<ScrollViewer>("GameTreeScrollViewer");
-            _dotsFieldViewModel = dotsFieldViewModel;
-            GameInfo = new GameInfo() { Width = dotsFieldViewModel.Field.Width, Height = dotsFieldViewModel.Field.Height };
+            GameInfo = new GameInfo() { Width = DotsFieldViewModel.Field.Width, Height = DotsFieldViewModel.Field.Height };
             _gameTreeCanvas.PointerPressed += _gameTreeCanvas_PointerPressed;
 
             PrevMoveCommand.Subscribe(_ =>
@@ -186,7 +195,7 @@ namespace DotsGame.GUI
                     var extractor = new GameInfoExtractor();
                     FileName = fileNames.First();
                     GameInfo = extractor.DetectFormatAndOpen(FileName);
-                    _dotsFieldViewModel.Field = new Field(GameInfo.Width, GameInfo.Height);
+                    DotsFieldViewModel.Field = new Field(GameInfo.Width, GameInfo.Height);
                     UpdateSelectedGameTree(GameInfo.GetDefaultLastTree());
                     ScrollToSelectedGameTree();
                 }
@@ -201,7 +210,7 @@ namespace DotsGame.GUI
                     var extractor = new GameInfoExtractor();
                     FileName = url;
                     GameInfo = extractor.DetectFormatAndOpen(FileName);
-                    _dotsFieldViewModel.Field = new Field(GameInfo.Width, GameInfo.Height);
+                    DotsFieldViewModel.Field = new Field(GameInfo.Width, GameInfo.Height);
                     UpdateSelectedGameTree(GameInfo.GetDefaultLastTree());
                     ScrollToSelectedGameTree();
                 }
@@ -212,7 +221,7 @@ namespace DotsGame.GUI
                 FileName = "";
                 GameInfoExtractor.InvalidateCache();
                 GameInfo = new GameInfo();
-                _dotsFieldViewModel.Field = new Field(GameInfo.Width, GameInfo.Height);
+                DotsFieldViewModel.Field = new Field(GameInfo.Width, GameInfo.Height);
                 UpdateSelectedGameTree(GameInfo.GetDefaultLastTree());
                 ScrollToSelectedGameTree();
             });
@@ -245,16 +254,33 @@ namespace DotsGame.GUI
             {
                 var extractor = new GameInfoExtractor();
                 bool fromCache;
+                bool uiThread = !(state is string && (string)state == "timer");
                 var gameInfo = extractor.DetectFormatAndOpen(FileName, out fromCache);
+                if (gameInfo != _gameInfo)
+                {
+                    _gameInfo = gameInfo;
+                    if (!uiThread)
+                    {
+                        Dispatcher.UIThread.InvokeAsync(() => ServiceLocator.BasicCoreControViewModel.GameInfo = gameInfo);
+                    }
+                    else
+                    {
+                        ServiceLocator.BasicCoreControViewModel.GameInfo = gameInfo;
+                    }
+                }
                 if (!fromCache)
                 {
-                    bool uiThread = !(state is string && (string)state == "timer");
-                    AddMoves(gameInfo.GameTree.GetDefaultSequence(), uiThread);
+                    IList<GameTree> gameMoves = gameInfo.GameTree.GetDefaultSequence();
+                    if (gameMoves.Count != _prevMovesCount)
+                    {
+                        AddMoves(gameInfo.GameTree.GetDefaultSequence(), uiThread);
+                        _prevMovesCount = gameMoves.Count;
+                    }
                 }
             }
             if (_autoUpdate)
             {
-                _autoupdateGameTimer.Change(500, Timeout.Infinite);
+                _autoupdateGameTimer.Change(1000, Timeout.Infinite);
             }
         }
 
@@ -282,11 +308,12 @@ namespace DotsGame.GUI
             }
             set
             {
+                ServiceLocator.BasicCoreControViewModel.GameInfo = value;
                 _gameInfo = value;
                 _previousSelectedGameTree = null;
                 _selectedGameTree = null;
-                _dotsFieldViewModel.Player1Name = _gameInfo.Player1Name;
-                _dotsFieldViewModel.Player2Name = _gameInfo.Player2Name;
+                DotsFieldViewModel.Player1Name = _gameInfo.Player1Name;
+                DotsFieldViewModel.Player2Name = _gameInfo.Player2Name;
                 Refresh();
             }
         }
@@ -324,7 +351,7 @@ namespace DotsGame.GUI
             bool newChild = false;
             foreach (GameTree gameTree in gameTrees)
             {
-                if (gameTree.Move.IsRoot)
+                if (gameTree.Root)
                 {
                     continue;
                 }
@@ -399,11 +426,17 @@ namespace DotsGame.GUI
                 if (_previousSelectedGameTree == null)
                 {
                     _previousSelectedGameTree = GameInfo.GameTree;
+                    DotsFieldViewModel.MakeMoves(GameInfo.GameTree.GameMoves);
                 }
 
                 GameMovesDiff movesDiff = _previousSelectedGameTree.GetMovesDiff(_selectedGameTree);
-                _dotsFieldViewModel.UnmakeMoves(movesDiff.UnmakeMovesCount);
-                _dotsFieldViewModel.MakeMoves(movesDiff.MakeMoves);
+                DotsFieldViewModel.UnmakeMoves(movesDiff.UnmakeMovesCount);
+                DotsFieldViewModel.MakeMoves(movesDiff.MakeMoves);
+
+                if (_selectedGameTree.Root)
+                {
+                    DotsFieldViewModel.ClearMoveMarker();
+                }
             }
             RefreshSelectedTreeMarker();
         }
@@ -457,7 +490,7 @@ namespace DotsGame.GUI
         {
             _gameTreesOnCanvas[yOffset, xOffset] = gameTree;
             _gameTreesPositions[gameTree] = new Tuple<int, int>(xOffset, yOffset);
-            DrawMove(gameTree.Move, xOffset, yOffset, currentNumber);
+            DrawMove(gameTree, xOffset, yOffset, currentNumber);
 
             int maxSequenceWidth = 0;
             if (gameTree.Childs.Count == 0)
@@ -475,11 +508,12 @@ namespace DotsGame.GUI
             return maxSequenceWidth;
         }
 
-        private void DrawMove(GameMove gameMove, int xOffset, int yOffset, int currentNumber)
+        private void DrawMove(GameTree gameTree, int xOffset, int yOffset, int currentNumber)
         {
+            int playerNumber = gameTree.Root ? 2 : gameTree.Move.PlayerNumber;
             double left = _padding + xOffset * _dotSpace - _dotSize / 2;
             double top = _padding + yOffset * _dotSpace - _dotSize / 2;
-            long hash = GetMoveHashCode(xOffset, yOffset, gameMove.PlayerNumber);
+            long hash = GetMoveHashCode(xOffset, yOffset, playerNumber);
             Ellipse circle;
             if (_moveCircles.TryGetValue(hash, out circle))
             {
@@ -488,13 +522,13 @@ namespace DotsGame.GUI
             else
             {
                 Brush fill;
-                if (gameMove.IsRoot)
+                if (gameTree.Root)
                 {
                     fill = Brushes.Green;
                 }
                 else
                 {
-                    fill = gameMove.PlayerNumber == 0 ? Brushes.Blue : Brushes.Red;
+                    fill = playerNumber == 0 ? Brushes.Blue : Brushes.Red;
                 }
                 circle = new Ellipse()
                 {
@@ -608,7 +642,7 @@ namespace DotsGame.GUI
 
         private long GetMoveHashCode(int x, int y, int playerNumber)
         {
-            return (((long)x * 4096 + y) * 4096 + playerNumber + 1);
+            return (((long)x * 4096 + y) * 4096 + playerNumber);
         }
 
         private long GetLineHashCode(int x, int y, TreeLineDirection lineDir, int length)

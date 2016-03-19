@@ -1,0 +1,60 @@
+﻿<UserControl xmlns="https://github.com/perspex">
+    <StackPanel Gap="4" Margin="4">
+        <Grid ColumnDefinitions="140,*">
+            <TextBlock Text="App Name" />
+            <TextBox Grid.Column="1" Text="{Binding Path=AppName}"/>
+        </Grid>
+        <Grid ColumnDefinitions="140,*">
+            <TextBlock Text="First Player" />
+            <TextBox Grid.Column="1" Text="{Binding Path=FirstPlayer}"/>
+        </Grid>
+        <Grid ColumnDefinitions="140,*">
+            <TextBlock Text="Second Player" />
+            <TextBox Grid.Column="1" Text="{Binding Path=SecondPlayer}"/>
+        </Grid>
+        <Grid ColumnDefinitions="140,*">
+            <TextBlock Text="First Player Rank" />
+            <TextBox Grid.Column="1" Text="{Binding Path=FirstPlayerRank}"/>
+        </Grid>
+        <Grid ColumnDefinitions="140,*">
+            <TextBlock Text="Second Player Rank" />
+            <TextBox Grid.Column="1" Text="{Binding Path=SecondPlayerRank}"/>
+        </Grid>
+        <Grid ColumnDefinitions="140,*">
+            <TextBlock Text="First Player Rating" />
+            <TextBox Grid.Column="1" Text="{Binding Path=FirstPlayerRating}"/>
+        </Grid>
+        <Grid ColumnDefinitions="140,*">
+            <TextBlock Text="Second Player Rating" />
+            <TextBox Grid.Column="1" Text="{Binding Path=SecondPlayerRating}"/>
+        </Grid>
+        <Grid ColumnDefinitions="140,*">
+            <TextBlock Text="Date" />
+            <TextBox Grid.Column="1" Text="{Binding Path=Date}"/>
+        </Grid>
+        <Grid ColumnDefinitions="140,*">
+            <TextBlock Text="Time" />
+            <TextBox Grid.Column="1" Text="{Binding Path=Time}"/>
+        </Grid>
+        <Grid ColumnDefinitions="140,*">
+            <TextBlock Text="Overtime" />
+            <TextBox Grid.Column="1" Text="{Binding Path=Overtime}"/>
+        </Grid>
+        <Grid ColumnDefinitions="140,*">
+            <TextBlock Text="Event" />
+            <TextBox Grid.Column="1" Text="{Binding Path=Event}"/>
+        </Grid>
+        <Grid ColumnDefinitions="140,*">
+            <TextBlock Text="Source" />
+            <TextBox Grid.Column="1" Text="{Binding Path=Source}"/>
+        </Grid>
+        <Grid ColumnDefinitions="140,*">
+            <TextBlock Text="Result" />
+            <TextBox Grid.Column="1" Text="{Binding Path=Result}"/>
+        </Grid>
+        <Grid ColumnDefinitions="140,*">
+            <TextBlock Text="Description" />
+            <TextBox Grid.Column="1" Height="80"  Text="{Binding Path=Description}" TextWrapping="Wrap" AcceptsReturn="True"/>
+        </Grid>
+    </StackPanel>
+</UserControl>

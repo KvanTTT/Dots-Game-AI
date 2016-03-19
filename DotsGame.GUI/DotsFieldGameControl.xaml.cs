@@ -20,8 +20,9 @@ namespace DotsGame.GUI
             var expander = this.Find<Expander>("GameTreeExpander");
             var dotsFieldViewModel = new DotsFieldViewModel(_canvas);
             this.DataContext = dotsFieldViewModel;
+            ServiceLocator.DotsFieldViewModel = dotsFieldViewModel;
 
-            GameTreeControl = new GameTreeControl(dotsFieldViewModel);
+            GameTreeControl = new GameTreeControl();
             expander.Content = GameTreeControl;
         }
 
