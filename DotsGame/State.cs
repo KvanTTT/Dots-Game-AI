@@ -11,19 +11,11 @@ namespace DotsGame
     /// </remarks>
     public class State
     {
-        #region Properties
+        public Base Base { get; set; }
 
-        public Base Base
-        {
-            get;
-            set;
-        }
+        public DotPosition Move { get; set; }
 
-        public DotPosition Move
-        {
-            get;
-            set;
-        }
+        public int MovePlayerNumber { get; set; }
 
         public int DiagonalGroupCount
         {
@@ -31,22 +23,9 @@ namespace DotsGame
             set;
         }
 
-        #endregion
-
-        #region Constructors
-
         public State()
         {
         }
-
-        public State(DotPosition dotPosition, Base b, int diagonalGroupCount = 0) : this()
-        {
-            Base = b;
-            Move = dotPosition;
-            DiagonalGroupCount = diagonalGroupCount;
-        }
-
-        #endregion
 
         public bool HasBase()
         {

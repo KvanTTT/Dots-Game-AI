@@ -16,11 +16,11 @@ namespace DotsGame
 
         public int Number { get; set; } = -1;
 
-        public string Comment { get; set; }
+        public string Comment { get; set; } = "";
 
         public GameMove Move => GameMoves.First();
 
-        public GameTree Child => Childs.First();
+        public bool Root { get; set;}
 
         public GameTree()
         {
@@ -91,12 +91,7 @@ namespace DotsGame
             }
             return result;
         }
-
-        /// <summary>
-        /// TODO: optimize it.
-        /// </summary>
-        /// <param name="neighborNode"></param>
-        /// <returns></returns>
+        
         public GameMovesDiff GetMovesDiff(GameTree neighborNode)
         {
             List<GameTree> parents = new List<GameTree>();
@@ -106,7 +101,8 @@ namespace DotsGame
             {
                 if (parent == neighborNode)
                 {
-                    return new GameMovesDiff(parents.Count, GameMovesDiff.EmptyMoves);
+                    return new GameMovesDiff(parents.Aggregate(0, (sum, p) => { sum += p.GameMoves.Count; return sum; }),
+                        GameMovesDiff.EmptyMoves);
                 }
                 parents.Add(parent);
                 parent = parent.Parent;
@@ -120,7 +116,7 @@ namespace DotsGame
                 if (neighborParent == this)
                 {
                     neighborParents.Reverse();
-                    return new GameMovesDiff(0, neighborParents.Select(tree => tree.Move).ToArray());
+                    return new GameMovesDiff(0, neighborParents.SelectMany(tree => tree.GameMoves).ToArray());
                 }
                 neighborParents.Add(neighborParent);
                 neighborParent = neighborParent.Parent;
@@ -129,27 +125,27 @@ namespace DotsGame
 
             int parentInd = parents.Count - 1;
             int neighborParentInd = neighborParents.Count - 1;
-            while (parentInd >= 0 && neighborParentInd >= 0 &&
-                   parents[parentInd] == neighborParents[neighborParentInd])
+            while (parentInd >= 0 && neighborParentInd >= 0 && parents[parentInd] == neighborParents[neighborParentInd])
             {
                 parentInd--;
                 neighborParentInd--;
             }
-            parentInd++;
-            if (neighborParentInd > 0 && neighborParents[neighborParentInd].Move.IsRoot)
-            {
-                neighborParentInd--;
-            }
 
-            int unmakeMovesCount = parentInd;
+            int unmakeMovesCount = 0;
+            for (int i = 0; i <= parentInd; i++)
+            {
+                unmakeMovesCount += parents[i].GameMoves.Count;
+            }
             List<GameMove> makeMoves;
             if (neighborParentInd >= 0)
             {
                 makeMoves = new List<GameMove>();
                 for (int i = neighborParentInd; i >= 0; i--)
                 {
-                    var move = neighborParents[i].GameMoves.First();
-                    makeMoves.Add(move);
+                    foreach (var move in neighborParents[i].GameMoves)
+                    {
+                        makeMoves.Add(move);
+                    }
                 }
             }
             else
@@ -165,5 +161,22 @@ namespace DotsGame
         {
             return string.Join(";", GameMoves);
         }
+
+        /*public override int GetHashCode()
+        {
+            int hashCode = 0;
+            foreach (var child in Childs)
+            {
+                hashCode ^= child.GetHashCode();
+            }
+            foreach (var move in GameMoves)
+            {
+                hashCode ^= move.GetHashCode();
+            }
+            hashCode ^= Number;
+            hashCode ^= Comment.GetHashCode();
+            hashCode ^= Root.GetHashCode();
+            return hashCode;
+        }*/
     }
 }

@@ -50,7 +50,9 @@
     <Compile Include="GameMove.cs" />
     <Compile Include="GameTree.cs" />
     <Compile Include="GameType.cs" />
+    <Compile Include="Rank.cs" />
     <Compile Include="SgfParser.cs" />
+    <Compile Include="WinReason.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

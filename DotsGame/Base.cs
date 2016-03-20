@@ -16,27 +16,24 @@ namespace DotsGame
         public readonly List<DotPosition> ChainDotPositions;
         public readonly List<DotPosition> SurrroundDotPositions;
 
-        public Base(int lastCaptureCount,
-            int lastFreedCount,
-            List<DotPosition> chainPointPoses,
-            List<DotPosition> surPointPoses,
-            List<short> chainPositions,
-            List<short> surroundPoistions,
-            int redSquare, int blueSquare)
+        public Base(int lastCaptureCount, int lastFreedCount,
+            List<DotPosition> chainPointPoses, List<DotPosition> surroundPointPoses,
+            List<short> chainPositions, List<short> surroundPoistions,
+            int player0Square, int player1Square)
         {
             LastCaptureCount = lastCaptureCount;
             LastFreedCount = lastFreedCount;
             ChainDotPositions = chainPointPoses;
-            SurrroundDotPositions = surPointPoses;
+            SurrroundDotPositions = surroundPointPoses;
             ChainPositions = chainPositions;
             SurroundPositions = surroundPoistions;
-            Player0Square = redSquare;
-            Player1Square = blueSquare;
+            Player0Square = player0Square;
+            Player1Square = player1Square;
         }
 
         public override string ToString()
         {
-            return "R: " + LastCaptureCount + ", B: " + LastFreedCount;
+            return "Player0: " + LastCaptureCount + ", Player1: " + LastFreedCount;
         }
     }
 }

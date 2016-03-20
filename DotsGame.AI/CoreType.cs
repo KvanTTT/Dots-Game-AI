@@ -7,7 +7,7 @@ namespace DotsGame.AI
 {
     public enum CoreType
     {
-        BasicCore,
+        SgfCore,
         GroupsCore
     }
 }

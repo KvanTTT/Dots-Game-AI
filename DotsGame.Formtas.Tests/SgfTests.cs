@@ -3,6 +3,7 @@ using DotsGame.Sgf;
 using NUnit.Framework;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -41,16 +42,6 @@ namespace DotsGame.Formtas.Tests
             CheckCrosswise(deserialized);
         }
 
-        [TestCase("5547")]
-        [TestCase("https://game.playdots.ru/practice/redirect?game_id=5547")]
-        public void DownloadParse_SgfFromVkCrosswise(string fileNameOrPath)
-        {
-            var extractor = new GameInfoExtractor();
-            GameInfo info = extractor.DetectFormatAndOpen(fileNameOrPath);
-            CheckCrosswise(info, false);
-            Assert.IsTrue(info.FromUrl);
-        }
-
         [TestCase("874744")]
         [TestCase("https://game.playdots.ru/game/redirect?game_id=874744")]
         public void DownloadParse_SgfFromVkComplex(string fileNameOrPath)
@@ -61,7 +52,7 @@ namespace DotsGame.Formtas.Tests
             Assert.AreEqual(new DateTime(2016, 02, 08, 13, 49, 30), info.Date);
             Assert.AreEqual("Сергей Чернобровин", info.Player1Name);
             Assert.AreEqual("Ксюша Димарчук", info.Player2Name);
-            Assert.AreEqual("без территории, с заземлением, двойной скрест в центре, 25 сек на ход, 4 мин на партию", info.Description);
+            Assert.AreEqual("без территории, с заземлением, двойной скрест в центре, 25 сек на ход, 4 мин на партию, зрители 25, средняя оценка 9.0, продолжительность 52:05", info.Description);
         }
 
         [Test]
@@ -73,13 +64,34 @@ namespace DotsGame.Formtas.Tests
         }
 
         [Test]
-        public void Serialzie_SgfTree()
+        public void Serialize_SgfTree()
         {
             var parser = new SgfParser { NewLines = true };
             GameInfo gameInfo = parser.Parse(Encoding.UTF8.GetBytes(TreeSgf));
             byte[] serialized = parser.Serialize(gameInfo);
             GameInfo deserialized = parser.Parse(serialized);
             CheckTree(deserialized);
+        }
+
+        [Test]
+        public void Parse_FullSgfWithStop()
+        {
+            var fileName = Path.Combine(TestContext.CurrentContext.TestDirectory, "FullSgfWithStop.sgf");
+            var parser = new SgfParser();
+            GameInfo gameInfo = parser.Parse(File.ReadAllBytes(fileName));
+            CheckFullInfo(gameInfo);
+        }
+
+        [Test]
+        public void Serialize_FullSgfWithStop()
+        {
+            var fileName = Path.Combine(TestContext.CurrentContext.TestDirectory, "FullSgfWithStop.sgf");
+            var parser = new SgfParser();
+            GameInfo gameInfo = parser.Parse(File.ReadAllBytes(fileName));
+            byte[] serialized = parser.Serialize(gameInfo);
+            GameInfo deserialized = parser.Parse(serialized);
+            string str = Encoding.UTF8.GetString(serialized);
+            CheckFullInfo(deserialized);
         }
 
         private static void CheckCrosswise(GameInfo gameInfo, bool checkDate = true)
@@ -95,7 +107,7 @@ namespace DotsGame.Formtas.Tests
             Assert.AreEqual("Первый игрок", gameInfo.Player1Name);
             Assert.AreEqual("Второй игрок", gameInfo.Player2Name);
             GameTree nextTree = gameInfo.GameTree;
-            Assert.IsTrue(nextTree.Move.IsRoot);
+            Assert.IsTrue(nextTree.Root);
             nextTree = nextTree.Childs.First();
             Assert.AreEqual(31, nextTree.Move.Row);
             Assert.AreEqual(2, nextTree.Move.Column);
@@ -145,6 +157,41 @@ namespace DotsGame.Formtas.Tests
             Assert.AreEqual(9, tree.Childs[0].Move.Row);
             Assert.AreEqual(16, tree.Childs[0].Move.Column);
             Assert.AreEqual(tree, tree.Childs[0].Parent);
+        }
+
+        private static void CheckFullInfo(GameInfo gameInfo)
+        {
+            Assert.AreEqual("Спортивные Точки (playdots.ru)", gameInfo.AppName);
+            Assert.AreEqual(GameType.Kropki, gameInfo.GameType);
+            Assert.AreEqual(39, gameInfo.Width);
+            Assert.AreEqual(32, gameInfo.Height);
+            Assert.AreEqual("russian", gameInfo.Rules);
+            Assert.AreEqual("Синий игрок", gameInfo.Player1Name);
+            Assert.AreEqual("Красный игрок", gameInfo.Player2Name);
+            Assert.AreEqual(Rank.Grandmaster, gameInfo.Player1Rank);
+            Assert.AreEqual(2022, gameInfo.Player1Rating);
+            Assert.AreEqual(Rank.Master, gameInfo.Player2Rank);
+            Assert.AreEqual(1823, gameInfo.Player2Rating);
+            Assert.AreEqual(new DateTime(2016, 03, 13, 01, 14, 30), gameInfo.Date);
+            Assert.AreEqual("rating", gameInfo.Event);
+            Assert.AreEqual("https://playdots.ru/game-info/?id=962686", gameInfo.Source);
+            Assert.AreEqual(240, gameInfo.TimeLimits.TotalSeconds);
+            Assert.AreEqual("20 sec / move", gameInfo.OverTime);
+            Assert.AreEqual(0, gameInfo.WinPlayerNumber);
+            Assert.AreEqual(WinReason.Score, gameInfo.WinReason);
+            Assert.AreEqual(1, gameInfo.WinScore);
+            Assert.AreEqual("B+1", gameInfo.Result);
+            Assert.AreEqual("without territory, with landing, single crossing in the center, 20 sec for a move, 4 min for a round, spectators 5, average score 8.5, duration 13:08", gameInfo.Description);
+
+            Assert.AreEqual(new GameMove(0, 7, 19), gameInfo.GameTree.GameMoves[0]);
+            Assert.AreEqual(new GameMove(0, 8, 20), gameInfo.GameTree.GameMoves[1]);
+            Assert.AreEqual(new GameMove(1, 7, 20), gameInfo.GameTree.GameMoves[2]);
+            Assert.AreEqual(new GameMove(1, 8, 19), gameInfo.GameTree.GameMoves[3]);
+
+            var lastStopMove = gameInfo.GameTree.GetDefaultSequence().Last();
+
+            Assert.AreEqual(new GameMove(1, 8, 17), lastStopMove.GameMoves[0]);
+            Assert.AreEqual(new GameMove(1, 9, 17), lastStopMove.GameMoves[1]);
         }
     }
 }

@@ -1,17 +1,17 @@
 ﻿<UserControl xmlns="https://github.com/perspex" Design.Width="800" >
     <Grid Name="GridMain" RowDefinitions="Auto,*" >
-        <Grid ColumnDefinitions="40,40,40,40,40,80,80,80,80,*,80,60">
-            <Button Grid.Column="0" Command="{Binding PrevMoveCommand}" >&lt;</Button>
-            <Button Grid.Column="1" Command="{Binding NextMoveCommand}" >&gt;</Button>
-            <Button Grid.Column="2" Command="{Binding StartMoveCommand}" >&lt;&lt;</Button>
-            <Button Grid.Column="3" Command="{Binding EndMoveCommand}" >&gt;&gt;</Button>
-            <Button Grid.Column="4" Command="{Binding RemoveCommand}" >X</Button>
-            <Button Grid.Column="5" Command="{Binding OpenFileCommand}" >Open</Button>
-            <Button Grid.Column="6" Command="{Binding OpenPlaydotsVkCommand}" >Open Vk</Button>
-            <Button Grid.Column="7" Command="{Binding ResetCommand}" >Reset</Button>
-            <Button Grid.Column="8" Command="{Binding SaveCommand}" >Save</Button>
-            <TextBox Grid.Column="9" IsReadOnly="true" Text="{Binding FileName}" />
-            <Button Grid.Column="10" Command="{Binding UpdateCommand}">Update</Button>
+        <Grid ColumnDefinitions="40,40,40,40,40,80,80,80,80,*,80,60" >
+            <Button Grid.Column="0" Margin="0,0,4,0" Command="{Binding PrevMoveCommand}" >&lt;</Button>
+            <Button Grid.Column="1" Margin="0,0,4,0" Command="{Binding NextMoveCommand}" >&gt;</Button>
+            <Button Grid.Column="2" Margin="0,0,4,0" Command="{Binding StartMoveCommand}" >&lt;&lt;</Button>
+            <Button Grid.Column="3" Margin="0,0,4,0" Command="{Binding EndMoveCommand}" >&gt;&gt;</Button>
+            <Button Grid.Column="4" Margin="0,0,4,0" Command="{Binding RemoveCommand}" >X</Button>
+            <Button Grid.Column="5" Margin="0,0,4,0" Command="{Binding OpenFileCommand}" >Open</Button>
+            <Button Grid.Column="6" Margin="0,0,4,0" Command="{Binding OpenPlaydotsVkCommand}" >Open Vk</Button>
+            <Button Grid.Column="7" Margin="0,0,4,0" Command="{Binding ResetCommand}" >Reset</Button>
+            <Button Grid.Column="8" Margin="0,0,4,0" Command="{Binding SaveCommand}" >Save</Button>
+            <TextBox Grid.Column="9" Margin="0,0,4,0" IsReadOnly="true" Text="{Binding FileName}" />
+            <Button Grid.Column="10" Margin="0,0,4,0" Command="{Binding UpdateCommand}">Update</Button>
             <CheckBox Grid.Column="11" IsChecked="{Binding AutoUpdate}" >Auto</CheckBox>
         </Grid>
         <ScrollViewer Grid.Row="1" MinHeight="{Binding Path=MinScrollViewerHeight}" MaxHeight="{Binding Path=MaxScrollViewerHeight}" Name="GameTreeScrollViewer">
