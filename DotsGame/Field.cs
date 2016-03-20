@@ -927,7 +927,8 @@ namespace DotsGame
                             new Base(LastMoveCaptureCount, LastMoveFreedCount,
                             new List<DotPosition>(_chainDotsPositions), new List<DotPosition>(_surroundDotsPositions),
                             new List<short>(_chainPositions), new List<short>(_surroundPositions), oldPlayer0Square, oldPlayer1Square),
-                    DiagonalGroupCount = oldDiagonalLinkedGroupsCount
+                    DiagonalGroupCount = oldDiagonalLinkedGroupsCount,
+                    MovePlayerNumber = (int)CurrentPlayer
                 });
                 LastState = _dotsSequenceStates[_dotsSequenceStates.Count - 1];
 
@@ -990,8 +991,8 @@ namespace DotsGame
                 }
 
                 _dots[LastState.Move.Position] = LastState.Move.Dot;
-                CurrentPlayer = CurrentPlayer.NextPlayer();
-                _dotsSequenceStates.RemoveAt(_dotsSequenceStates.Count - 1);
+                CurrentPlayer = (DotState)LastState.MovePlayerNumber;
+               _dotsSequenceStates.RemoveAt(_dotsSequenceStates.Count - 1);
 
                 LastPosition = LastState.Move.Position;
                 DiagonalLinkedGroupsCount = LastState.DiagonalGroupCount;

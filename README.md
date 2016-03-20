@@ -1,4 +1,4 @@
 ## Dots-Game-AI
 
 ### Unit Tests
-![image](https://travis-ci.org/KvanTTT/Dots-Game-AI.svg?branch=master)
+[![Build Status](https://travis-ci.org/KvanTTT/Dots-Game-AI.svg?branch=master)](https://travis-ci.org/KvanTTT/Dots-Game-AI)

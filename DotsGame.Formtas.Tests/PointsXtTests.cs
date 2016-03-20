@@ -20,7 +20,7 @@ namespace DotsGame.Formtas.Tests
             var gameInfo = parser.Parse(File.ReadAllBytes(fileName));
             IList<GameTree> moves = gameInfo.GameTree.GetDefaultSequence();
             Assert.AreEqual(5, moves.Count);
-            Assert.IsTrue(moves[0].Move.IsRoot);
+            Assert.IsTrue(moves[0].Root);
             Assert.AreEqual(17, moves[1].Move.Row);
             Assert.AreEqual(19, moves[1].Move.Column);
             Assert.AreEqual(17, moves[2].Move.Row);

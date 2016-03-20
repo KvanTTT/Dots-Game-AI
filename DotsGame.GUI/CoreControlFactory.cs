@@ -14,8 +14,8 @@ namespace DotsGame.GUI
         {
             switch (coreType)
             {
-                case CoreType.BasicCore:
-                    return new BasicCoreControl();
+                case CoreType.SgfCore:
+                    return new SgfCoreControl();
                 case CoreType.GroupsCore:
                     return new GroupsCoreControl();
                 default:
