@@ -13,7 +13,7 @@ namespace DotsGame.GUI
     public class MainWindowViewModel : ReactiveObject
     {
         private CoreType _selectedCoreType;
-        private UserControl _coreCotnrol;
+        private UserControl _coreControl;
 
         public CoreType SelectedCoreType
         {
@@ -23,7 +23,7 @@ namespace DotsGame.GUI
             }
             set
             {
-                _selectedCoreType = value;
+                this.RaiseAndSetIfChanged(ref _selectedCoreType, value);
                 CoreControl = CoreControlFactory.Create(_selectedCoreType);
             }
         }
@@ -38,11 +38,11 @@ namespace DotsGame.GUI
         {
             get
             {
-                return _coreCotnrol;
+                return _coreControl;
             }
             set
             {
-                this.RaiseAndSetIfChanged(ref _coreCotnrol, value);
+                this.RaiseAndSetIfChanged(ref _coreControl, value);
             }
         }
     }

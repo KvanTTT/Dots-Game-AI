@@ -254,11 +254,11 @@ namespace DotsGame.GUI
             {
                 var extractor = new GameInfoExtractor();
                 bool fromCache;
-                bool uiThread = !(state is string && (string)state == "timer");
                 var gameInfo = extractor.DetectFormatAndOpen(FileName, out fromCache);
-                if (gameInfo != _gameInfo)
+                bool uiThread = !(state is string && (string)state == "timer");
+                if (gameInfo != ServiceLocator.BasicCoreControViewModel.GameInfo)
                 {
-                    _gameInfo = gameInfo;
+                    _gameInfo.CopyInfoFrom(gameInfo);
                     if (!uiThread)
                     {
                         Dispatcher.UIThread.InvokeAsync(() => ServiceLocator.BasicCoreControViewModel.GameInfo = gameInfo);
@@ -273,8 +273,15 @@ namespace DotsGame.GUI
                     IList<GameTree> gameMoves = gameInfo.GameTree.GetDefaultSequence();
                     if (gameMoves.Count != _prevMovesCount)
                     {
-                        AddMoves(gameInfo.GameTree.GetDefaultSequence(), uiThread);
                         _prevMovesCount = gameMoves.Count;
+                        if (!uiThread)
+                        {
+                            Dispatcher.UIThread.InvokeAsync(() => AddMoves(gameMoves));
+                        }
+                        else
+                        {
+                            AddMoves(gameMoves);
+                        }
                     }
                 }
             }
@@ -345,7 +352,7 @@ namespace DotsGame.GUI
             }
         }
 
-        public void AddMoves(IList<GameTree> gameTrees, bool uiThread)
+        public void AddMoves(IList<GameTree> gameTrees)
         {
             GameTree node = _gameInfo.GameTree;
             bool newChild = false;
@@ -383,21 +390,9 @@ namespace DotsGame.GUI
                 }
             }
 
-            if (uiThread)
-            {
-                Refresh();
-                UpdateSelectedGameTree(node);
-                ScrollToSelectedGameTree();
-            }
-            else
-            {
-                Dispatcher.UIThread.InvokeAsync(() =>
-                {
-                    Refresh();
-                    UpdateSelectedGameTree(node);
-                    ScrollToSelectedGameTree();
-                });
-            }
+            Refresh();
+            UpdateSelectedGameTree(node);
+            ScrollToSelectedGameTree();
         }
 
         private void Refresh()
@@ -443,12 +438,12 @@ namespace DotsGame.GUI
 
         private void ScrollToSelectedGameTree()
         {
-            if (_selectedGameTree != null)
+            Tuple<int, int> pos;
+            if (_selectedGameTree != null && _gameTreesPositions.TryGetValue(_selectedGameTree, out pos))
             {
-                var pos = _gameTreesPositions[_selectedGameTree];
                 double left = _padding + pos.Item1 * _dotSpace;
                 double top = _padding + pos.Item2 * _dotSpace;
-                Dispatcher.UIThread.InvokeAsync(() => 
+                Dispatcher.UIThread.InvokeAsync(() =>
                     _canvasScrollViewer.Offset = new Vector(
                         left - _canvasScrollViewer.DesiredSize.Width / 2, top - _canvasScrollViewer.DesiredSize.Height / 2));
             }
@@ -456,18 +451,21 @@ namespace DotsGame.GUI
 
         private void RefreshSelectedTreeMarker()
         {
-            var pos = _gameTreesPositions[_selectedGameTree];
-            _gameTreeCanvas.Children.Remove(_selectedTreeRect);
-            _selectedTreeRect = new Rectangle
+            Tuple<int, int> pos;
+            if (_gameTreesPositions.TryGetValue(_selectedGameTree, out pos))
             {
-                [Canvas.LeftProperty] = _padding + pos.Item1 * _dotSpace - _dotSize / 2 - 2,
-                [Canvas.TopProperty] = _padding + pos.Item2 * _dotSpace - _dotSize / 2 - 2,
-                Width = _dotSize + 4,
-                Height = _dotSize + 4,
-                Stroke = Brushes.Black,
-                StrokeThickness = 2,
-            };
-            _gameTreeCanvas.Children.Add(_selectedTreeRect);
+                _gameTreeCanvas.Children.Remove(_selectedTreeRect);
+                _selectedTreeRect = new Rectangle
+                {
+                    [Canvas.LeftProperty] = _padding + pos.Item1 * _dotSpace - _dotSize / 2 - 2,
+                    [Canvas.TopProperty] = _padding + pos.Item2 * _dotSpace - _dotSize / 2 - 2,
+                    Width = _dotSize + 4,
+                    Height = _dotSize + 4,
+                    Stroke = Brushes.Black,
+                    StrokeThickness = 2,
+                };
+                _gameTreeCanvas.Children.Add(_selectedTreeRect);
+            }
         }
 
         private void RefreshMoves()

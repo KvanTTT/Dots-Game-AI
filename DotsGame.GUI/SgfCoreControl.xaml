@@ -1,5 +1,5 @@
 ﻿<UserControl xmlns="https://github.com/perspex">
-    <StackPanel Gap="4" Margin="4">
+    <StackPanel Gap="4" Margin="0,4,0,4">
         <Grid ColumnDefinitions="140,*">
             <TextBlock Text="App Name" />
             <TextBox Grid.Column="1" Text="{Binding Path=AppName}"/>
@@ -54,7 +54,7 @@
         </Grid>
         <Grid ColumnDefinitions="140,*">
             <TextBlock Text="Description" />
-            <TextBox Grid.Column="1" Height="80"  Text="{Binding Path=Description}" TextWrapping="Wrap" AcceptsReturn="True"/>
+            <TextBox Grid.Column="1" Height="100"  Text="{Binding Path=Description}" TextWrapping="Wrap" AcceptsReturn="True"/>
         </Grid>
     </StackPanel>
 </UserControl>

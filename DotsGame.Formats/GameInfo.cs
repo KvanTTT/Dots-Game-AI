@@ -121,6 +121,31 @@ namespace DotsGame
             GameTree = new GameTree() { Number = 0, Root = true };
         }
 
+        public void CopyInfoFrom(GameInfo sourceInfo)
+        {
+            FromUrl = sourceInfo.FromUrl;
+            GameType = sourceInfo.GameType;
+            AppName = sourceInfo.AppName;
+            Width = sourceInfo.Width;
+            Height = sourceInfo.Height;
+            Player1Name = sourceInfo.Player1Name;
+            Player2Name = sourceInfo.Player2Name;
+            Player1Rank = sourceInfo.Player1Rank;
+            Player2Rank = sourceInfo.Player2Rank;
+            Player1Rating = sourceInfo.Player1Rating;
+            Player2Rating = sourceInfo.Player2Rating;
+            Date = sourceInfo.Date;
+            TimeLimits = sourceInfo.TimeLimits;
+            OverTime = sourceInfo.OverTime;
+            Rules = sourceInfo.Rules;
+            Event = sourceInfo.Event;
+            WinPlayerNumber = sourceInfo.WinPlayerNumber;
+            WinReason = sourceInfo.WinReason;
+            WinScore = sourceInfo.WinScore;
+            Source = sourceInfo.Source;
+            Description = sourceInfo.Description;
+        }
+
         public GameTree GetDefaultLastTree()
         {
             return GameTree.GetDefaultLastTree();
