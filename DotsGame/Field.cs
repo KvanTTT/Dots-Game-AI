@@ -895,7 +895,7 @@ namespace DotsGame
 
         public bool MakeMove(int position)
         {
-            if (_dots[position].IsPuttingAllowed())
+            if (_dots[position].IsNotPutted())
             {
                 DotState oldDot = _dots[position];
 

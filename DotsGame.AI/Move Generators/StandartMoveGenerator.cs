@@ -39,7 +39,7 @@ namespace DotsGame.AI
 			for (int i = 0; i < 3; i++)
 			{
 				for (int j = position; j < position + 3; j++)
-					if (Field.IsValidPos(j) && Field[j].IsPuttingAllowed() && !Moves.Contains(j))
+					if (Field.IsValidPos(j) && Field[j].IsNotPutted() && !Moves.Contains(j))
 						Moves.Add(j);
 
 				position += Field.RealWidth;

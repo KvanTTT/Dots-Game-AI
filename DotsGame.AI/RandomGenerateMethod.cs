@@ -4,7 +4,7 @@ using System.Linq;
 
 namespace DotsGame.AI
 {
-	public enum enmRandomGenerateMethod
+	public enum RandomGenerateMethod
 	{
 		Standart,
 		Crypto

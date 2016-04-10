@@ -62,7 +62,6 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
-    <Compile Include="StrategicalMovesGeneratorTest.cs" />
     <Compile Include="TestUtils.cs" />
     <Compile Include="ZobristHashTest.cs" />
   </ItemGroup>
