@@ -6,11 +6,10 @@ namespace DotsGame.GUI
 {
     public class GroupsCoreControl : UserControl
     {
-        private GroupsCore _groupsCore;
-
         public GroupsCoreControl()
         {
             this.InitializeComponent();
+            this.DataContext = new GroupCoreControlViewModel();
         }
 
         private void InitializeComponent()

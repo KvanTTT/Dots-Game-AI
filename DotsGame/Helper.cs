@@ -17,17 +17,17 @@ namespace DotsGame
             return dot & DotState.Player;
         }
 
+        public static int GetPlayerNumber(this DotState dot)
+        {
+            return (int)(dot & DotState.Player);
+        }
+
         public static bool IsPutted(this DotState dot)
         {
             return (dot & DotState.Putted) == DotState.Putted;
         }
 
         public static bool IsNotPutted(this DotState dot)
-        {
-            return (dot & DotState.EnableMask) == DotState.Empty;
-        }
-
-        public static bool IsPuttingAllowed(this DotState dot)
         {
             return (dot & DotState.EnableMask) == DotState.Empty;
         }
@@ -40,6 +40,11 @@ namespace DotsGame
         public static bool IsPlayerPutted(this DotState dot, DotState player)
         {
             return (dot & DotState.EnableMask) == (DotState.Putted | player);
+        }
+
+        public static bool IsPlayerPutted(this DotState dot, int playerNumber)
+        {
+            return (dot & DotState.EnableMask) == (DotState.Putted | (DotState)playerNumber);
         }
 
         public static bool IsPlayer0Putted(this DotState dot)

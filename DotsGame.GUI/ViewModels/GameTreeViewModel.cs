@@ -138,8 +138,20 @@ namespace DotsGame.GUI
             _gameTreeUserControl = gameTreeUserControl;
             _gameTreeCanvas = gameTreeUserControl.Find<Canvas>("GameTreeCanvas");
             _canvasScrollViewer = gameTreeUserControl.Find<ScrollViewer>("GameTreeScrollViewer");
-            GameInfo = new GameInfo() { Width = DotsFieldViewModel.Field.Width, Height = DotsFieldViewModel.Field.Height };
             _gameTreeCanvas.PointerPressed += _gameTreeCanvas_PointerPressed;
+            FileName = ServiceLocator.Settings.OpenedFileName;
+            if (string.IsNullOrEmpty(ServiceLocator.Settings.CurrentGameSgf))
+            {
+                GameInfo = new GameInfo() { Width = DotsFieldViewModel.Field.Width, Height = DotsFieldViewModel.Field.Height };
+                UpdateSelectedGameTree(GameInfo.GameTree);
+            }
+            else
+            {
+                var serializer = new SgfParser();
+                GameInfo = serializer.Parse(Encoding.UTF8.GetBytes(ServiceLocator.Settings.CurrentGameSgf));
+                UpdateSelectedGameTree(GameInfo.GetDefaultLastTree());
+                ScrollToSelectedGameTree();
+            }
 
             PrevMoveCommand.Subscribe(_ =>
             {
@@ -240,8 +252,6 @@ namespace DotsGame.GUI
             });
 
             UpdateCommand.Subscribe(UpdateGame);
-
-            UpdateSelectedGameTree(GameInfo.GameTree);
         }
 
         internal void GameTreeCanvas_KeyUp(object sender, Perspex.Input.KeyEventArgs e)
@@ -519,7 +529,7 @@ namespace DotsGame.GUI
             }
             else
             {
-                Brush fill;
+                IBrush fill;
                 if (gameTree.Root)
                 {
                     fill = Brushes.Green;

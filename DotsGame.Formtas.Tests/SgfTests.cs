@@ -52,7 +52,7 @@ namespace DotsGame.Formtas.Tests
             Assert.AreEqual(new DateTime(2016, 02, 08, 13, 49, 30), info.Date);
             Assert.AreEqual("Сергей Чернобровин", info.Player1Name);
             Assert.AreEqual("Ксюша Димарчук", info.Player2Name);
-            Assert.AreEqual("без территории, с заземлением, двойной скрест в центре, 25 сек на ход, 4 мин на партию, зрители 25, средняя оценка 9.0, продолжительность 52:05", info.Description);
+            Assert.AreEqual("without territory, with landing, double crossing in the center, 25 sec for a move, 4 min for a round, spectators 25, average score 9.0, duration 52:05", info.Description);
         }
 
         [Test]

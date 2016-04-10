@@ -61,6 +61,7 @@ namespace DotsGame.Formats
                     sgfUrls.Add(string.Format(VkPlaydotsSgfPrefix, "practice", vkId));
                 }
                 var webClient = new WebClient();
+                webClient.Headers["Accept-Language"] = "en-US";
                 Exception lastException = null;
                 foreach (var sgfUrl in sgfUrls)
                 {

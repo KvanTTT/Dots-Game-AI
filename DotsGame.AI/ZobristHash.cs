@@ -22,7 +22,7 @@ namespace DotsGame.AI
 		#region Constructors
 
 		public ZobristHashField(Field field, int? seed = null,
-			enmRandomGenerateMethod randomGenerateMethod = enmRandomGenerateMethod.Standart)
+			RandomGenerateMethod randomGenerateMethod = RandomGenerateMethod.Standart)
 		{
 			Field = field;
 			Seed = seed;
@@ -70,7 +70,7 @@ namespace DotsGame.AI
 
 		private void FillWithRandomValues()
 		{
-			if (RandomGenerateMethod == enmRandomGenerateMethod.Standart)
+			if (RandomGenerateMethod == RandomGenerateMethod.Standart)
 			{
 				var random = Seed.HasValue ? new Random((int)Seed) : new Random();
 				var buffer = new byte[sizeof(ulong)];
@@ -81,7 +81,7 @@ namespace DotsGame.AI
 				}
 			}
 			else
-				if (RandomGenerateMethod == enmRandomGenerateMethod.Crypto)
+				if (RandomGenerateMethod == RandomGenerateMethod.Crypto)
 				{
 					// TODO: Understand how to generate sequence with define seed.
 					using (var generator = new RNGCryptoServiceProvider())
@@ -182,7 +182,7 @@ namespace DotsGame.AI
 			set;
 		}
 
-		public enmRandomGenerateMethod RandomGenerateMethod
+		public RandomGenerateMethod RandomGenerateMethod
 		{
 			get;
 			private set;
