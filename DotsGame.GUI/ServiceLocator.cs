@@ -13,5 +13,7 @@ namespace DotsGame.GUI
         internal static GameTreeViewModel GameTreeViewModel { get; set; }
 
         internal static SgfCoreControViewModel BasicCoreControViewModel { get; set; } = new SgfCoreControViewModel();
+
+        internal static Settings Settings { get; set; } = Settings.Load();
     }
 }

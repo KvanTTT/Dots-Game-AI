@@ -24,6 +24,7 @@ namespace DotsGame.GUI
         private List<Ellipse> _dotShapes = new List<Ellipse>();
         private Stack<List<Shape>> _movesShapes = new Stack<List<Shape>>();
         private Shape _lastMoveMarker;
+        private List<Shape> _additionalShapes = new List<Shape>();
 
         private GameTreeViewModel _gameTreeViewModel;
 
@@ -37,7 +38,7 @@ namespace DotsGame.GUI
         public Color Player1BaseColor { get; private set; }
         public Color Player2BaseColor { get; private set; }
 
-        public Brush LineBrush { get; set; } = Brushes.DimGray;
+        public IBrush LineBrush { get; set; } = Brushes.DimGray;
 
         public GameTreeViewModel GameTreeViewModel
         {
@@ -82,12 +83,12 @@ namespace DotsGame.GUI
             set { this.RaiseAndSetIfChanged(ref _player2Name, value); }
         }
 
-        public Brush Player1Brush
+        public IBrush Player1Brush
         {
             get { return new SolidColorBrush(Player1Color); }
         }
 
-        public Brush Player2Brush
+        public IBrush Player2Brush
         {
             get { return new SolidColorBrush(Player2Color); }
         }
@@ -145,6 +146,12 @@ namespace DotsGame.GUI
         {
             _canvasField.Children.Remove(_lastMoveMarker);
             _lastMoveMarker = null;
+        }
+
+        public void AddShapes(IList<Shape> shapes)
+        {
+            _additionalShapes.AddRange(shapes);
+            _canvasField.Children.AddRange(shapes);
         }
 
         private void CanvasField_PointerPressed(object sender, Perspex.Input.PointerPressedEventArgs e)
@@ -226,6 +233,7 @@ namespace DotsGame.GUI
 
         private void ResetAll()
         {
+            _additionalShapes.Clear();
             _dotShapes.Clear();
             _movesShapes.Clear();
             UpdateLastMoveMarker();
@@ -234,6 +242,7 @@ namespace DotsGame.GUI
 
         private void AddLastMoveState()
         {
+            ClearAdditionalShapes();
             State state = _field.States.Last();
             var moveShapes = new List<Shape>();
 
@@ -294,6 +303,7 @@ namespace DotsGame.GUI
 
         private void RemoveMoveState(State state)
         {
+            ClearAdditionalShapes();
             if (state.Base != null && state.Base.LastCaptureCount != 0)
             { 
                 _currentBaseZInd -= 2;
@@ -332,6 +342,12 @@ namespace DotsGame.GUI
             int posX, posY;
             Field.GetPosition(dotPos, out posX, out posY);
             return new Point((posX - 1) * CellSize + FieldMargin, (posY - 1) * CellSize + FieldMargin);
+        }
+
+        private void ClearAdditionalShapes()
+        {
+            _canvasField.Children.RemoveAll(_additionalShapes);
+            _additionalShapes.Clear();
         }
     }
 }

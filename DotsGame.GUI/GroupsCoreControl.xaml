@@ -1,12 +1,15 @@
 ﻿<UserControl xmlns="https://github.com/perspex">
     <StackPanel Gap="5">
-    <CheckBox>Strong Groups</CheckBox>
-    <CheckBox>Fragile Groups</CheckBox>
-    <StackPanel Orientation="Horizontal" >
-      <CheckBox>
-        Max Linked Distance
-      </CheckBox>
-      <TextBox Margin="5,0,5,0"  Width="100">3</TextBox>
+        <CheckBox>Strong Groups</CheckBox>
+        <CheckBox>Fragile Groups</CheckBox>
+        <StackPanel Orientation="Horizontal" >
+            <CheckBox>
+                Max Linked Distance
+            </CheckBox>
+            <TextBox Margin="5,0,5,0"  Width="100">3</TextBox>
+        </StackPanel>
+        <Button Command="{Binding ShowCrosswisesCommand}">
+            Show Crosswises
+        </Button>
     </StackPanel>
-  </StackPanel>
 </UserControl>

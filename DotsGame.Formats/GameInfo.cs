@@ -19,9 +19,9 @@ namespace DotsGame
 
         public int Height { get; set; } = 32;
 
-        public string Player1Name { get; set; } = "";
+        public string Player1Name { get; set; } = "Player1";
 
-        public string Player2Name { get; set; } = "";
+        public string Player2Name { get; set; } = "Player2";
 
         public Rank Player1Rank { get; set; } = Rank.Unknown;
 
