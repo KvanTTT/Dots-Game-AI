@@ -1,4 +1,4 @@
-﻿<Window xmlns="https://github.com/perspex"
+﻿<Window xmlns="https://github.com/avaloniaui"
         xmlns:DotsGUI="clr-namespace:DotsGame.GUI;assembly=DotsGame.GUI" Title="Dots Game AI" Width="1366" Height="768">
   <Grid ColumnDefinitions="3*,1*" RowDefinitions="*,Auto">
     <DotsGUI:DotsFieldGameControl Grid.Column="0"  Name="DotsField"/>

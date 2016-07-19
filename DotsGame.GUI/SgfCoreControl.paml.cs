@@ -1,5 +1,5 @@
-﻿using Perspex.Controls;
-using Perspex.Markup.Xaml;
+﻿using Avalonia.Controls;
+using Avalonia.Markup.Xaml;
 
 namespace DotsGame.GUI
 {
@@ -12,7 +12,7 @@ namespace DotsGame.GUI
 
         private void InitializeComponent()
         {
-            PerspexXamlLoader.Load(this);
+            AvaloniaXamlLoader.Load(this);
         }
     }
 }

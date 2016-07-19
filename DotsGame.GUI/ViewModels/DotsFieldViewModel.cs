@@ -1,13 +1,11 @@
-﻿using Perspex;
-using Perspex.Controls;
-using Perspex.Controls.Shapes;
-using Perspex.Media;
+﻿using Avalonia;
+using Avalonia.Controls;
+using Avalonia.Controls.Shapes;
+using Avalonia.Media;
 using ReactiveUI;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace DotsGame.GUI
 {
@@ -154,13 +152,13 @@ namespace DotsGame.GUI
             _canvasField.Children.AddRange(shapes);
         }
 
-        private void CanvasField_PointerPressed(object sender, Perspex.Input.PointerPressedEventArgs e)
+        private void CanvasField_PointerPressed(object sender, Avalonia.Input.PointerPressedEventArgs e)
         {
             var pos = e.GetPosition(_canvasField) - new Point(FieldMargin, FieldMargin);
             pos = pos / CellSize;
             int fieldPosX = (int)Math.Round(pos.X) + 1;
             int fieldPosY = (int)Math.Round(pos.Y) + 1;
-            if (e.MouseButton == Perspex.Input.MouseButton.Left)
+            if (e.MouseButton == Avalonia.Input.MouseButton.Left)
             {
                 if (_field.MakeMove(fieldPosX, fieldPosY))
                 {
@@ -169,7 +167,7 @@ namespace DotsGame.GUI
                     GameTreeViewModel.AddMove(new GameMove((int)Field.CurrentPlayer.NextPlayer(), fieldPosY, fieldPosX));
                 }
             }
-            else if (e.MouseButton == Perspex.Input.MouseButton.Right)
+            else if (e.MouseButton == Avalonia.Input.MouseButton.Right)
             {
                 int lastX, lastY;
                 Field.GetPosition(_field.LastMakedPosition, out lastX, out lastY);

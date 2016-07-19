@@ -1,5 +1,5 @@
-﻿using Perspex.Controls;
-using Perspex.Markup.Xaml;
+﻿using Avalonia.Controls;
+using Avalonia.Markup.Xaml;
 using System.Threading;
 
 namespace DotsGame.GUI
@@ -35,17 +35,17 @@ namespace DotsGame.GUI
 
         private async void ClipboardUpdateEvent(object state)
         {
-            string clipboardText = await Perspex.Application.Current.Clipboard.GetTextAsync();
+            string clipboardText = await Avalonia.Application.Current.Clipboard.GetTextAsync();
             if (clipboardText != null && clipboardText.Contains("game.playdots.ru") && clipboardText != _textBox.Text)
             {
-                Perspex.Threading.Dispatcher.UIThread.InvokeAsync(() => _textBox.Text = clipboardText);
+                Avalonia.Threading.Dispatcher.UIThread.InvokeAsync(() => _textBox.Text = clipboardText);
             }
             _clipboardTimer.Change(250, Timeout.Infinite);
         }
 
         private void InitializeComponent()
         {
-            PerspexXamlLoader.Load(this);
+            AvaloniaXamlLoader.Load(this);
         }
     }
 }

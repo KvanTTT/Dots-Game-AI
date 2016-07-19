@@ -1,13 +1,10 @@
-﻿using DotsGame.AI;
-using Perspex.Controls;
-using Perspex.Controls.Shapes;
-using Perspex.Media;
+﻿using Avalonia.Controls;
+using Avalonia.Controls.Shapes;
+using Avalonia.Media;
+using DotsGame.AI;
 using ReactiveUI;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace DotsGame.GUI
 {

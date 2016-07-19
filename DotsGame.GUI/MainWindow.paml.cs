@@ -1,7 +1,6 @@
-﻿using DotsGame.Sgf;
-using Perspex.Controls;
-using Perspex.Input;
-using Perspex.Markup.Xaml;
+﻿using Avalonia.Controls;
+using Avalonia.Markup.Xaml;
+using DotsGame.Sgf;
 using System.Text;
 
 namespace DotsGame.GUI
@@ -32,7 +31,7 @@ namespace DotsGame.GUI
 
         private void InitializeComponent()
         {
-            PerspexXamlLoader.Load(this);
+            AvaloniaXamlLoader.Load(this);
         }
     }
 }

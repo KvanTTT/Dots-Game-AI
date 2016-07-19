@@ -1,10 +1,10 @@
-﻿using DotsGame.Formats;
+﻿using Avalonia;
+using Avalonia.Controls;
+using Avalonia.Controls.Shapes;
+using Avalonia.Media;
+using Avalonia.Threading;
+using DotsGame.Formats;
 using DotsGame.Sgf;
-using Perspex;
-using Perspex.Controls;
-using Perspex.Controls.Shapes;
-using Perspex.Media;
-using Perspex.Threading;
 using ReactiveUI;
 using System;
 using System.Collections.Generic;
@@ -12,7 +12,6 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading;
-using System.Threading.Tasks;
 
 namespace DotsGame.GUI
 {
@@ -254,7 +253,7 @@ namespace DotsGame.GUI
             UpdateCommand.Subscribe(UpdateGame);
         }
 
-        internal void GameTreeCanvas_KeyUp(object sender, Perspex.Input.KeyEventArgs e)
+        internal void GameTreeCanvas_KeyUp(object sender, Avalonia.Input.KeyEventArgs e)
         {
         }
 
@@ -301,7 +300,7 @@ namespace DotsGame.GUI
             }
         }
 
-        private void _gameTreeCanvas_PointerPressed(object sender, Perspex.Input.PointerPressedEventArgs e)
+        private void _gameTreeCanvas_PointerPressed(object sender, Avalonia.Input.PointerPressedEventArgs e)
         {
             Point position = e.GetPosition(_gameTreeCanvas);
             int xOffset = (int)Math.Round((position.X - _padding) / _dotSpace);
@@ -569,7 +568,7 @@ namespace DotsGame.GUI
                         Width = _dotSize,
                         Height = _dotSize,
                         TextAlignment = TextAlignment.Center,
-                        VerticalAlignment = Perspex.Layout.VerticalAlignment.Center,
+                        VerticalAlignment = Avalonia.Layout.VerticalAlignment.Center,
                         Foreground = Brushes.White,
                         FontSize = 11,
                         ZIndex = 15
