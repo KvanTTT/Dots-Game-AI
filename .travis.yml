@@ -1,8 +1,9 @@
 language: csharp
 solution: DotsGame.sln
 install:
-    - nuget sources add -Name Avalonia -Source https://www.myget.org/F/avalonia-ci/api/v2
-    - nuget restore DotsGame.sln
+    - curl -L -o nuget.exe https://dist.nuget.org/win-x86-commandline/latest/nuget.exe
+    - mono nuget.exe sources add -Name Avalonia -Source https://www.myget.org/F/avalonia-ci/api/v2
+    - mono nuget.exe restore DotsGame.sln
 script:
     - xbuild /p:Configuration=Release DotsGame.sln /p:TargetFrameworkVersion="v4.5"
     - mono ./packages/NUnit.ConsoleRunner.*/tools/nunit3-console.exe ./DotsGame.Tests/bin/Release/DotsGame.Tests.dll
