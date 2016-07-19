@@ -1,7 +1,7 @@
 language: csharp
 solution: DotsGame.sln
 install:
-    - nuget sources add -Name Perspex -Source https://www.myget.org/F/avalonia-ci/api/v2
+    - nuget sources add -Name Avalonia -Source https://www.myget.org/F/avalonia-ci/api/v2
     - nuget restore DotsGame.sln
 script:
     - xbuild /p:Configuration=Release DotsGame.sln /p:TargetFrameworkVersion="v4.5"
