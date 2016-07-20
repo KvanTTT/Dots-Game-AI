@@ -29,7 +29,7 @@ Yet another implementation of [Dots Game](https://en.wikipedia.org/wiki/Dots_(ga
 
 ### Dependencies
 
-* [Perspex](https://github.com/Perspex/Perspex); a multi-platform .NET UI framework;
+* [Avalonia](https://github.com/AvaloniaUI/Avalonia); a multi-platform .NET UI framework;
 * [Json.NET](http://www.newtonsoft.com/json) for serialization and deserialization to JSON;
 * [NUnit 3](http://www.nunit.org/) for unit tests.
 
