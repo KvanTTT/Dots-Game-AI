@@ -284,7 +284,7 @@
     <Delete Files="@(ReferenceCopyLocalPaths->'$(OutDir)%(DestinationSubDirectory)%(Filename)%(Extension)')" />
   </Target>
   <PropertyGroup>
-    <PostBuildEvent>if $(ConfigurationName) == Release (
+    <PostBuildEvent>if $(ConfigurationName) == ReleaseWithoutUselessFiles (
     del $(TargetDir)*.pdb
     del $(TargetDir)*.xml
 )</PostBuildEvent>
