@@ -1,12 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using DotsGame;
-
-namespace DotsGame.AI
+﻿namespace DotsGame.AI
 {
-	public class AlphaBetaAlgoritm
+    public class AlphaBetaAlgoritm
 	{
 		#region Constructors
 

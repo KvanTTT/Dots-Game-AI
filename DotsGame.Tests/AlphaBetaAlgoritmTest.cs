@@ -1,7 +1,5 @@
-﻿using System;
+﻿using DotsGame.AI;
 using NUnit.Framework;
-using DotsGame;
-using DotsGame.AI;
 
 namespace DotsGame.Tests
 {

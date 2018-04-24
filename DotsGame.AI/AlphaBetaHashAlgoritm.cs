@@ -1,13 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using DotsGame;
+﻿using System.Collections.Generic;
 using System.Threading;
 
 namespace DotsGame.AI
 {
-	public class AlphaBetaHashAlgoritm
+    public class AlphaBetaHashAlgoritm
 	{
 		#region Constructors
 

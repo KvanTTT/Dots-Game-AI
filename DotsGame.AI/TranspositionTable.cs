@@ -1,14 +1,9 @@
-﻿﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using DotsGame;
-using System.Diagnostics;
+﻿using System.Collections.Generic;
 using System.Threading;
 
 namespace DotsGame.AI
 {
-	public class TranspositionTable
+    public class TranspositionTable
 	{
 		#region Fields
 

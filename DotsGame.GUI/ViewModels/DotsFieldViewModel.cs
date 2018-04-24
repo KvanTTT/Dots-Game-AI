@@ -173,7 +173,7 @@ namespace DotsGame.GUI
                 Field.GetPosition(_field.LastMakedPosition, out lastX, out lastY);
                 if (fieldPosX == lastX && fieldPosY == lastY)
                 {
-                    GameTreeViewModel.PrevMoveCommand.Execute(null);
+                    GameTreeViewModel.PrevMoveCommandAction();
                 }
             }
         }

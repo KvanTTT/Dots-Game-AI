@@ -3,18 +3,17 @@ using Avalonia.Controls.Shapes;
 using Avalonia.Media;
 using DotsGame.AI;
 using ReactiveUI;
-using System;
 using System.Collections.Generic;
 
 namespace DotsGame.GUI
 {
     public class GroupCoreControlViewModel : ReactiveObject
     {
-        public ReactiveCommand<object> ShowCrosswisesCommand { get; } = ReactiveCommand.Create();
+        public ReactiveCommand ShowCrosswisesCommand { get; }
 
         public GroupCoreControlViewModel()
         {
-            ShowCrosswisesCommand.Subscribe(_ =>
+            ShowCrosswisesCommand = ReactiveCommand.Create(() =>
             {
                 var dotsField = ServiceLocator.DotsFieldViewModel;
                 var groupsCore = new GroupsCore(ServiceLocator.DotsFieldViewModel.Field);

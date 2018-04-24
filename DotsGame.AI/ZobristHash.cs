@@ -1,16 +1,12 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Security.Cryptography;
-using DotsGame;
 
 namespace DotsGame.AI
 {
-	/// <summary>
-	/// TODO: take in calculation Current Red and Blue Capture Count.
-	/// </summary>
-	public class ZobristHashField
+    /// <summary>
+    /// TODO: take in calculation Current Red and Blue Capture Count.
+    /// </summary>
+    public class ZobristHashField
 	{
 		#region Fields
 

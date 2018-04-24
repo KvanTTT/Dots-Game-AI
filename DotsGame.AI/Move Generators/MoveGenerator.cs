@@ -1,12 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using DotsGame;
+﻿using System.Collections.Generic;
 
 namespace DotsGame.AI
 {
-	public abstract class MoveGenerator
+    public abstract class MoveGenerator
 	{
 		#region Constructors
 		

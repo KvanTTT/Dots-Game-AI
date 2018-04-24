@@ -2,11 +2,9 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using System.Net;
 using System.Security.Cryptography;
 using System.Text;
-using System.Threading.Tasks;
 
 namespace DotsGame.Formats
 {
@@ -23,8 +21,7 @@ namespace DotsGame.Formats
 
         public GameInfo DetectFormatAndOpen(string fileUrlOrPath)
         {
-            bool fromCache;
-            return DetectFormatAndOpen(fileUrlOrPath, out fromCache);
+            return DetectFormatAndOpen(fileUrlOrPath, out bool fromCache);
         }
 
         public GameInfo DetectFormatAndOpen(string fileUrlOrPath, out bool fromCache)

@@ -46,25 +46,25 @@ namespace DotsGame.GUI
 
         private bool _showLabels = true;
 
-        public ReactiveCommand<object> PrevMoveCommand { get; } = ReactiveCommand.Create();
+        public ReactiveCommand PrevMoveCommand { get; }
 
-        public ReactiveCommand<object> NextMoveCommand { get; } = ReactiveCommand.Create();
+        public ReactiveCommand NextMoveCommand { get; }
 
-        public ReactiveCommand<object> StartMoveCommand { get; } = ReactiveCommand.Create();
+        public ReactiveCommand StartMoveCommand { get; }
 
-        public ReactiveCommand<object> EndMoveCommand { get; } = ReactiveCommand.Create();
+        public ReactiveCommand EndMoveCommand { get; }
 
-        public ReactiveCommand<object> RemoveCommand { get; } = ReactiveCommand.Create();
+        public ReactiveCommand RemoveCommand { get; }
 
-        public ReactiveCommand<object> OpenFileCommand { get; } = ReactiveCommand.Create();
+        public ReactiveCommand OpenFileCommand { get; }
 
-        public ReactiveCommand<object> OpenPlaydotsVkCommand { get; } = ReactiveCommand.Create();
+        public ReactiveCommand OpenPlaydotsVkCommand { get; }
 
-        public ReactiveCommand<object> ResetCommand { get; } = ReactiveCommand.Create();
+        public ReactiveCommand ResetCommand { get; }
 
-        public ReactiveCommand<object> SaveCommand { get; } = ReactiveCommand.Create();
+        public ReactiveCommand SaveCommand { get; }
 
-        public ReactiveCommand<object> UpdateCommand { get; } = ReactiveCommand.Create();
+        public ReactiveCommand UpdateCommand { get; }
 
         public DotsFieldViewModel DotsFieldViewModel
         {
@@ -152,16 +152,9 @@ namespace DotsGame.GUI
                 ScrollToSelectedGameTree();
             }
 
-            PrevMoveCommand.Subscribe(_ =>
-            {
-                if (_selectedGameTree.Parent != null)
-                {
-                    UpdateSelectedGameTree(_selectedGameTree.Parent);
-                    ScrollToSelectedGameTree();
-                }
-            });
+            PrevMoveCommand = ReactiveCommand.Create(() => PrevMoveCommandAction());
 
-            NextMoveCommand.Subscribe(_ =>
+            NextMoveCommand = ReactiveCommand.Create(() =>
             {
                 if (_selectedGameTree.Childs.Count != 0)
                 {
@@ -170,19 +163,19 @@ namespace DotsGame.GUI
                 }
             });
 
-            StartMoveCommand.Subscribe(_ =>
+            StartMoveCommand = ReactiveCommand.Create(() =>
             {
                 UpdateSelectedGameTree(_gameInfo.GameTree);
                 ScrollToSelectedGameTree();
             });
 
-            EndMoveCommand.Subscribe(_ =>
+            EndMoveCommand = ReactiveCommand.Create(() =>
             {
                 UpdateSelectedGameTree(_selectedGameTree.GetDefaultLastTree());
                 ScrollToSelectedGameTree();
             });
 
-            RemoveCommand.Subscribe(_ =>
+            RemoveCommand = ReactiveCommand.Create(() =>
             {
                 if (_selectedGameTree != null && _selectedGameTree.Parent != null)
                 {
@@ -194,7 +187,7 @@ namespace DotsGame.GUI
                 }
             });
 
-            OpenFileCommand.Subscribe(async _ =>
+            OpenFileCommand = ReactiveCommand.Create(async () =>
             {
                 var dialog = new OpenFileDialog();
                 dialog.Filters.Add(new FileDialogFilter() { Name = "Smart Game Format, PointsXT", Extensions = new List<string>() { "sgf", "sav" } });
@@ -212,7 +205,7 @@ namespace DotsGame.GUI
                 }
             });
 
-            OpenPlaydotsVkCommand.Subscribe(async _ =>
+            OpenPlaydotsVkCommand = ReactiveCommand.Create(async () =>
             {
                 var dialog = new OpenPlaydotsGame();
                 var url = await dialog.ShowDialog<string>();
@@ -227,7 +220,7 @@ namespace DotsGame.GUI
                 }
             });
 
-            ResetCommand.Subscribe(_ =>
+            ResetCommand = ReactiveCommand.Create(() =>
             {
                 FileName = "";
                 GameInfoExtractor.InvalidateCache();
@@ -237,11 +230,11 @@ namespace DotsGame.GUI
                 ScrollToSelectedGameTree();
             });
 
-            SaveCommand.Subscribe(async _ =>
+            SaveCommand = ReactiveCommand.Create(async () =>
             {
                 var saveSgfDialog = new SaveFileDialog();
                 saveSgfDialog.Filters.Add(new FileDialogFilter() { Name = "Smart Game Format", Extensions = new List<string>() { "sgf" } });
-                string fileName = await saveSgfDialog.ShowAsync();
+                string fileName = await saveSgfDialog.ShowAsync(null);
                 if (fileName != null)
                 {
                     var parser = new SgfParser { NewLines = true };
@@ -250,11 +243,16 @@ namespace DotsGame.GUI
                 }
             });
 
-            UpdateCommand.Subscribe(UpdateGame);
+            UpdateCommand = ReactiveCommand.Create(() => UpdateGame(null));
         }
 
-        internal void GameTreeCanvas_KeyUp(object sender, Avalonia.Input.KeyEventArgs e)
+        public void PrevMoveCommandAction()
         {
+            if (_selectedGameTree.Parent != null)
+            {
+                UpdateSelectedGameTree(_selectedGameTree.Parent);
+                ScrollToSelectedGameTree();
+            }
         }
 
         private void UpdateGame(object state)

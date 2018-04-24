@@ -1,11 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-
-namespace DotsGame.AI
+﻿namespace DotsGame.AI
 {
-	public static class Helper
+    public static class Helper
 	{
 		public static ushort GetMove(this ulong data)
 		{

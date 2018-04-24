@@ -1,11 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using DotsGame;
-
-namespace DotsGame.AI
+﻿namespace DotsGame.AI
 {
-	public class StandartMoveGenerator : MoveGenerator
+    public class StandartMoveGenerator : MoveGenerator
 	{
 		#region Constructors
 

@@ -1,8 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
 
 namespace DotsGame.Formats
 {
@@ -10,11 +7,13 @@ namespace DotsGame.Formats
     {
         public GameInfo Parse(byte[] data)
         {
-            var result = new GameInfo();
-            result.AppName = "PointsXT";
-            result.GameType = GameType.Kropki;
-            result.Width = 39;
-            result.Height = 32;
+            var result = new GameInfo
+            {
+                AppName = "PointsXT",
+                GameType = GameType.Kropki,
+                Width = 39,
+                Height = 32
+            };
             GameTree gameTree = null;
             GameTree rootGameTree = null;
 
