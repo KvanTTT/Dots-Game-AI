@@ -260,8 +260,7 @@ namespace DotsGame.GUI
             if (!string.IsNullOrEmpty(FileName))
             {
                 var extractor = new GameInfoExtractor();
-                bool fromCache;
-                var gameInfo = extractor.DetectFormatAndOpen(FileName, out fromCache);
+                var gameInfo = extractor.DetectFormatAndOpen(FileName, out bool fromCache);
                 bool uiThread = !(state is string && (string)state == "timer");
                 if (gameInfo != ServiceLocator.BasicCoreControViewModel.GameInfo)
                 {
@@ -445,8 +444,7 @@ namespace DotsGame.GUI
 
         private void ScrollToSelectedGameTree()
         {
-            Tuple<int, int> pos;
-            if (_selectedGameTree != null && _gameTreesPositions.TryGetValue(_selectedGameTree, out pos))
+            if (_selectedGameTree != null && _gameTreesPositions.TryGetValue(_selectedGameTree, out Tuple<int, int> pos))
             {
                 double left = _padding + pos.Item1 * _dotSpace;
                 double top = _padding + pos.Item2 * _dotSpace;
@@ -458,8 +456,7 @@ namespace DotsGame.GUI
 
         private void RefreshSelectedTreeMarker()
         {
-            Tuple<int, int> pos;
-            if (_gameTreesPositions.TryGetValue(_selectedGameTree, out pos))
+            if (_gameTreesPositions.TryGetValue(_selectedGameTree, out Tuple<int, int> pos))
             {
                 _gameTreeCanvas.Children.Remove(_selectedTreeRect);
                 _selectedTreeRect = new Rectangle
@@ -519,8 +516,7 @@ namespace DotsGame.GUI
             double left = _padding + xOffset * _dotSpace - _dotSize / 2;
             double top = _padding + yOffset * _dotSpace - _dotSize / 2;
             long hash = GetMoveHashCode(xOffset, yOffset, playerNumber);
-            Ellipse circle;
-            if (_moveCircles.TryGetValue(hash, out circle))
+            if (_moveCircles.TryGetValue(hash, out Ellipse circle))
             {
                 _moveCircles.Remove(hash);
             }
@@ -551,8 +547,7 @@ namespace DotsGame.GUI
             if (_showLabels)
             {
                 long textBlockHash = GetLabelHashCode(xOffset, yOffset, currentNumber);
-                TextBlock textBlock;
-                if (_moveLabels.TryGetValue(textBlockHash, out textBlock))
+                if (_moveLabels.TryGetValue(textBlockHash, out TextBlock textBlock))
                 {
                     _moveLabels.Remove(textBlockHash);
                 }
@@ -607,9 +602,8 @@ namespace DotsGame.GUI
 
         private void UpdateLine(int x, int y, TreeLineDirection dir, int length)
         {
-            Line line;
             long hash = GetLineHashCode(x, y, dir, length);
-            if (_treeLines.TryGetValue(hash, out line))
+            if (_treeLines.TryGetValue(hash, out Line line))
             {
                 _treeLines.Remove(hash);
             }

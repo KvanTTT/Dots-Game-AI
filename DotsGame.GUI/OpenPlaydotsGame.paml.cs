@@ -38,7 +38,7 @@ namespace DotsGame.GUI
             string clipboardText = await Avalonia.Application.Current.Clipboard.GetTextAsync();
             if (clipboardText != null && clipboardText.Contains("game.playdots.ru") && clipboardText != _textBox.Text)
             {
-                Avalonia.Threading.Dispatcher.UIThread.InvokeAsync(() => _textBox.Text = clipboardText);
+                await Avalonia.Threading.Dispatcher.UIThread.InvokeAsync(() => _textBox.Text = clipboardText);
             }
             _clipboardTimer.Change(250, Timeout.Infinite);
         }

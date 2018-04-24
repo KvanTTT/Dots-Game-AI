@@ -4,68 +4,68 @@ using System.Threading;
 namespace DotsGame.AI
 {
     public class TranspositionTable
-	{
-		#region Fields
+    {
+        #region Fields
 
-		private Field Field_;
-		public static HashEntry[] HashEntries_;
+        private Field Field_;
+        public static HashEntry[] HashEntries_;
 
-		#endregion
+        #endregion
 
-		#region Constructors
+        #region Constructors
 
-		static TranspositionTable()
-		{
-			HashEntries_ = new HashEntry[AiSettings.HashTableSize];
-		}
+        static TranspositionTable()
+        {
+            HashEntries_ = new HashEntry[AiSettings.HashTableSize];
+        }
 
-		public TranspositionTable(Field field)
-		{
-			Field_ = field;
-		}
+        public TranspositionTable(Field field)
+        {
+            Field_ = field;
+        }
 
-		#endregion
+        #endregion
 
-		#region Public
+        #region Public
 
-		public unsafe void RecordHash(byte depth, float score, HashEntryData type, ulong key, ushort move)
-		{
-			fixed (HashEntry* entry = &HashEntries_[key % AiSettings.HashTableSize])
-			{
-				var entryType = entry->GetMoveType();
+        public unsafe void RecordHash(byte depth, float score, HashEntryData type, ulong key, ushort move)
+        {
+            fixed (HashEntry* entry = &HashEntries_[key % AiSettings.HashTableSize])
+            {
+                var entryType = entry->GetMoveType();
 
-				if (type == HashEntryData.AlphaType &&
-					(entryType == HashEntryData.ExactType || entryType == HashEntryData.BetaType))
-					return;
+                if (type == HashEntryData.AlphaType &&
+                    (entryType == HashEntryData.ExactType || entryType == HashEntryData.BetaType))
+                    return;
 
-				if (entry->GetDepth() <= depth)
-				{
-					ulong data = HashEntry.PackData(move, score, depth, type);
+                if (entry->GetDepth() <= depth)
+                {
+                    ulong data = HashEntry.PackData(move, score, depth, type);
 
-					Interlocked.Exchange(ref *(long*)&entry->HashKey, (long)(key ^ data));
-					Interlocked.Exchange(ref *(long*)&entry->Data, (long)data);
-				}
-			}
-		}
+                    Interlocked.Exchange(ref *(long*)&entry->HashKey, (long)(key ^ data));
+                    Interlocked.Exchange(ref *(long*)&entry->Data, (long)data);
+                }
+            }
+        }
 
-		public void RecordRealHash(float score, ulong key)
-		{
-		}
+        public void RecordRealHash(float score, ulong key)
+        {
+        }
 
-		public static void Clear()
-		{
-			for (int i = 0; i < HashEntries_.Length; i++)
-				HashEntries_[i].Data = 0;
-		}
+        public static void Clear()
+        {
+            for (int i = 0; i < HashEntries_.Length; i++)
+                HashEntries_[i].Data = 0;
+        }
 
-		public IEnumerable<HashEntry> HashEntries
-		{
-			get
-			{
-				return HashEntries_;
-			}
-		}
+        public IEnumerable<HashEntry> HashEntries
+        {
+            get
+            {
+                return HashEntries_;
+            }
+        }
 
-		#endregion
-	}
+        #endregion
+    }
 }

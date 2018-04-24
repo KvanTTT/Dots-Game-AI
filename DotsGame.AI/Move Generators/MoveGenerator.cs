@@ -3,52 +3,52 @@
 namespace DotsGame.AI
 {
     public abstract class MoveGenerator
-	{
-		#region Constructors
-		
-		public MoveGenerator(Field field)
-		{
-			Field = field;
-			Moves = new List<int>(Field.DotsSequenceCount * 2);
-		}
+    {
+        #region Constructors
 
-		#endregion
+        public MoveGenerator(Field field)
+        {
+            Field = field;
+            Moves = new List<int>(Field.DotsSequenceCount * 2);
+        }
 
-		#region Abstract
-		
-		public abstract void GenerateMoves(DotState player, int depth = 0);
-		public virtual void UpdateMoves()
-		{
-		}
+        #endregion
 
-		#endregion
+        #region Abstract
 
-		#region Properties
-		
-		public Field Field
-		{
-			get;
-			protected set;
-		}
+        public abstract void GenerateMoves(DotState player, int depth = 0);
+        public virtual void UpdateMoves()
+        {
+        }
 
-		public List<int> Moves
-		{
-			get;
-			protected set;
-		}
+        #endregion
 
-		public List<ulong> HashEntries
-		{
-			get;
-			protected set;
-		}
+        #region Properties
 
-		public int MaxDepth
-		{
-			get;
-			set;
-		}
+        public Field Field
+        {
+            get;
+            protected set;
+        }
 
-		#endregion
-	}
+        public List<int> Moves
+        {
+            get;
+            protected set;
+        }
+
+        public List<ulong> HashEntries
+        {
+            get;
+            protected set;
+        }
+
+        public int MaxDepth
+        {
+            get;
+            set;
+        }
+
+        #endregion
+    }
 }

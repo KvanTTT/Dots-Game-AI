@@ -1,7 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 
 namespace DotsGame
 {
@@ -50,7 +48,7 @@ namespace DotsGame
                 return;
             }
 
-            if (SurroundCondition == enmSurroundCondition.Standart)
+            if (SurroundCondition == SurroundCondition.Standart)
             {
                 if (GetInputDots(LastPosition) > 1)
                     ProcessLastDot(LastPosition);
@@ -240,7 +238,7 @@ namespace DotsGame
                     AddCapturedFreedCount(dotColor);
 
                     // If capture not empty base or turned on an option "Surround all".
-                    if ((LastMoveCaptureCount != 0) || (SurroundCondition == enmSurroundCondition.Always))
+                    if ((LastMoveCaptureCount != 0) || (SurroundCondition == SurroundCondition.Always))
                     {
                         for (var j = previousSuroundDotsCount; j < _surroundPositions.Count; j++)
                         {
@@ -413,7 +411,7 @@ namespace DotsGame
         {
         }
 
-        public FieldWithGroups(int width, int height, enmSurroundCondition surroundCondition = enmSurroundCondition.Standart)
+        public FieldWithGroups(int width, int height, SurroundCondition surroundCondition = SurroundCondition.Standart)
             : base(width, height, surroundCondition)
         {
         }

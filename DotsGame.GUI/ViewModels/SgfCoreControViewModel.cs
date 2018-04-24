@@ -82,8 +82,7 @@ namespace DotsGame.GUI
             }
             set
             {
-                Rank rank;
-                if (Enum.TryParse(value, true, out rank))
+                if (Enum.TryParse(value, true, out Rank rank))
                 {
                     _gameInfo.Player1Rank = rank;
                 }
@@ -92,14 +91,10 @@ namespace DotsGame.GUI
 
         public string SecondPlayerRank
         {
-            get
-            {
-                return _gameInfo.Player2Rank.ToString();
-            }
+            get => _gameInfo.Player2Rank.ToString();
             set
             {
-                Rank rank;
-                if (Enum.TryParse(value, out rank))
+                if (Enum.TryParse(value, out Rank rank))
                 {
                     _gameInfo.Player2Rank = rank;
                 }
@@ -108,14 +103,10 @@ namespace DotsGame.GUI
 
         public string FirstPlayerRating
         {
-            get
-            {
-                return _gameInfo.Player1Rating.ToString();
-            }
+            get => _gameInfo.Player1Rating.ToString();
             set
             {
-                double rating;
-                if (double.TryParse(value, out rating))
+                if (double.TryParse(value, out double rating))
                 {
                     _gameInfo.Player1Rating = rating;
                 }
@@ -124,14 +115,10 @@ namespace DotsGame.GUI
 
         public string SecondPlayerRating
         {
-            get
-            {
-                return _gameInfo.Player2Rating.ToString();
-            }
+            get => _gameInfo.Player2Rating.ToString();
             set
             {
-                double rating;
-                if (double.TryParse(value, out rating))
+                if (double.TryParse(value, out double rating))
                 {
                     _gameInfo.Player2Rating = rating;
                 }
@@ -140,14 +127,10 @@ namespace DotsGame.GUI
 
         public string Date
         {
-            get
-            {
-                return _gameInfo.Date.ToString();
-            }
+            get => _gameInfo.Date.ToString();
             set
             {
-                DateTime date;
-                if (DateTime.TryParse(value, out date))
+                if (DateTime.TryParse(value, out DateTime date))
                 {
                     _gameInfo.Date = date;
                 }
@@ -156,14 +139,10 @@ namespace DotsGame.GUI
 
         public string Time
         {
-            get
-            {
-                return _gameInfo.TimeLimits.ToString();
-            }
+            get => _gameInfo.TimeLimits.ToString();
             set
             {
-                TimeSpan timeSpan;
-                if (TimeSpan.TryParse(value, out timeSpan))
+                if (TimeSpan.TryParse(value, out TimeSpan timeSpan))
                 {
                     _gameInfo.TimeLimits = timeSpan;
                 }
@@ -172,10 +151,7 @@ namespace DotsGame.GUI
 
         public string Overtime
         {
-            get
-            {
-                return _gameInfo.OverTime;
-            }
+            get => _gameInfo.OverTime;
             set
             {
                 _gameInfo.OverTime = value;

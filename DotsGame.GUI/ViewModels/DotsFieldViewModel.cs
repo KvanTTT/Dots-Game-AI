@@ -169,8 +169,7 @@ namespace DotsGame.GUI
             }
             else if (e.MouseButton == Avalonia.Input.MouseButton.Right)
             {
-                int lastX, lastY;
-                Field.GetPosition(_field.LastMakedPosition, out lastX, out lastY);
+                Field.GetPosition(_field.LastMakedPosition, out int lastX, out int lastY);
                 if (fieldPosX == lastX && fieldPosY == lastY)
                 {
                     GameTreeViewModel.PrevMoveCommandAction();
@@ -337,8 +336,7 @@ namespace DotsGame.GUI
 
         private Point GetGraphicalPoint(int dotPos)
         {
-            int posX, posY;
-            Field.GetPosition(dotPos, out posX, out posY);
+            Field.GetPosition(dotPos, out int posX, out int posY);
             return new Point((posX - 1) * CellSize + FieldMargin, (posY - 1) * CellSize + FieldMargin);
         }
 

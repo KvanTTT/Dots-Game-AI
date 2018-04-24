@@ -1,8 +1,6 @@
-﻿using System.IO;
-using System.Linq;
-using System.Reflection;
+﻿using DotsGame.AI;
 using NUnit.Framework;
-using DotsGame.AI;
+using System.Linq;
 
 namespace DotsGame.Tests
 {

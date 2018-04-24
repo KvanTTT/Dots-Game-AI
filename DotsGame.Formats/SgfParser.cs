@@ -32,8 +32,7 @@ namespace DotsGame.Sgf
             bool atLeastOneGameTreeShouldBeSpecified = false;
             while (Accept('('))
             {
-                bool ignoreParent;
-                GameTree childGameTree = ParseGameTree(out ignoreParent);
+                GameTree childGameTree = ParseGameTree(out bool ignoreParent);
                 if (ignoreParent)
                 {
                     foreach (var tree in childGameTree.Childs)
@@ -141,8 +140,7 @@ namespace DotsGame.Sgf
 
             while (Accept('('))
             {
-                bool ignoreParent2;
-                GameTree childGameTree = ParseGameTree(out ignoreParent2);
+                GameTree childGameTree = ParseGameTree(out bool ignoreParent2);
                 if (ignoreParent2)
                 {
                     foreach (var tree in childGameTree.Childs)
@@ -336,8 +334,7 @@ namespace DotsGame.Sgf
                     }
                     if (strs.Length > 1)
                     {
-                        int rating;
-                        if (int.TryParse(strs[1], out rating))
+                        if (int.TryParse(strs[1], out int rating))
                         {
                             if (id == "BR")
                             {

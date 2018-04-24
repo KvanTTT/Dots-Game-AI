@@ -7,195 +7,195 @@ namespace DotsGame.AI
     /// TODO: take in calculation Current Red and Blue Capture Count.
     /// </summary>
     public class ZobristHashField
-	{
-		#region Fields
+    {
+        #region Fields
 
-		private ulong[] HashTable_;
-		private int CaptureCountOffset_;
+        private ulong[] HashTable_;
+        private int CaptureCountOffset_;
 
-		#endregion
+        #endregion
 
-		#region Constructors
+        #region Constructors
 
-		public ZobristHashField(Field field, int? seed = null,
-			RandomGenerateMethod randomGenerateMethod = RandomGenerateMethod.Standart)
-		{
-			Field = field;
-			Seed = seed;
-			RandomGenerateMethod = randomGenerateMethod;
+        public ZobristHashField(Field field, int? seed = null,
+            RandomGenerateMethod randomGenerateMethod = RandomGenerateMethod.Standart)
+        {
+            Field = field;
+            Seed = seed;
+            RandomGenerateMethod = randomGenerateMethod;
 
-			CaptureCountOffset_ = field.RealDotsCount * 2;
-			HashTable_ = new ulong[CaptureCountOffset_ + Field.RealWidth * 2];
-			Key ^= HashTable_[CaptureCountOffset_ + Field.Player0CaptureCount % Field.RealWidth];
-			Key ^= HashTable_[CaptureCountOffset_ + Field.RealWidth + Field.Player1CaptureCount % Field.RealWidth];
-			FillWithRandomValues();
-			Key = 0;
-		}
+            CaptureCountOffset_ = field.RealDotsCount * 2;
+            HashTable_ = new ulong[CaptureCountOffset_ + Field.RealWidth * 2];
+            Key ^= HashTable_[CaptureCountOffset_ + Field.Player0CaptureCount % Field.RealWidth];
+            Key ^= HashTable_[CaptureCountOffset_ + Field.RealWidth + Field.Player1CaptureCount % Field.RealWidth];
+            FillWithRandomValues();
+            Key = 0;
+        }
 
-		#endregion
+        #endregion
 
-		#region Public Methods
-	
-		public void UpdateHash()
-		{
-			if (Field.LastMoveState == enmMoveState.Add)
-			{
-				int pos = Field.LastPosition;
-				if (Field.CurrentPlayer == DotState.Player0)
-					pos *= 2;
-				Key ^= HashTable_[pos];
-				
-				if (Field.LastMoveCaptureCount != 0)
-					UpdateLastBaseHash();
-			}
-			else
-			{
-				if (Field.LastMoveCaptureCount != 0)
-					UpdateLastBaseHash();
+        #region Public Methods
 
-				int pos = Field.LastPosition;
-				if (Field.CurrentPlayer == DotState.Player1)
-					pos *= 2;
-				Key ^= HashTable_[pos];
-			}
-		}
+        public void UpdateHash()
+        {
+            if (Field.LastMoveState == MoveState.Add)
+            {
+                int pos = Field.LastPosition;
+                if (Field.CurrentPlayer == DotState.Player0)
+                    pos *= 2;
+                Key ^= HashTable_[pos];
 
-		#endregion
+                if (Field.LastMoveCaptureCount != 0)
+                    UpdateLastBaseHash();
+            }
+            else
+            {
+                if (Field.LastMoveCaptureCount != 0)
+                    UpdateLastBaseHash();
 
-		#region Helpers
+                int pos = Field.LastPosition;
+                if (Field.CurrentPlayer == DotState.Player1)
+                    pos *= 2;
+                Key ^= HashTable_[pos];
+            }
+        }
 
-		private void FillWithRandomValues()
-		{
-			if (RandomGenerateMethod == RandomGenerateMethod.Standart)
-			{
-				var random = Seed.HasValue ? new Random((int)Seed) : new Random();
-				var buffer = new byte[sizeof(ulong)];
-				for (int i = 0; i < HashTable_.Length; i++)
-				{
-					random.NextBytes(buffer);
-					HashTable_[i] = BitConverter.ToUInt64(buffer, 0);
-				}
-			}
-			else
-				if (RandomGenerateMethod == RandomGenerateMethod.Crypto)
-				{
-					// TODO: Understand how to generate sequence with define seed.
-					using (var generator = new RNGCryptoServiceProvider())
-					{
-						var bytes = new byte[sizeof(ulong)];
-						for (int i = 0; i < HashTable_.Length; i++)
-						{
-							generator.GetBytes(bytes);
-							HashTable_[i] = BitConverter.ToUInt64(bytes, 0);
-						}
-					}
-				}
-		}
+        #endregion
 
-		/// <summary>
-		/// TODO: Try to optimize it.
-		/// </summary>
-		private void UpdateLastBaseHash()
-		{
-			bool isRed = !((Field.CurrentPlayer == DotState.Player0 && Field.LastMoveState == enmMoveState.Add)
-				|| (Field.CurrentPlayer == DotState.Player1 && Field.LastMoveState == enmMoveState.Remove)) ? true : false;
-			if (Field.LastMoveCaptureCount < 0)
-				isRed = !isRed;
-			if (isRed)
-				foreach (var surroundPos in Field.SurroundPositions)
-				{
-					if ((Field[surroundPos].IsOneSurroundLevel() && Field.LastMoveState == enmMoveState.Add) ||
-						 Field[surroundPos].IsZeroSurroundLevel() && Field.LastMoveState == enmMoveState.Remove)
-					{
-						if (Field[surroundPos].IsRealPutted())
-						{
-							if (Field[surroundPos].IsRealPlayer1())
-							{
-								Key ^= HashTable_[surroundPos * 2];
-								Key ^= HashTable_[surroundPos];
-							}
-						}
-						else
-						{
-							if (Field.LastMoveCaptureCount < 0 && Field.LastMoveState == enmMoveState.Remove &&
-								Field.LastPosition == surroundPos)
-								Key ^= HashTable_[surroundPos * 2];
-							Key ^= HashTable_[surroundPos];
-						}
-					}
-					else if ((Field[surroundPos].IsMoreThanOneSurroundLevel() && Field.LastMoveState == enmMoveState.Add) ||
-							(Field[surroundPos].IsOneSurroundLevel() && Field.LastMoveState == enmMoveState.Remove))
-					{
-						Key ^= HashTable_[surroundPos * 2];
-						Key ^= HashTable_[surroundPos];
-					}
-				}
-			else
-				foreach (var surroundPos in Field.SurroundPositions)
-				{
-					if ((Field[surroundPos].IsOneSurroundLevel() && Field.LastMoveState == enmMoveState.Add) ||
-						(Field[surroundPos].IsZeroSurroundLevel() && Field.LastMoveState == enmMoveState.Remove))
-					{
-						if (Field[surroundPos].IsRealPutted())
-						{
-							if (Field[surroundPos].IsRealPlayer0())
-							{
-								Key ^= HashTable_[surroundPos];
-								Key ^= HashTable_[surroundPos * 2];
-							}
-						}
-						else
-						{
-							if (Field.LastMoveCaptureCount < 0 && Field.LastMoveState == enmMoveState.Remove &&
-								   Field.LastPosition == surroundPos)
-							{
-								Key ^= HashTable_[surroundPos];
-							}
-							Key ^= HashTable_[surroundPos * 2];
-						}
-					}
-					else if ((Field[surroundPos].IsMoreThanOneSurroundLevel() && Field.LastMoveState == enmMoveState.Add) ||
-							(Field[surroundPos].IsOneSurroundLevel() && Field.LastMoveState == enmMoveState.Remove))
-					{
-						Key ^= HashTable_[surroundPos];
-						Key ^= HashTable_[surroundPos * 2];
-					}
-				}
+        #region Helpers
 
-			Key ^= HashTable_[CaptureCountOffset_ + Field.OldPlayer0CaptureCount % Field.RealWidth];
-			Key ^= HashTable_[CaptureCountOffset_ + Field.Player0CaptureCount % Field.RealWidth];
-			Key ^= HashTable_[CaptureCountOffset_ + Field.RealWidth + Field.OldPlayer1CaptureCount % Field.RealWidth];
-			Key ^= HashTable_[CaptureCountOffset_ + Field.RealWidth + Field.Player1CaptureCount % Field.RealWidth];
-		}
+        private void FillWithRandomValues()
+        {
+            if (RandomGenerateMethod == RandomGenerateMethod.Standart)
+            {
+                var random = Seed.HasValue ? new Random((int)Seed) : new Random();
+                var buffer = new byte[sizeof(ulong)];
+                for (int i = 0; i < HashTable_.Length; i++)
+                {
+                    random.NextBytes(buffer);
+                    HashTable_[i] = BitConverter.ToUInt64(buffer, 0);
+                }
+            }
+            else
+                if (RandomGenerateMethod == RandomGenerateMethod.Crypto)
+            {
+                // TODO: Understand how to generate sequence with define seed.
+                using (var generator = new RNGCryptoServiceProvider())
+                {
+                    var bytes = new byte[sizeof(ulong)];
+                    for (int i = 0; i < HashTable_.Length; i++)
+                    {
+                        generator.GetBytes(bytes);
+                        HashTable_[i] = BitConverter.ToUInt64(bytes, 0);
+                    }
+                }
+            }
+        }
 
-		#endregion
+        /// <summary>
+        /// TODO: Try to optimize it.
+        /// </summary>
+        private void UpdateLastBaseHash()
+        {
+            bool isRed = !((Field.CurrentPlayer == DotState.Player0 && Field.LastMoveState == MoveState.Add)
+                || (Field.CurrentPlayer == DotState.Player1 && Field.LastMoveState == MoveState.Remove)) ? true : false;
+            if (Field.LastMoveCaptureCount < 0)
+                isRed = !isRed;
+            if (isRed)
+                foreach (var surroundPos in Field.SurroundPositions)
+                {
+                    if ((Field[surroundPos].IsOneSurroundLevel() && Field.LastMoveState == MoveState.Add) ||
+                         Field[surroundPos].IsZeroSurroundLevel() && Field.LastMoveState == MoveState.Remove)
+                    {
+                        if (Field[surroundPos].IsRealPutted())
+                        {
+                            if (Field[surroundPos].IsRealPlayer1())
+                            {
+                                Key ^= HashTable_[surroundPos * 2];
+                                Key ^= HashTable_[surroundPos];
+                            }
+                        }
+                        else
+                        {
+                            if (Field.LastMoveCaptureCount < 0 && Field.LastMoveState == MoveState.Remove &&
+                                Field.LastPosition == surroundPos)
+                                Key ^= HashTable_[surroundPos * 2];
+                            Key ^= HashTable_[surroundPos];
+                        }
+                    }
+                    else if ((Field[surroundPos].IsMoreThanOneSurroundLevel() && Field.LastMoveState == MoveState.Add) ||
+                            (Field[surroundPos].IsOneSurroundLevel() && Field.LastMoveState == MoveState.Remove))
+                    {
+                        Key ^= HashTable_[surroundPos * 2];
+                        Key ^= HashTable_[surroundPos];
+                    }
+                }
+            else
+                foreach (var surroundPos in Field.SurroundPositions)
+                {
+                    if ((Field[surroundPos].IsOneSurroundLevel() && Field.LastMoveState == MoveState.Add) ||
+                        (Field[surroundPos].IsZeroSurroundLevel() && Field.LastMoveState == MoveState.Remove))
+                    {
+                        if (Field[surroundPos].IsRealPutted())
+                        {
+                            if (Field[surroundPos].IsRealPlayer0())
+                            {
+                                Key ^= HashTable_[surroundPos];
+                                Key ^= HashTable_[surroundPos * 2];
+                            }
+                        }
+                        else
+                        {
+                            if (Field.LastMoveCaptureCount < 0 && Field.LastMoveState == MoveState.Remove &&
+                                   Field.LastPosition == surroundPos)
+                            {
+                                Key ^= HashTable_[surroundPos];
+                            }
+                            Key ^= HashTable_[surroundPos * 2];
+                        }
+                    }
+                    else if ((Field[surroundPos].IsMoreThanOneSurroundLevel() && Field.LastMoveState == MoveState.Add) ||
+                            (Field[surroundPos].IsOneSurroundLevel() && Field.LastMoveState == MoveState.Remove))
+                    {
+                        Key ^= HashTable_[surroundPos];
+                        Key ^= HashTable_[surroundPos * 2];
+                    }
+                }
 
-		#region Properties
+            Key ^= HashTable_[CaptureCountOffset_ + Field.OldPlayer0CaptureCount % Field.RealWidth];
+            Key ^= HashTable_[CaptureCountOffset_ + Field.Player0CaptureCount % Field.RealWidth];
+            Key ^= HashTable_[CaptureCountOffset_ + Field.RealWidth + Field.OldPlayer1CaptureCount % Field.RealWidth];
+            Key ^= HashTable_[CaptureCountOffset_ + Field.RealWidth + Field.Player1CaptureCount % Field.RealWidth];
+        }
 
-		public Field Field
-		{
-			get;
-			set;
-		}
+        #endregion
 
-		public RandomGenerateMethod RandomGenerateMethod
-		{
-			get;
-			private set;
-		}
+        #region Properties
 
-		public int? Seed
-		{
-			get;
-			private set;
-		}
+        public Field Field
+        {
+            get;
+            set;
+        }
 
-		public ulong Key
-		{
-			get;
-			private set;
-		}
+        public RandomGenerateMethod RandomGenerateMethod
+        {
+            get;
+            private set;
+        }
 
-		#endregion
-	}
+        public int? Seed
+        {
+            get;
+            private set;
+        }
+
+        public ulong Key
+        {
+            get;
+            private set;
+        }
+
+        #endregion
+    }
 }
