@@ -68,30 +68,18 @@ namespace DotsGame.GUI
 
         public DotsFieldViewModel DotsFieldViewModel
         {
-            get
-            {
-                return _dotsFieldViewModel ?? (_dotsFieldViewModel = ServiceLocator.DotsFieldViewModel);
-            }
+            get => _dotsFieldViewModel ?? (_dotsFieldViewModel = ServiceLocator.DotsFieldViewModel);
         }
 
         public string FileName
         {
-            get
-            {
-                return _fileName;
-            }
-            set
-            {
-                this.RaiseAndSetIfChanged(ref _fileName, value);
-            }
+            get => _fileName;
+            set => this.RaiseAndSetIfChanged(ref _fileName, value);
         }
 
         public bool AutoUpdate
         {
-            get
-            {
-                return _autoUpdate;
-            }
+            get => _autoUpdate;
             set
             {
                 if (value)
@@ -102,28 +90,13 @@ namespace DotsGame.GUI
             }
         }
 
-        public double MinScrollViewerHeight
-        {
-            get
-            {
-                return _padding * 2;
-            }
-        }
+        public double MinScrollViewerHeight => _padding * 2;
 
-        public double MaxScrollViewerHeight
-        {
-            get
-            {
-                return _padding + _dotSpace * 4.5;
-            }
-        }
-        
+        public double MaxScrollViewerHeight =>_padding + _dotSpace * 4.5;
+
         public bool ShowLabels
         {
-            get
-            {
-                return _showLabels;
-            }
+            get => _showLabels;
             set
             {
                 this.RaiseAndSetIfChanged(ref _showLabels, value);

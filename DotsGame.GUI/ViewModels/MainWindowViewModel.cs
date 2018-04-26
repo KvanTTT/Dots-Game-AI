@@ -11,10 +11,7 @@ namespace DotsGame.GUI
 
         public CoreType SelectedCoreType
         {
-            get
-            {
-                return _selectedCoreType;
-            }
+            get => _selectedCoreType;
             set
             {
                 this.RaiseAndSetIfChanged(ref _selectedCoreType, value);
@@ -27,17 +24,11 @@ namespace DotsGame.GUI
             CoreType.SgfCore,
             CoreType.GroupsCore
         };
-        
+
         public UserControl CoreControl
         {
-            get
-            {
-                return _coreControl;
-            }
-            set
-            {
-                this.RaiseAndSetIfChanged(ref _coreControl, value);
-            }
+            get => _coreControl;
+            set => this.RaiseAndSetIfChanged(ref _coreControl, value);
         }
     }
 }

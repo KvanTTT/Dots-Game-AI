@@ -14,10 +14,7 @@ namespace DotsGame.GUI
 
         public GameInfo GameInfo
         {
-            get
-            {
-                return _gameInfo;
-            }
+            get => _gameInfo;
             set
             {
                 _gameInfo = value;
@@ -40,46 +37,25 @@ namespace DotsGame.GUI
 
         public string AppName
         {
-            get
-            {
-                return _gameInfo.AppName;
-            }
-            set
-            {
-                _gameInfo.AppName = value;
-            }
+            get => _gameInfo.AppName;
+            set => _gameInfo.AppName = value;
         }
 
         public string FirstPlayer
         {
-            get
-            {
-                return _gameInfo.Player1Name;
-            }
-            set
-            {
-                _gameInfo.Player1Name = value;
-            }
+            get => _gameInfo.Player1Name;
+            set => _gameInfo.Player1Name = value;
         }
 
         public string SecondPlayer
         {
-            get
-            {
-                return _gameInfo.Player2Name;
-            }
-            set
-            {
-                _gameInfo.Player2Name = value;
-            }
+            get => _gameInfo.Player2Name;
+            set => _gameInfo.Player2Name = value;
         }
 
         public string FirstPlayerRank
         {
-            get
-            {
-                return _gameInfo.Player1Rank.ToString();
-            }
+            get => _gameInfo.Player1Rank.ToString();
             set
             {
                 if (Enum.TryParse(value, true, out Rank rank))
@@ -152,42 +128,24 @@ namespace DotsGame.GUI
         public string Overtime
         {
             get => _gameInfo.OverTime;
-            set
-            {
-                _gameInfo.OverTime = value;
-            }
+            set => _gameInfo.OverTime = value;
         }
 
         public string Event
         {
-            get
-            {
-                return _gameInfo.Event;
-            }
-            set
-            {
-                _gameInfo.Event = value;
-            }
+            get => _gameInfo.Event;
+            set => _gameInfo.Event = value;
         }
 
         public string Source
         {
-            get
-            {
-                return _gameInfo.Source;
-            }
-            set
-            {
-                _gameInfo.Source = value;
-            }
+            get => _gameInfo.Source;
+            set => _gameInfo.Source = value;
         }
 
         public string Result
         {
-            get
-            {
-                return _gameInfo.Result;
-            }
+            get => _gameInfo.Result;
             set
             {
                 try
@@ -202,14 +160,8 @@ namespace DotsGame.GUI
 
         public string Description
         {
-            get
-            {
-                return _gameInfo.Description;
-            }
-            set
-            {
-                _gameInfo.Description = value;
-            }
+            get => _gameInfo.Description;
+            set => _gameInfo.Description = value;
         }
     }
 }

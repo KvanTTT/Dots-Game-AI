@@ -40,10 +40,7 @@ namespace DotsGame.GUI
 
         public GameTreeViewModel GameTreeViewModel
         {
-            get
-            {
-                return _gameTreeViewModel ?? (_gameTreeViewModel = ServiceLocator.GameTreeViewModel);
-            }
+            get => _gameTreeViewModel ?? (_gameTreeViewModel = ServiceLocator.GameTreeViewModel);
         }
 
         public DotsFieldViewModel(Canvas canvas, Field field = null)
@@ -59,44 +56,35 @@ namespace DotsGame.GUI
 
         public int Player1Score
         {
-            get { return _player1Score; }
-            set { this.RaiseAndSetIfChanged(ref _player1Score, value); }
+            get => _player1Score;
+            set => this.RaiseAndSetIfChanged(ref _player1Score, value);
         }
 
         public int Player2Score
         {
-            get { return _player2Score; }
-            set { this.RaiseAndSetIfChanged(ref _player2Score, value); }
+            get => _player2Score;
+            set => this.RaiseAndSetIfChanged(ref _player2Score, value);
         }
 
         public string Player1Name
         {
-            get { return _player1Name; }
-            set { this.RaiseAndSetIfChanged(ref _player1Name, value); }
+            get => _player1Name;
+            set => this.RaiseAndSetIfChanged(ref _player1Name, value);
         }
 
         public string Player2Name
         {
-            get { return _player2Name; }
-            set { this.RaiseAndSetIfChanged(ref _player2Name, value); }
+            get => _player2Name;
+            set => this.RaiseAndSetIfChanged(ref _player2Name, value);
         }
 
-        public IBrush Player1Brush
-        {
-            get { return new SolidColorBrush(Player1Color); }
-        }
+        public IBrush Player1Brush => new SolidColorBrush(Player1Color);
 
-        public IBrush Player2Brush
-        {
-            get { return new SolidColorBrush(Player2Color); }
-        }
+        public IBrush Player2Brush => new SolidColorBrush(Player2Color);
 
         public Field Field
         {
-            get
-            {
-                return _field;
-            }
+            get => _field;
             set
             {
                 _field = value;
