@@ -110,7 +110,7 @@ namespace DotsGame.GUI
             _gameTreeUserControl = gameTreeUserControl;
             _gameTreeCanvas = gameTreeUserControl.Find<Canvas>("GameTreeCanvas");
             _canvasScrollViewer = gameTreeUserControl.Find<ScrollViewer>("GameTreeScrollViewer");
-            _gameTreeCanvas.PointerPressed += _gameTreeCanvas_PointerPressed;
+            _gameTreeCanvas.PointerPressed += GameTreeCanvas_PointerPressed;
             FileName = ServiceLocator.Settings.OpenedFileName;
             if (string.IsNullOrEmpty(ServiceLocator.Settings.CurrentGameSgf))
             {
@@ -270,7 +270,7 @@ namespace DotsGame.GUI
             }
         }
 
-        private void _gameTreeCanvas_PointerPressed(object sender, Avalonia.Input.PointerPressedEventArgs e)
+        private void GameTreeCanvas_PointerPressed(object sender, Avalonia.Input.PointerPressedEventArgs e)
         {
             Point position = e.GetPosition(_gameTreeCanvas);
             int xOffset = (int)Math.Round((position.X - _padding) / _dotSpace);
@@ -288,10 +288,7 @@ namespace DotsGame.GUI
 
         public GameInfo GameInfo
         {
-            get
-            {
-                return _gameInfo;
-            }
+            get => _gameInfo;
             set
             {
                 ServiceLocator.BasicCoreControViewModel.GameInfo = value;

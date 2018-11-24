@@ -1,5 +1,5 @@
 ﻿<UserControl xmlns="https://github.com/avaloniaui">
-    <StackPanel Gap="5">
+    <StackPanel Spacing="5">
         <CheckBox>Strong Groups</CheckBox>
         <CheckBox>Fragile Groups</CheckBox>
         <StackPanel Orientation="Horizontal" >
