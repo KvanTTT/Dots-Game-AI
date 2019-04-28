@@ -14,6 +14,7 @@ namespace DotsGame.GUI
             this.InitializeComponent();
             App.AttachDevTools(this);
 
+            ServiceLocator.MainWindow = this;
             _viewModel = new MainWindowViewModel();
             DataContext = _viewModel;
 

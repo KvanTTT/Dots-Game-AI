@@ -166,8 +166,8 @@ namespace DotsGame.GUI
                 dialog.Filters.Add(new FileDialogFilter() { Name = "Smart Game Format, PointsXT", Extensions = new List<string>() { "sgf", "sav" } });
                 dialog.Filters.Add(new FileDialogFilter() { Name = "Smart Game Format", Extensions = new List<string>() { "sgf" } });
                 dialog.Filters.Add(new FileDialogFilter() { Name = "PointsXT Save", Extensions = new List<string>() { "sav" } });
-                string[] fileNames = await dialog.ShowAsync();
-                if (fileNames != null)
+                string[] fileNames = await dialog.ShowAsync(ServiceLocator.MainWindow);
+                if (fileNames != null) 
                 {
                     var extractor = new GameInfoExtractor();
                     FileName = fileNames.First();
@@ -181,7 +181,7 @@ namespace DotsGame.GUI
             OpenPlaydotsVkCommand = ReactiveCommand.Create(async () =>
             {
                 var dialog = new OpenPlaydotsGame();
-                var url = await dialog.ShowDialog<string>();
+                var url = await dialog.ShowDialog<string>(ServiceLocator.MainWindow);
                 if (url != null)
                 {
                     var extractor = new GameInfoExtractor();
