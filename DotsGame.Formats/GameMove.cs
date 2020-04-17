@@ -28,10 +28,8 @@ namespace DotsGame
             {
                 return "Root";
             }
-            else
-            {
-                return $"{Row}:{Column},{(PlayerNumber == 0 ? "Player0" : "Player1")}";
-            }
+
+            return $"{Row}:{Column},{(PlayerNumber == 0 ? "Player0" : "Player1")}";
         }
 
         public override int GetHashCode()

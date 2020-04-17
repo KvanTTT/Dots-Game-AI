@@ -1,5 +1,5 @@
-﻿using DotsGame.AI.Patterns;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
+using DotsGame.AI.Patterns;
 
 namespace DotsGame
 {

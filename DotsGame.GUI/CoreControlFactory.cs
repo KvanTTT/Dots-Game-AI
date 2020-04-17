@@ -1,6 +1,6 @@
-﻿using Avalonia.Controls;
+﻿using System;
+using Avalonia.Controls;
 using DotsGame.AI;
-using System;
 
 namespace DotsGame.GUI
 {

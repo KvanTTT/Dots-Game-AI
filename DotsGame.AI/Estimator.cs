@@ -24,9 +24,8 @@
             if (player == DotState.Player0)
                 return (Field.Player0CaptureCount - Field.Player1CaptureCount) +
                        (Field.Player0Square - Field.Player1Square) * AiSettings.SquareCoef;
-            else
-                return (Field.Player1CaptureCount - Field.Player0CaptureCount) +
-                       (Field.Player1Square - Field.Player0Square) * AiSettings.SquareCoef;
+            return (Field.Player1CaptureCount - Field.Player0CaptureCount) +
+                   (Field.Player1Square - Field.Player0Square) * AiSettings.SquareCoef;
         }
 
         #endregion

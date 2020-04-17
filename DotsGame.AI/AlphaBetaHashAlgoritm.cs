@@ -102,7 +102,7 @@ namespace DotsGame.AI
                     if (tmp > alpha)
                     {
                         TranspositionTable.RecordHash(
-                            (byte)depth, tmp, tmp < beta ? HashEntryData.ExactType : HashEntryData.BetaType, HashField.Key, (ushort)move);
+                            depth, tmp, tmp < beta ? HashEntryData.ExactType : HashEntryData.BetaType, HashField.Key, (ushort)move);
 
                         alpha = tmp;
                         if (alpha >= beta)
@@ -112,7 +112,7 @@ namespace DotsGame.AI
             }
 
             if (alpha == oldAlpha)
-                TranspositionTable.RecordHash((byte)depth, alpha, HashEntryData.AlphaType, HashField.Key, 0);
+                TranspositionTable.RecordHash(depth, alpha, HashEntryData.AlphaType, HashField.Key, 0);
 
             return alpha;
         }

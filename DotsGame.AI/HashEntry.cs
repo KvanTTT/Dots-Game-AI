@@ -30,7 +30,7 @@ namespace DotsGame.AI
         EmptyType = 0 << HashEntryConstants.TypeShift,
         ExactType = 1 << HashEntryConstants.TypeShift,
         AlphaType = 2 << HashEntryConstants.TypeShift,
-        BetaType = 3 << HashEntryConstants.TypeShift,
+        BetaType = 3 << HashEntryConstants.TypeShift
     }
 
     public struct HashEntry

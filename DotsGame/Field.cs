@@ -12,11 +12,11 @@ namespace DotsGame
         public const int InputSurroundDotsCount = 4;
 
         public static int[] DiagDeltas = {
-            -Field.RealWidth - 1, -Field.RealWidth, -Field.RealWidth + 1,
+            -RealWidth - 1, -RealWidth, -RealWidth + 1,
             -1, +1,
-            +Field.RealWidth - 1, +Field.RealWidth, +Field.RealWidth + 1 };
+            +RealWidth - 1, +RealWidth, +RealWidth + 1 };
 
-        public static int[] VertHorizDeltas = { -Field.RealWidth, +1, +Field.RealWidth, -1 };
+        public static int[] VertHorizDeltas = { -RealWidth, +1, +RealWidth, -1 };
 
         #endregion
 
@@ -286,7 +286,7 @@ namespace DotsGame
         /// <param name="pos"></param>
         public static void GetFirstNextPos(int centerPosition, ref int pos)
         {
-            pos = centerPosition + Helper.NextFirstPosOffsets[pos - centerPosition + Field.RealWidth + 1];
+            pos = centerPosition + Helper.NextFirstPosOffsets[pos - centerPosition + RealWidth + 1];
         }
 
         /// <summary>
@@ -301,7 +301,7 @@ namespace DotsGame
         /// <param name="pos"></param>
         public static void GetFirstNextPosCCW(int centerPosition, ref int pos)
         {
-            pos = centerPosition + Helper.NextFirstPosOffsetsCCW[pos - centerPosition + Field.RealWidth + 1];
+            pos = centerPosition + Helper.NextFirstPosOffsetsCCW[pos - centerPosition + RealWidth + 1];
         }
 
         /// <summary>
@@ -316,14 +316,14 @@ namespace DotsGame
         /// <param name="pos"></param>
         public static void GetNextPos(int centerPosition, ref int pos)
         {
-            pos = centerPosition + Helper.NextPosOffsets[pos - centerPosition + Field.RealWidth + 1];
+            pos = centerPosition + Helper.NextPosOffsets[pos - centerPosition + RealWidth + 1];
         }
 
         public static int Distance(int pos1, int pos2)
         {
             return
-                Math.Max(Math.Abs((pos1 % Field.RealWidth) - (pos2 % Field.RealWidth)),
-                         Math.Abs((pos1 / Field.RealWidth) - (pos2 / Field.RealWidth)));
+                Math.Max(Math.Abs((pos1 % RealWidth) - (pos2 % RealWidth)),
+                         Math.Abs((pos1 / RealWidth) - (pos2 / RealWidth)));
         }
 
         #endregion
@@ -871,11 +871,8 @@ namespace DotsGame
             CurrentPlayer = color;
             if (MakeMove(position))
                 return true;
-            else
-            {
-                CurrentPlayer = oldCurrentPlayer;
-                return false;
-            }
+            CurrentPlayer = oldCurrentPlayer;
+            return false;
         }
 
         public bool MakeMove(int x, int y, int playerNumber)
@@ -884,11 +881,8 @@ namespace DotsGame
             CurrentPlayer = (DotState)playerNumber;
             if (MakeMove(y * RealWidth + x))
                 return true;
-            else
-            {
-                CurrentPlayer = oldCurrentPlayer;
-                return false;
-            }
+            CurrentPlayer = oldCurrentPlayer;
+            return false;
         }
 
         public bool MakeMove(int position)
@@ -935,11 +929,9 @@ namespace DotsGame
                 LastMoveState = MoveState.Add;
                 return true;
             }
-            else
-            {
-                LastMoveState = MoveState.None;
-                return false;
-            }
+
+            LastMoveState = MoveState.None;
+            return false;
         }
 
         public bool UnmakeMove()
@@ -998,11 +990,9 @@ namespace DotsGame
                 LastMoveState = MoveState.Remove;
                 return true;
             }
-            else
-            {
-                LastMoveState = MoveState.None;
-                return false;
-            }
+
+            LastMoveState = MoveState.None;
+            return false;
         }
 
         public bool UnmakeAllMoves()
@@ -1060,7 +1050,7 @@ namespace DotsGame
 
         public DotState GetDot(int x, int y)
         {
-            return _dots[Field.GetPosition(x, y)];
+            return _dots[GetPosition(x, y)];
         }
 
         public State GetState(int ind)

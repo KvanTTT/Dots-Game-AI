@@ -15,7 +15,7 @@ namespace DotsGame.Tests
             float score = 123.0342f;
 
             ulong data = HashEntry.PackData(bestMove, score, depth, type);
-            HashEntry unpackedHashEntry = new HashEntry() { Data = data };
+            HashEntry unpackedHashEntry = new HashEntry { Data = data };
 
             Assert.AreEqual(data, unpackedHashEntry.Data);
             Assert.AreEqual(depth, unpackedHashEntry.GetDepth());

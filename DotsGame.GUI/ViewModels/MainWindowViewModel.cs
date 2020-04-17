@@ -19,7 +19,7 @@ namespace DotsGame.GUI
             }
         }
 
-        public CoreType[] CoreTypes => new CoreType[]
+        public CoreType[] CoreTypes => new[]
         {
             CoreType.SgfCore,
             CoreType.GroupsCore

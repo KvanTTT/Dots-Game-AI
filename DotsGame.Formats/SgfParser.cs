@@ -1,8 +1,8 @@
-﻿using DotsGame.Formats;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using DotsGame.Formats;
 
 namespace DotsGame.Sgf
 {
@@ -276,7 +276,7 @@ namespace DotsGame.Sgf
                 case "SZ":
                     try
                     {
-                        string[] sizes = stringValue.Split(new char[] { ':' }, StringSplitOptions.RemoveEmptyEntries);
+                        string[] sizes = stringValue.Split(new[] { ':' }, StringSplitOptions.RemoveEmptyEntries);
                         if (sizes.Length == 1)
                         {
                             _gameInfo.Width = _gameInfo.Height = int.Parse(stringValue);
@@ -380,10 +380,6 @@ namespace DotsGame.Sgf
                         }
                     }
                     break;
-
-                default:
-                    // Unknown property.
-                    break;
             }
         }
 
@@ -424,10 +420,8 @@ namespace DotsGame.Sgf
             {
                 return true;
             }
-            else
-            {
-                throw new Exception($"Unexpected symbol {c}");
-            }
+
+            throw new Exception($"Unexpected symbol {c}");
         }
 
         private bool Accept(char c)
@@ -437,10 +431,8 @@ namespace DotsGame.Sgf
                 _currentDataPos++;
                 return true;
             }
-            else
-            {
-                return false;
-            }
+
+            return false;
         }
 
         #endregion

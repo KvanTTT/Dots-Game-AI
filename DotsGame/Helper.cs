@@ -53,7 +53,7 @@
 
         public static bool IsZeroSurroundLevel(this DotState dot)
         {
-            return (dot & DotState.SurroundCountMask) == (DotState)0;
+            return (dot & DotState.SurroundCountMask) == 0;
         }
 
         public static bool IsOneSurroundLevel(this DotState dot)
@@ -128,12 +128,12 @@
 
         public static DotState SetDiagonalGroupNumber(this DotState dot, int groupNumber)
         {
-            return (DotState)((dot & ~DotState.DiagonalGroupMask) | (DotState)groupNumber);
+            return (dot & ~DotState.DiagonalGroupMask) | (DotState)groupNumber;
         }
 
         public static DotState ClearGroupNumber(this DotState dot)
         {
-            return (DotState)(dot & ~DotState.DiagonalGroupMask);
+            return dot & ~DotState.DiagonalGroupMask;
         }
 
         public static bool IsEmptyBound(this DotState dot)

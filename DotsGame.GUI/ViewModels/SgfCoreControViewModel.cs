@@ -1,16 +1,12 @@
-﻿using DotsGame.Formats;
+﻿using System;
+using DotsGame.Formats;
 using ReactiveUI;
-using System;
 
 namespace DotsGame.GUI
 {
     public class SgfCoreControViewModel : ReactiveObject
     {
         private GameInfo _gameInfo = new GameInfo();
-
-        public SgfCoreControViewModel()
-        {
-        }
 
         public GameInfo GameInfo
         {

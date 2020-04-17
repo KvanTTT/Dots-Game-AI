@@ -20,10 +20,6 @@ namespace DotsGame
             set;
         }
 
-        public State()
-        {
-        }
-
         public bool HasBase()
         {
             return Base != null;
@@ -31,7 +27,7 @@ namespace DotsGame
 
         public override string ToString()
         {
-            return Move.ToString() + (Base == null ? string.Empty : "; " + Base.ToString());
+            return Move + (Base == null ? string.Empty : "; " + Base);
         }
 
         public State Clone()

@@ -24,7 +24,8 @@
             {
                 return dotState.IsNotPutted();
             }
-            else if (State == PatternDotState.FreeOrPut)
+
+            if (State == PatternDotState.FreeOrPut)
             {
                 if (dotState.IsNotPutted())
                 {
@@ -44,10 +45,8 @@
             {
                 return Player0 && dotPlayerNumber == 0 || !Player0 && dotPlayerNumber == 1;
             }
-            else
-            {
-                return Player0 && dotPlayerNumber == 1 || !Player0 && dotPlayerNumber == 0;
-            }
+
+            return Player0 && dotPlayerNumber == 1 || !Player0 && dotPlayerNumber == 0;
         }
     }
 }

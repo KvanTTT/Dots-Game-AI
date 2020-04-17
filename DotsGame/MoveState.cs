@@ -15,6 +15,6 @@
         /// <summary>
         /// Start has not been changed.
         /// </summary>
-        None,
+        None
     }
 }

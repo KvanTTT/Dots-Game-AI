@@ -1,10 +1,10 @@
-﻿using DotsGame.Sgf;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Net;
 using System.Security.Cryptography;
 using System.Text;
+using DotsGame.Sgf;
 
 namespace DotsGame.Formats
 {

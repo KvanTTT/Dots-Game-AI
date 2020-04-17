@@ -1,6 +1,6 @@
-﻿using DotsGame.AI.Patterns;
-using System;
+﻿using System;
 using System.Collections.Generic;
+using DotsGame.AI.Patterns;
 
 namespace DotsGame.AI
 {
@@ -27,14 +27,14 @@ namespace DotsGame.AI
 
         public List<PatternMatchResult> GetCrosswises()
         {
-            var crosswise = new Pattern(1, new PatternDot[]
+            var crosswise = new Pattern(1, new[]
             {
                 new PatternDot(0, 0, PatternDotState.Put, true),
                 new PatternDot(0, 1, PatternDotState.Put, false),
                 new PatternDot(1, 1, PatternDotState.Put, true),
-                new PatternDot(1, 0, PatternDotState.Put, false),
+                new PatternDot(1, 0, PatternDotState.Put, false)
             });
-            var patterns = new Pattern[] { crosswise };
+            var patterns = new[] { crosswise };
             var patternMatcher = new PatternMatcher(_dots, patterns);
             var result = patternMatcher.GetMatches();
             return result;

@@ -26,7 +26,7 @@ namespace DotsGame
 
         public override string ToString()
         {
-            return Position + ", " + Dot.ToString();
+            return Position + ", " + Dot;
         }
     }
 }

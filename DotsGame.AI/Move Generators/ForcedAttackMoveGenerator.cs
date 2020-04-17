@@ -74,8 +74,8 @@ namespace DotsGame.AI
 
                 var newMoveSequences = FindCapturesMoves(player, 2,
                     curMovesSequence.Continious ?
-                    new List<short>() { curMovesSequence.CapturePositions[ind] } :
-                    new List<short>() { curMovesSequence.CapturePositions[ind], curMovesSequence.CapturePositions[ind2] });
+                    new List<short> { curMovesSequence.CapturePositions[ind] } :
+                    new List<short> { curMovesSequence.CapturePositions[ind], curMovesSequence.CapturePositions[ind2] });
                 foreach (var moveSequence in newMoveSequences)
                 {
                     if (moveSequence.CapturePositions.Count == 1)
@@ -110,14 +110,14 @@ namespace DotsGame.AI
         {
             if (depth == 1)
                 return FindCapturesMovesDepthOne(player, centerPositions);
-            else if (depth == 2)
+            if (depth == 2)
                 return FindCapturesMovesDepthTwo(player, findWithLessDepth, centerPositions);
             throw new NotImplementedException();
         }
 
         public List<MovesSequence> FindDefenceMoves(DotState player)
         {
-            return FindCapturesMoves(player.NextPlayer(), 1, null);
+            return FindCapturesMoves(player.NextPlayer());
         }
 
         private List<MovesSequence> FindCapturesMovesDepthOne(DotState player, List<short> centerPositions)
@@ -142,7 +142,7 @@ namespace DotsGame.AI
                                 {
                                     Field.MakeMove(pos, player);
                                     if (Field.LastMoveCaptureCount > 0)
-                                        result.Add(new MovesSequence()
+                                        result.Add(new MovesSequence
                                         {
                                             CapturePositions = new List<short> { (short)pos },
                                             SurroundedPositions = new List<short>(Field.LastState.Base.SurroundPositions),
@@ -228,7 +228,7 @@ namespace DotsGame.AI
                                     {
                                         Field.MakeMove(pos, player);
                                         if (Field.LastMoveCaptureCount > 0)
-                                            result.Add(new MovesSequence()
+                                            result.Add(new MovesSequence
                                             {
                                                 CapturePositions = new List<short> { (short)pos },
                                                 SurroundedPositions = new List<short>(Field.LastState.Base.SurroundPositions),
@@ -285,16 +285,15 @@ namespace DotsGame.AI
         {
             if (inputDots.Count <= 1)
                 return false;
-            else if (inputDots.Count == 2)
+            if (inputDots.Count == 2)
                 return Field[inputDots[0]].GetDiagGroupNumber() == Field[inputDots[1]].GetDiagGroupNumber();
-            else
-                for (int i = 0; i < inputDots.Count; i++)
-                {
-                    var groupNumber = Field[inputDots[i]].GetDiagGroupNumber();
-                    for (int j = i + 1; j < inputDots.Count; j++)
-                        if (groupNumber == Field[inputDots[j]].GetDiagGroupNumber())
-                            return true;
-                }
+            for (int i = 0; i < inputDots.Count; i++)
+            {
+                var groupNumber = Field[inputDots[i]].GetDiagGroupNumber();
+                for (int j = i + 1; j < inputDots.Count; j++)
+                    if (groupNumber == Field[inputDots[j]].GetDiagGroupNumber())
+                        return true;
+            }
 
             return false;
         }

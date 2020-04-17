@@ -8,6 +8,6 @@
         Forfeit,
         Void,
         Unknown,
-        Draw,
+        Draw
     }
 }

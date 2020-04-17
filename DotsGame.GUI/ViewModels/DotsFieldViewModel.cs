@@ -1,11 +1,12 @@
-﻿using Avalonia;
-using Avalonia.Controls;
-using Avalonia.Controls.Shapes;
-using Avalonia.Media;
-using ReactiveUI;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Avalonia;
+using Avalonia.Controls;
+using Avalonia.Controls.Shapes;
+using Avalonia.Input;
+using Avalonia.Media;
+using ReactiveUI;
 
 namespace DotsGame.GUI
 {
@@ -17,7 +18,7 @@ namespace DotsGame.GUI
         private string _player1Name, _player2Name;
 
         private int _currentBaseZInd;
-        
+
         private List<Line> _lineShapes = new List<Line>();
         private List<Ellipse> _dotShapes = new List<Ellipse>();
         private Stack<List<Shape>> _movesShapes = new Stack<List<Shape>>();
@@ -140,13 +141,14 @@ namespace DotsGame.GUI
             _canvasField.Children.AddRange(shapes);
         }
 
-        private void CanvasField_PointerPressed(object sender, Avalonia.Input.PointerPressedEventArgs e)
+        private void CanvasField_PointerPressed(object sender, PointerPressedEventArgs e)
         {
             var pos = e.GetPosition(_canvasField) - new Point(FieldMargin, FieldMargin);
             pos = pos / CellSize;
             int fieldPosX = (int)Math.Round(pos.X) + 1;
             int fieldPosY = (int)Math.Round(pos.Y) + 1;
-            if (e.MouseButton == Avalonia.Input.MouseButton.Left)
+
+            if (e.MouseButton == MouseButton.Left)
             {
                 if (_field.MakeMove(fieldPosX, fieldPosY))
                 {
@@ -155,7 +157,7 @@ namespace DotsGame.GUI
                     GameTreeViewModel.AddMove(new GameMove((int)Field.CurrentPlayer.NextPlayer(), fieldPosY, fieldPosX));
                 }
             }
-            else if (e.MouseButton == Avalonia.Input.MouseButton.Right)
+            else if (e.MouseButton == MouseButton.Right)
             {
                 Field.GetPosition(_field.LastMakedPosition, out int lastX, out int lastY);
                 if (fieldPosX == lastX && fieldPosY == lastY)
@@ -189,7 +191,7 @@ namespace DotsGame.GUI
                     StrokeThickness = LineThickness,
                     StartPoint = new Point(x, FieldMargin),
                     EndPoint = new Point(x, FieldMargin + lineLength),
-                    ZIndex = 0,
+                    ZIndex = 0
                 };
 
                 _lineShapes.Add(line);
@@ -207,7 +209,7 @@ namespace DotsGame.GUI
                     StrokeThickness = LineThickness,
                     StartPoint = new Point(FieldMargin, y),
                     EndPoint = new Point(FieldMargin + lineLength, y),
-                    ZIndex = 0,
+                    ZIndex = 0
                 };
 
                 _lineShapes.Add(line);
@@ -278,7 +280,7 @@ namespace DotsGame.GUI
                     Points = polygonPoints,
                     ZIndex = dotZIndex - 1
                 };
-                
+
                 _canvasField.Children.Add(basePolygon);
                 moveShapes.Add(basePolygon);
             }
@@ -290,7 +292,7 @@ namespace DotsGame.GUI
         {
             ClearAdditionalShapes();
             if (state.Base != null && state.Base.LastCaptureCount != 0)
-            { 
+            {
                 _currentBaseZInd -= 2;
             }
             List<Shape> moveShapes = _movesShapes.Pop();
@@ -312,7 +314,7 @@ namespace DotsGame.GUI
                     Height = DotRadius * 1.2,
                     [Canvas.LeftProperty] = point.X - DotRadius * 0.6,
                     [Canvas.TopProperty] = point.Y - DotRadius * 0.6,
-                    ZIndex = 1000,
+                    ZIndex = 1000
                 };
                 _canvasField.Children.Add(_lastMoveMarker);
             }

@@ -1,6 +1,6 @@
-﻿using Newtonsoft.Json;
-using System;
+﻿using System;
 using System.IO;
+using Newtonsoft.Json;
 
 namespace DotsGame.GUI
 {
@@ -28,10 +28,8 @@ namespace DotsGame.GUI
                     return new Settings();
                 }
             }
-            else
-            {
-                return new Settings();
-            }
+
+            return new Settings();
         }
 
         public void Save()

@@ -1,7 +1,7 @@
-﻿using DotsGame.Formats;
-using NUnit.Framework;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.IO;
+using DotsGame.Formats;
+using NUnit.Framework;
 
 namespace DotsGame.Formtas.Tests
 {
