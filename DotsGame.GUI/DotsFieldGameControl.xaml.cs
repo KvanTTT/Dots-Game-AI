@@ -9,11 +9,11 @@ namespace DotsGame.GUI
 
         public DotsFieldGameControl()
         {
-            this.InitializeComponent();
+            InitializeComponent();
             var _canvas = this.Find<Canvas>("CanvasField");
             var expander = this.Find<Expander>("GameTreeExpander");
             var dotsFieldViewModel = new DotsFieldViewModel(_canvas);
-            this.DataContext = dotsFieldViewModel;
+            DataContext = dotsFieldViewModel;
             ServiceLocator.DotsFieldViewModel = dotsFieldViewModel;
 
             GameTreeControl = new GameTreeControl();

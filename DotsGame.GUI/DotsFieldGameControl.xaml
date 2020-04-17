@@ -1,4 +1,5 @@
-﻿<UserControl xmlns="https://github.com/avaloniaui" xmlns:DotsGUI="clr-namespace:DotsGame.GUI;assembly=DotsGame.GUI"
+﻿<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" x:Class="DotsGame.GUI.DotsFieldGameControl"
              FontSize="16">
   <Grid RowDefinitions="25,*,Auto">
     <StackPanel Grid.Row="0" Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Top" Height="30" Margin="0,8,0,0">

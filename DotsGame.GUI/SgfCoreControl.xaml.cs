@@ -7,7 +7,7 @@ namespace DotsGame.GUI
     {
         public SgfCoreControl()
         {
-            this.InitializeComponent();
+            InitializeComponent();
         }
 
         private void InitializeComponent()

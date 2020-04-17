@@ -1,4 +1,5 @@
-﻿<UserControl xmlns="https://github.com/avaloniaui" Design.Width="800" >
+﻿<UserControl xmlns="https://github.com/avaloniaui" Design.Width="800"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" x:Class="DotsGame.GUI.GameTreeControl" >
     <Grid Name="GridMain" RowDefinitions="Auto,*" >
         <Grid ColumnDefinitions="40,40,40,40,40,80,80,80,80,*,80,60" >
             <Button Grid.Column="0" Margin="0,0,4,0" Command="{Binding PrevMoveCommand}" >&lt;</Button>

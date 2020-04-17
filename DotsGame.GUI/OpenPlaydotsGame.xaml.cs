@@ -1,6 +1,8 @@
-﻿using Avalonia.Controls;
+﻿using System.Threading;
+using Avalonia;
+using Avalonia.Controls;
 using Avalonia.Markup.Xaml;
-using System.Threading;
+using Avalonia.Threading;
 
 namespace DotsGame.GUI
 {
@@ -11,8 +13,7 @@ namespace DotsGame.GUI
 
         public OpenPlaydotsGame()
         {
-            this.InitializeComponent();
-            App.AttachDevTools(this);
+            InitializeComponent();
             DataContext = this;
 
             _textBox = this.Find<TextBox>("InputTextBox");
@@ -35,10 +36,10 @@ namespace DotsGame.GUI
 
         private async void ClipboardUpdateEvent(object state)
         {
-            string clipboardText = await Avalonia.Application.Current.Clipboard.GetTextAsync();
+            string clipboardText = await Application.Current.Clipboard.GetTextAsync();
             if (clipboardText != null && clipboardText.Contains("game.playdots.ru") && clipboardText != _textBox.Text)
             {
-                await Avalonia.Threading.Dispatcher.UIThread.InvokeAsync(() => _textBox.Text = clipboardText);
+                await Dispatcher.UIThread.InvokeAsync(() => _textBox.Text = clipboardText);
             }
             _clipboardTimer.Change(250, Timeout.Infinite);
         }

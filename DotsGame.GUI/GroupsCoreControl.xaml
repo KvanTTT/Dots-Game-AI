@@ -1,4 +1,5 @@
-﻿<UserControl xmlns="https://github.com/avaloniaui">
+﻿<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" x:Class="DotsGame.GUI.GroupsCoreControl">
     <StackPanel Spacing="5">
         <CheckBox>Strong Groups</CheckBox>
         <CheckBox>Fragile Groups</CheckBox>

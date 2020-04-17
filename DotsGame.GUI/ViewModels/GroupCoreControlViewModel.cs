@@ -1,15 +1,16 @@
-﻿using Avalonia.Controls;
+﻿using System.Collections.Generic;
+using System.Reactive;
+using Avalonia.Controls;
 using Avalonia.Controls.Shapes;
 using Avalonia.Media;
 using DotsGame.AI;
 using ReactiveUI;
-using System.Collections.Generic;
 
 namespace DotsGame.GUI
 {
     public class GroupCoreControlViewModel : ReactiveObject
     {
-        public ReactiveCommand ShowCrosswisesCommand { get; }
+        public ReactiveCommand<Unit, Unit> ShowCrosswisesCommand { get; }
 
         public GroupCoreControlViewModel()
         {
@@ -18,7 +19,7 @@ namespace DotsGame.GUI
                 var dotsField = ServiceLocator.DotsFieldViewModel;
                 var groupsCore = new GroupsCore(ServiceLocator.DotsFieldViewModel.Field);
                 var crosswises = groupsCore.GetCrosswises();
-                
+
                 var shapes = new List<Shape>();
                 foreach (var crosswise in crosswises)
                 {
