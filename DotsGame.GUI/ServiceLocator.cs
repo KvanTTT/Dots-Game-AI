@@ -1,13 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using Avalonia.Controls;
 
 namespace DotsGame.GUI
 {
     public class ServiceLocator
     {
+        internal static Window MainWindow { get; set; }
+
         internal static DotsFieldViewModel DotsFieldViewModel { get; set; }
 
         internal static GameTreeViewModel GameTreeViewModel { get; set; }

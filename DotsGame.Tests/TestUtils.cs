@@ -1,11 +1,7 @@
-﻿using DotsGame.Formats;
-using NUnit.Framework;
-using System;
-using System.Collections.Generic;
-using System.IO;
+﻿using System.IO;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using DotsGame.Formats;
+using NUnit.Framework;
 
 namespace DotsGame.Tests
 {

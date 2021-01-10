@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using System.Collections.Generic;
 
 namespace DotsGame
 {
@@ -23,10 +20,6 @@ namespace DotsGame
             set;
         }
 
-        public State()
-        {
-        }
-
         public bool HasBase()
         {
             return Base != null;
@@ -34,7 +27,7 @@ namespace DotsGame
 
         public override string ToString()
         {
-            return Move.ToString() + (Base == null ? string.Empty : "; " + Base.ToString());
+            return Move + (Base == null ? string.Empty : "; " + Base);
         }
 
         public State Clone()

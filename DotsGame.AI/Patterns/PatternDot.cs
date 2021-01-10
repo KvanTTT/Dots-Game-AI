@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace DotsGame.AI.Patterns
+﻿namespace DotsGame.AI.Patterns
 {
     public struct PatternDot
     {
@@ -30,7 +24,8 @@ namespace DotsGame.AI.Patterns
             {
                 return dotState.IsNotPutted();
             }
-            else if (State == PatternDotState.FreeOrPut)
+
+            if (State == PatternDotState.FreeOrPut)
             {
                 if (dotState.IsNotPutted())
                 {
@@ -50,10 +45,8 @@ namespace DotsGame.AI.Patterns
             {
                 return Player0 && dotPlayerNumber == 0 || !Player0 && dotPlayerNumber == 1;
             }
-            else
-            {
-                return Player0 && dotPlayerNumber == 1 || !Player0 && dotPlayerNumber == 0;
-            }
+
+            return Player0 && dotPlayerNumber == 1 || !Player0 && dotPlayerNumber == 0;
         }
     }
 }

@@ -1,12 +1,10 @@
-﻿using DotsGame.Formats;
-using DotsGame.Sgf;
-using NUnit.Framework;
-using System;
-using System.Collections.Generic;
+﻿using System;
 using System.IO;
 using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
+using DotsGame.Formats;
+using DotsGame.Sgf;
+using NUnit.Framework;
 
 namespace DotsGame.Formtas.Tests
 {

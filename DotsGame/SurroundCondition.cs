@@ -1,12 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-
-namespace DotsGame
+﻿namespace DotsGame
 {
     // Возможные типы обработки пустых баз.
-    public enum enmSurroundCondition
+    public enum SurroundCondition
     {
         /// <summary>
         /// Классическая.

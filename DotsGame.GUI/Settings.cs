@@ -1,16 +1,12 @@
-﻿using Newtonsoft.Json;
-using System;
-using System.Collections.Generic;
+﻿using System;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using Newtonsoft.Json;
 
 namespace DotsGame.GUI
 {
     public class Settings
     {
-        private static string settingsFileName = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData),
+        private static readonly string settingsFileName = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData),
                 "DotsGame.json");
         private static readonly object saveLock = new object();
 
@@ -32,10 +28,8 @@ namespace DotsGame.GUI
                     return new Settings();
                 }
             }
-            else
-            {
-                return new Settings();
-            }
+
+            return new Settings();
         }
 
         public void Save()

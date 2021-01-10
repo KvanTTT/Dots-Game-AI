@@ -1,124 +1,118 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using DotsGame;
-
-namespace DotsGame.AI
+﻿namespace DotsGame.AI
 {
-	public class AlphaBetaAlgoritm
-	{
-		#region Constructors
+    public class AlphaBetaAlgoritm
+    {
+        #region Constructors
 
-		public AlphaBetaAlgoritm(Field field, MoveGenerator moveGenerator = null, Estimator estimator = null)
-		{
-			Field = field;
-			MoveGenerator = moveGenerator ?? new StandartMoveGenerator(field);
-			Estimator = estimator ?? new Estimator(field);
-		}
+        public AlphaBetaAlgoritm(Field field, MoveGenerator moveGenerator = null, Estimator estimator = null)
+        {
+            Field = field;
+            MoveGenerator = moveGenerator ?? new StandartMoveGenerator(field);
+            Estimator = estimator ?? new Estimator(field);
+        }
 
-		#endregion
+        #endregion
 
-		#region Public Methods
+        #region Public Methods
 
-		public int SearchBestMove(byte depth = 4)
-		{
-			return SearchBestMove(depth, Field.CurrentPlayer, -AiSettings.InfinityScore, AiSettings.InfinityScore);
-		}
+        public int SearchBestMove(byte depth = 4)
+        {
+            return SearchBestMove(depth, Field.CurrentPlayer, -AiSettings.InfinityScore, AiSettings.InfinityScore);
+        }
 
-		public int SearchBestMove(byte depth, DotState player, float alpha, float beta)
-		{
-			int bestMove = 0;
+        public int SearchBestMove(byte depth, DotState player, float alpha, float beta)
+        {
+            int bestMove = 0;
 
-			CalculatedPositionCount = 0;
+            CalculatedPositionCount = 0;
 
-			MoveGenerator.MaxDepth = depth;
-			MoveGenerator.GenerateMoves(player, depth);
-			DotState nextPlayer = player.NextPlayer();
+            MoveGenerator.MaxDepth = depth;
+            MoveGenerator.GenerateMoves(player, depth);
+            DotState nextPlayer = player.NextPlayer();
 
-			foreach (var move in MoveGenerator.Moves)
-			{
-				if (alpha < beta)
-				{
-					if (Field.MakeMove(move))
-					{
-						CalculatedPositionCount++;
-						MoveGenerator.UpdateMoves();
-						float tmp = -EvaluatePosition((byte)(depth - 1), nextPlayer, -beta, -alpha);
-						Field.UnmakeMove();
-						MoveGenerator.UpdateMoves();
-						if (tmp > alpha)
-						{
-							alpha = tmp;
-							bestMove = move;
-						}
-					}
-				}
-			}
+            foreach (var move in MoveGenerator.Moves)
+            {
+                if (alpha < beta)
+                {
+                    if (Field.MakeMove(move))
+                    {
+                        CalculatedPositionCount++;
+                        MoveGenerator.UpdateMoves();
+                        float tmp = -EvaluatePosition((byte)(depth - 1), nextPlayer, -beta, -alpha);
+                        Field.UnmakeMove();
+                        MoveGenerator.UpdateMoves();
+                        if (tmp > alpha)
+                        {
+                            alpha = tmp;
+                            bestMove = move;
+                        }
+                    }
+                }
+            }
 
-			return bestMove;
-		}
+            return bestMove;
+        }
 
-		#endregion
+        #endregion
 
-		#region Helpers
+        #region Helpers
 
-		private float EvaluatePosition(byte depth, DotState player, float alpha, float beta)
-		{
-			if (depth == 0)
-				return Estimator.Estimate(player);
+        private float EvaluatePosition(byte depth, DotState player, float alpha, float beta)
+        {
+            if (depth == 0)
+                return Estimator.Estimate(player);
 
-			MoveGenerator.GenerateMoves(player, depth);
-			DotState nextPlayer = player.NextPlayer();
+            MoveGenerator.GenerateMoves(player, depth);
+            DotState nextPlayer = player.NextPlayer();
 
-			foreach (var move in MoveGenerator.Moves)
-			{
-				if (alpha < beta)
-				{
-					if (Field.MakeMove(move))
-					{
-						CalculatedPositionCount++;
-						MoveGenerator.UpdateMoves();
-						float tmp = -EvaluatePosition((byte)(depth - 1), nextPlayer, -beta, -alpha);
-						Field.UnmakeMove();
-						MoveGenerator.UpdateMoves();
-						if (tmp > alpha)
-							alpha = tmp;
-					}
-				}
-			}
+            foreach (var move in MoveGenerator.Moves)
+            {
+                if (alpha < beta)
+                {
+                    if (Field.MakeMove(move))
+                    {
+                        CalculatedPositionCount++;
+                        MoveGenerator.UpdateMoves();
+                        float tmp = -EvaluatePosition((byte)(depth - 1), nextPlayer, -beta, -alpha);
+                        Field.UnmakeMove();
+                        MoveGenerator.UpdateMoves();
+                        if (tmp > alpha)
+                            alpha = tmp;
+                    }
+                }
+            }
 
-			return alpha;
-		}
+            return alpha;
+        }
 
-		#endregion
+        #endregion
 
-		#region Properties
+        #region Properties
 
-		public Field Field
-		{
-			get;
-			set;
-		}
+        public Field Field
+        {
+            get;
+            set;
+        }
 
-		public MoveGenerator MoveGenerator
-		{
-			get;
-			set;
-		}
+        public MoveGenerator MoveGenerator
+        {
+            get;
+            set;
+        }
 
-		public Estimator Estimator
-		{
-			get;
-			set;
-		}
+        public Estimator Estimator
+        {
+            get;
+            set;
+        }
 
-		public long CalculatedPositionCount
-		{
-			get;
-			private set;
-		}
+        public long CalculatedPositionCount
+        {
+            get;
+            private set;
+        }
 
-		#endregion
-	}
+        #endregion
+    }
 }

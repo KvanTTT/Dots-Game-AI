@@ -1,17 +1,20 @@
-﻿using Avalonia;
+﻿using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Linq;
+using System.Reactive;
+using System.Text;
+using System.Threading;
+using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Controls.Shapes;
+using Avalonia.Input;
+using Avalonia.Layout;
 using Avalonia.Media;
 using Avalonia.Threading;
 using DotsGame.Formats;
 using DotsGame.Sgf;
 using ReactiveUI;
-using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading;
 
 namespace DotsGame.GUI
 {
@@ -19,12 +22,11 @@ namespace DotsGame.GUI
     {
         private DotsFieldViewModel _dotsFieldViewModel;
         private GameInfo _gameInfo;
-        private UserControl _gameTreeUserControl;
-        private Canvas _gameTreeCanvas;
-        private ScrollViewer _canvasScrollViewer;
+        private readonly Canvas _gameTreeCanvas;
+        private readonly ScrollViewer _canvasScrollViewer;
         private string _fileName;
         private bool _autoUpdate;
-        private Timer _autoupdateGameTimer;
+        private readonly Timer _autoupdateGameTimer;
 
         private double _dotSize = 23;
         private double _dotSpace = 32;
@@ -34,7 +36,7 @@ namespace DotsGame.GUI
         private GameTree _previousSelectedGameTree;
         private GameTree _selectedGameTree;
         private GameTree[,] _gameTreesOnCanvas;
-        private Dictionary<GameTree, Tuple<int, int>> _gameTreesPositions = new Dictionary<GameTree, Tuple<int, int>>();
+        private readonly Dictionary<GameTree, Tuple<int, int>> _gameTreesPositions = new Dictionary<GameTree, Tuple<int, int>>();
         int _prevMovesCount;
 
         private Dictionary<long, Ellipse> _moveCircles = new Dictionary<long, Ellipse>();
@@ -46,52 +48,37 @@ namespace DotsGame.GUI
 
         private bool _showLabels = true;
 
-        public ReactiveCommand<object> PrevMoveCommand { get; } = ReactiveCommand.Create();
+        public ReactiveCommand<Unit, Unit> PrevMoveCommand { get; }
 
-        public ReactiveCommand<object> NextMoveCommand { get; } = ReactiveCommand.Create();
+        public ReactiveCommand<Unit, Unit> NextMoveCommand { get; }
 
-        public ReactiveCommand<object> StartMoveCommand { get; } = ReactiveCommand.Create();
+        public ReactiveCommand<Unit, Unit> StartMoveCommand { get; }
 
-        public ReactiveCommand<object> EndMoveCommand { get; } = ReactiveCommand.Create();
+        public ReactiveCommand<Unit, Unit> EndMoveCommand { get; }
 
-        public ReactiveCommand<object> RemoveCommand { get; } = ReactiveCommand.Create();
+        public ReactiveCommand<Unit, Unit> RemoveCommand { get; }
 
-        public ReactiveCommand<object> OpenFileCommand { get; } = ReactiveCommand.Create();
+        public ReactiveCommand<Unit, Unit> OpenFileCommand { get; }
 
-        public ReactiveCommand<object> OpenPlaydotsVkCommand { get; } = ReactiveCommand.Create();
+        public ReactiveCommand<Unit, Unit> OpenPlaydotsVkCommand { get; }
 
-        public ReactiveCommand<object> ResetCommand { get; } = ReactiveCommand.Create();
+        public ReactiveCommand<Unit, Unit> ResetCommand { get; }
 
-        public ReactiveCommand<object> SaveCommand { get; } = ReactiveCommand.Create();
+        public ReactiveCommand<Unit, Unit> SaveCommand { get; }
 
-        public ReactiveCommand<object> UpdateCommand { get; } = ReactiveCommand.Create();
+        public ReactiveCommand<Unit, Unit> UpdateCommand { get; }
 
-        public DotsFieldViewModel DotsFieldViewModel
-        {
-            get
-            {
-                return _dotsFieldViewModel ?? (_dotsFieldViewModel = ServiceLocator.DotsFieldViewModel);
-            }
-        }
+        public DotsFieldViewModel DotsFieldViewModel => _dotsFieldViewModel ??= ServiceLocator.DotsFieldViewModel;
 
         public string FileName
         {
-            get
-            {
-                return _fileName;
-            }
-            set
-            {
-                this.RaiseAndSetIfChanged(ref _fileName, value);
-            }
+            get => _fileName;
+            set => this.RaiseAndSetIfChanged(ref _fileName, value);
         }
 
         public bool AutoUpdate
         {
-            get
-            {
-                return _autoUpdate;
-            }
+            get => _autoUpdate;
             set
             {
                 if (value)
@@ -102,28 +89,13 @@ namespace DotsGame.GUI
             }
         }
 
-        public double MinScrollViewerHeight
-        {
-            get
-            {
-                return _padding * 2;
-            }
-        }
+        public double MinScrollViewerHeight => _padding * 2;
 
-        public double MaxScrollViewerHeight
-        {
-            get
-            {
-                return _padding + _dotSpace * 4.5;
-            }
-        }
-        
+        public double MaxScrollViewerHeight =>_padding + _dotSpace * 4.5;
+
         public bool ShowLabels
         {
-            get
-            {
-                return _showLabels;
-            }
+            get => _showLabels;
             set
             {
                 this.RaiseAndSetIfChanged(ref _showLabels, value);
@@ -134,14 +106,13 @@ namespace DotsGame.GUI
         public GameTreeViewModel(UserControl gameTreeUserControl)
         {
             _autoupdateGameTimer = new Timer(UpdateGame, "timer", Timeout.Infinite, Timeout.Infinite);
-            _gameTreeUserControl = gameTreeUserControl;
             _gameTreeCanvas = gameTreeUserControl.Find<Canvas>("GameTreeCanvas");
             _canvasScrollViewer = gameTreeUserControl.Find<ScrollViewer>("GameTreeScrollViewer");
-            _gameTreeCanvas.PointerPressed += _gameTreeCanvas_PointerPressed;
+            _gameTreeCanvas.PointerPressed += GameTreeCanvas_PointerPressed;
             FileName = ServiceLocator.Settings.OpenedFileName;
             if (string.IsNullOrEmpty(ServiceLocator.Settings.CurrentGameSgf))
             {
-                GameInfo = new GameInfo() { Width = DotsFieldViewModel.Field.Width, Height = DotsFieldViewModel.Field.Height };
+                GameInfo = new GameInfo { Width = DotsFieldViewModel.Field.Width, Height = DotsFieldViewModel.Field.Height };
                 UpdateSelectedGameTree(GameInfo.GameTree);
             }
             else
@@ -152,16 +123,9 @@ namespace DotsGame.GUI
                 ScrollToSelectedGameTree();
             }
 
-            PrevMoveCommand.Subscribe(_ =>
-            {
-                if (_selectedGameTree.Parent != null)
-                {
-                    UpdateSelectedGameTree(_selectedGameTree.Parent);
-                    ScrollToSelectedGameTree();
-                }
-            });
+            PrevMoveCommand = ReactiveCommand.Create(PrevMoveCommandAction);
 
-            NextMoveCommand.Subscribe(_ =>
+            NextMoveCommand = ReactiveCommand.Create(() =>
             {
                 if (_selectedGameTree.Childs.Count != 0)
                 {
@@ -170,19 +134,19 @@ namespace DotsGame.GUI
                 }
             });
 
-            StartMoveCommand.Subscribe(_ =>
+            StartMoveCommand = ReactiveCommand.Create(() =>
             {
                 UpdateSelectedGameTree(_gameInfo.GameTree);
                 ScrollToSelectedGameTree();
             });
 
-            EndMoveCommand.Subscribe(_ =>
+            EndMoveCommand = ReactiveCommand.Create(() =>
             {
                 UpdateSelectedGameTree(_selectedGameTree.GetDefaultLastTree());
                 ScrollToSelectedGameTree();
             });
 
-            RemoveCommand.Subscribe(_ =>
+            RemoveCommand = ReactiveCommand.Create(() =>
             {
                 if (_selectedGameTree != null && _selectedGameTree.Parent != null)
                 {
@@ -194,13 +158,13 @@ namespace DotsGame.GUI
                 }
             });
 
-            OpenFileCommand.Subscribe(async _ =>
+            OpenFileCommand = ReactiveCommand.CreateFromTask(async () =>
             {
                 var dialog = new OpenFileDialog();
-                dialog.Filters.Add(new FileDialogFilter() { Name = "Smart Game Format, PointsXT", Extensions = new List<string>() { "sgf", "sav" } });
-                dialog.Filters.Add(new FileDialogFilter() { Name = "Smart Game Format", Extensions = new List<string>() { "sgf" } });
-                dialog.Filters.Add(new FileDialogFilter() { Name = "PointsXT Save", Extensions = new List<string>() { "sav" } });
-                string[] fileNames = await dialog.ShowAsync();
+                dialog.Filters.Add(new FileDialogFilter { Name = "Smart Game Format, PointsXT", Extensions = new List<string> { "sgf", "sav" } });
+                dialog.Filters.Add(new FileDialogFilter { Name = "Smart Game Format", Extensions = new List<string> { "sgf" } });
+                dialog.Filters.Add(new FileDialogFilter { Name = "PointsXT Save", Extensions = new List<string> { "sav" } });
+                string[] fileNames = await dialog.ShowAsync(ServiceLocator.MainWindow);
                 if (fileNames != null)
                 {
                     var extractor = new GameInfoExtractor();
@@ -212,10 +176,10 @@ namespace DotsGame.GUI
                 }
             });
 
-            OpenPlaydotsVkCommand.Subscribe(async _ =>
+            OpenPlaydotsVkCommand = ReactiveCommand.CreateFromTask(async () =>
             {
                 var dialog = new OpenPlaydotsGame();
-                var url = await dialog.ShowDialog<string>();
+                var url = await dialog.ShowDialog<string>(ServiceLocator.MainWindow);
                 if (url != null)
                 {
                     var extractor = new GameInfoExtractor();
@@ -227,7 +191,7 @@ namespace DotsGame.GUI
                 }
             });
 
-            ResetCommand.Subscribe(_ =>
+            ResetCommand = ReactiveCommand.Create(() =>
             {
                 FileName = "";
                 GameInfoExtractor.InvalidateCache();
@@ -237,11 +201,11 @@ namespace DotsGame.GUI
                 ScrollToSelectedGameTree();
             });
 
-            SaveCommand.Subscribe(async _ =>
+            SaveCommand = ReactiveCommand.CreateFromTask(async () =>
             {
                 var saveSgfDialog = new SaveFileDialog();
-                saveSgfDialog.Filters.Add(new FileDialogFilter() { Name = "Smart Game Format", Extensions = new List<string>() { "sgf" } });
-                string fileName = await saveSgfDialog.ShowAsync();
+                saveSgfDialog.Filters.Add(new FileDialogFilter { Name = "Smart Game Format", Extensions = new List<string> { "sgf" } });
+                string fileName = await saveSgfDialog.ShowAsync(null);
                 if (fileName != null)
                 {
                     var parser = new SgfParser { NewLines = true };
@@ -250,11 +214,16 @@ namespace DotsGame.GUI
                 }
             });
 
-            UpdateCommand.Subscribe(UpdateGame);
+            UpdateCommand = ReactiveCommand.Create(() => UpdateGame(null));
         }
 
-        internal void GameTreeCanvas_KeyUp(object sender, Avalonia.Input.KeyEventArgs e)
+        public void PrevMoveCommandAction()
         {
+            if (_selectedGameTree.Parent != null)
+            {
+                UpdateSelectedGameTree(_selectedGameTree.Parent);
+                ScrollToSelectedGameTree();
+            }
         }
 
         private void UpdateGame(object state)
@@ -262,8 +231,7 @@ namespace DotsGame.GUI
             if (!string.IsNullOrEmpty(FileName))
             {
                 var extractor = new GameInfoExtractor();
-                bool fromCache;
-                var gameInfo = extractor.DetectFormatAndOpen(FileName, out fromCache);
+                var gameInfo = extractor.DetectFormatAndOpen(FileName, out bool fromCache);
                 bool uiThread = !(state is string && (string)state == "timer");
                 if (gameInfo != ServiceLocator.BasicCoreControViewModel.GameInfo)
                 {
@@ -300,7 +268,7 @@ namespace DotsGame.GUI
             }
         }
 
-        private void _gameTreeCanvas_PointerPressed(object sender, Avalonia.Input.PointerPressedEventArgs e)
+        private void GameTreeCanvas_PointerPressed(object sender, PointerPressedEventArgs e)
         {
             Point position = e.GetPosition(_gameTreeCanvas);
             int xOffset = (int)Math.Round((position.X - _padding) / _dotSpace);
@@ -318,10 +286,7 @@ namespace DotsGame.GUI
 
         public GameInfo GameInfo
         {
-            get
-            {
-                return _gameInfo;
-            }
+            get => _gameInfo;
             set
             {
                 ServiceLocator.BasicCoreControViewModel.GameInfo = value;
@@ -447,8 +412,7 @@ namespace DotsGame.GUI
 
         private void ScrollToSelectedGameTree()
         {
-            Tuple<int, int> pos;
-            if (_selectedGameTree != null && _gameTreesPositions.TryGetValue(_selectedGameTree, out pos))
+            if (_selectedGameTree != null && _gameTreesPositions.TryGetValue(_selectedGameTree, out Tuple<int, int> pos))
             {
                 double left = _padding + pos.Item1 * _dotSpace;
                 double top = _padding + pos.Item2 * _dotSpace;
@@ -460,8 +424,7 @@ namespace DotsGame.GUI
 
         private void RefreshSelectedTreeMarker()
         {
-            Tuple<int, int> pos;
-            if (_gameTreesPositions.TryGetValue(_selectedGameTree, out pos))
+            if (_gameTreesPositions.TryGetValue(_selectedGameTree, out Tuple<int, int> pos))
             {
                 _gameTreeCanvas.Children.Remove(_selectedTreeRect);
                 _selectedTreeRect = new Rectangle
@@ -471,7 +434,7 @@ namespace DotsGame.GUI
                     Width = _dotSize + 4,
                     Height = _dotSize + 4,
                     Stroke = Brushes.Black,
-                    StrokeThickness = 2,
+                    StrokeThickness = 2
                 };
                 _gameTreeCanvas.Children.Add(_selectedTreeRect);
             }
@@ -521,8 +484,7 @@ namespace DotsGame.GUI
             double left = _padding + xOffset * _dotSpace - _dotSize / 2;
             double top = _padding + yOffset * _dotSpace - _dotSize / 2;
             long hash = GetMoveHashCode(xOffset, yOffset, playerNumber);
-            Ellipse circle;
-            if (_moveCircles.TryGetValue(hash, out circle))
+            if (_moveCircles.TryGetValue(hash, out Ellipse circle))
             {
                 _moveCircles.Remove(hash);
             }
@@ -537,14 +499,14 @@ namespace DotsGame.GUI
                 {
                     fill = playerNumber == 0 ? Brushes.Blue : Brushes.Red;
                 }
-                circle = new Ellipse()
+                circle = new Ellipse
                 {
                     [Canvas.LeftProperty] = left,
                     [Canvas.TopProperty] = top,
                     Width = _dotSize,
                     Height = _dotSize,
                     ZIndex = 10,
-                    Fill = fill,
+                    Fill = fill
                 };
                 _gameTreeCanvas.Children.Add(circle);
             }
@@ -553,14 +515,13 @@ namespace DotsGame.GUI
             if (_showLabels)
             {
                 long textBlockHash = GetLabelHashCode(xOffset, yOffset, currentNumber);
-                TextBlock textBlock;
-                if (_moveLabels.TryGetValue(textBlockHash, out textBlock))
+                if (_moveLabels.TryGetValue(textBlockHash, out TextBlock textBlock))
                 {
                     _moveLabels.Remove(textBlockHash);
                 }
                 else
                 {
-                    textBlock = new TextBlock()
+                    textBlock = new TextBlock
                     {
                         [Canvas.LeftProperty] = left,
                         [Canvas.TopProperty] = top + 3,
@@ -568,7 +529,7 @@ namespace DotsGame.GUI
                         Width = _dotSize,
                         Height = _dotSize,
                         TextAlignment = TextAlignment.Center,
-                        VerticalAlignment = Avalonia.Layout.VerticalAlignment.Center,
+                        VerticalAlignment = VerticalAlignment.Center,
                         Foreground = Brushes.White,
                         FontSize = 11,
                         ZIndex = 15
@@ -609,9 +570,8 @@ namespace DotsGame.GUI
 
         private void UpdateLine(int x, int y, TreeLineDirection dir, int length)
         {
-            Line line;
             long hash = GetLineHashCode(x, y, dir, length);
-            if (_treeLines.TryGetValue(hash, out line))
+            if (_treeLines.TryGetValue(hash, out Line line))
             {
                 _treeLines.Remove(hash);
             }

@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.IO;
 
 namespace DotsGame
 {
@@ -14,11 +12,11 @@ namespace DotsGame
         public const int InputSurroundDotsCount = 4;
 
         public static int[] DiagDeltas = {
-            -Field.RealWidth - 1, -Field.RealWidth, -Field.RealWidth + 1,
+            -RealWidth - 1, -RealWidth, -RealWidth + 1,
             -1, +1,
-            +Field.RealWidth - 1, +Field.RealWidth, +Field.RealWidth + 1 };
+            +RealWidth - 1, +RealWidth, +RealWidth + 1 };
 
-        public static int[] VertHorizDeltas = { -Field.RealWidth, +1, +Field.RealWidth, -1 };
+        public static int[] VertHorizDeltas = { -RealWidth, +1, +RealWidth, -1 };
 
         #endregion
 
@@ -70,7 +68,7 @@ namespace DotsGame
             private set;
         }
 
-        public enmSurroundCondition SurroundCondition
+        public SurroundCondition SurroundCondition
         {
             get;
             private set;
@@ -128,7 +126,7 @@ namespace DotsGame
             private set;
         }
 
-        public enmMoveState LastMoveState
+        public MoveState LastMoveState
         {
             get;
             private set;
@@ -240,7 +238,7 @@ namespace DotsGame
         {
         }
 
-        public Field(int width, int height, enmSurroundCondition surroundCondition = enmSurroundCondition.Standart)
+        public Field(int width, int height, SurroundCondition surroundCondition = SurroundCondition.Standart)
         {
             Width = width;
             Height = height;
@@ -258,7 +256,7 @@ namespace DotsGame
             _tempList = new List<int>(16);
             _inputChainDots = new List<int>(InputSurroundDotsCount);
             _inputSurroundedDots = new List<int>(InputSurroundDotsCount);
-            LastMoveState = enmMoveState.None;
+            LastMoveState = MoveState.None;
         }
 
         #endregion
@@ -288,7 +286,7 @@ namespace DotsGame
         /// <param name="pos"></param>
         public static void GetFirstNextPos(int centerPosition, ref int pos)
         {
-            pos = centerPosition + Helper.NextFirstPosOffsets[pos - centerPosition + Field.RealWidth + 1];
+            pos = centerPosition + Helper.NextFirstPosOffsets[pos - centerPosition + RealWidth + 1];
         }
 
         /// <summary>
@@ -303,7 +301,7 @@ namespace DotsGame
         /// <param name="pos"></param>
         public static void GetFirstNextPosCCW(int centerPosition, ref int pos)
         {
-            pos = centerPosition + Helper.NextFirstPosOffsetsCCW[pos - centerPosition + Field.RealWidth + 1];
+            pos = centerPosition + Helper.NextFirstPosOffsetsCCW[pos - centerPosition + RealWidth + 1];
         }
 
         /// <summary>
@@ -318,14 +316,14 @@ namespace DotsGame
         /// <param name="pos"></param>
         public static void GetNextPos(int centerPosition, ref int pos)
         {
-            pos = centerPosition + Helper.NextPosOffsets[pos - centerPosition + Field.RealWidth + 1];
+            pos = centerPosition + Helper.NextPosOffsets[pos - centerPosition + RealWidth + 1];
         }
 
         public static int Distance(int pos1, int pos2)
         {
             return
-                Math.Max(Math.Abs((pos1 % Field.RealWidth) - (pos2 % Field.RealWidth)),
-                         Math.Abs((pos1 / Field.RealWidth) - (pos2 / Field.RealWidth)));
+                Math.Max(Math.Abs((pos1 % RealWidth) - (pos2 % RealWidth)),
+                         Math.Abs((pos1 / RealWidth) - (pos2 / RealWidth)));
         }
 
         #endregion
@@ -415,7 +413,7 @@ namespace DotsGame
                 return;
             }
 
-            if (SurroundCondition == enmSurroundCondition.Standart)
+            if (SurroundCondition == SurroundCondition.Standart)
             {
                 if (GetInputDots(LastPosition) > 1)
                     FindAndMarkChainAndSurroundedDots(LastPosition);
@@ -519,7 +517,7 @@ namespace DotsGame
                     AddCapturedFreedCount(dotColor);
 
                     // If capture not empty base or turned on an option "Surround all".
-                    if (_lastBaseCaptureCount != 0 || SurroundCondition == enmSurroundCondition.Always)
+                    if (_lastBaseCaptureCount != 0 || SurroundCondition == SurroundCondition.Always)
                     {
                         for (var j = previousSuroundDotsCount; j < _surroundPositions.Count; j++)
                         {
@@ -873,11 +871,8 @@ namespace DotsGame
             CurrentPlayer = color;
             if (MakeMove(position))
                 return true;
-            else
-            {
-                CurrentPlayer = oldCurrentPlayer;
-                return false;
-            }
+            CurrentPlayer = oldCurrentPlayer;
+            return false;
         }
 
         public bool MakeMove(int x, int y, int playerNumber)
@@ -886,11 +881,8 @@ namespace DotsGame
             CurrentPlayer = (DotState)playerNumber;
             if (MakeMove(y * RealWidth + x))
                 return true;
-            else
-            {
-                CurrentPlayer = oldCurrentPlayer;
-                return false;
-            }
+            CurrentPlayer = oldCurrentPlayer;
+            return false;
         }
 
         public bool MakeMove(int position)
@@ -934,14 +926,12 @@ namespace DotsGame
 
                 CurrentPlayer = CurrentPlayer.NextPlayer();
 
-                LastMoveState = enmMoveState.Add;
+                LastMoveState = MoveState.Add;
                 return true;
             }
-            else
-            {
-                LastMoveState = enmMoveState.None;
-                return false;
-            }
+
+            LastMoveState = MoveState.None;
+            return false;
         }
 
         public bool UnmakeMove()
@@ -997,14 +987,12 @@ namespace DotsGame
                 LastPosition = LastState.Move.Position;
                 DiagonalLinkedGroupsCount = LastState.DiagonalGroupCount;
 
-                LastMoveState = enmMoveState.Remove;
+                LastMoveState = MoveState.Remove;
                 return true;
             }
-            else
-            {
-                LastMoveState = enmMoveState.None;
-                return false;
-            }
+
+            LastMoveState = MoveState.None;
+            return false;
         }
 
         public bool UnmakeAllMoves()
@@ -1022,30 +1010,32 @@ namespace DotsGame
 
         public Field Clone()
         {
-            var result = new Field();
-            result._tempList = new List<int>(_tempList);
-            result._chainPositions = new List<short>(_chainPositions);
-            result._surroundPositions = new List<short>(_surroundPositions);
-            result._emptyBaseCreated = _emptyBaseCreated;
-            result.Player0CaptureCount = Player0CaptureCount;
-            result.Player1CaptureCount = Player1CaptureCount;
-            result.OldPlayer0CaptureCount = OldPlayer0CaptureCount;
-            result.OldPlayer1CaptureCount = OldPlayer1CaptureCount;
-            result.Player0Square = Player0Square;
-            result.Player1Square = Player1Square;
-            result.CurrentPlayer = CurrentPlayer;
-            result.LastPosition = LastPosition;
-            //result.LastBaseCaptureCount_ = LastBaseCaptureCount_;
-            //result.LastBaseFreedCount_ = LastBaseFreedCount_;
-            result.LastMoveCaptureCount = LastMoveCaptureCount;
-            result.LastMoveFreedCount = LastMoveFreedCount;
-            //result.LastSquareCaptureCount_ = LastSquareCaptureCount_;
-            //result.LastSquareFreedCount_ = LastSquareFreedCount_;
-            result.LastState = LastState.Clone();
-            result.LastMoveState = LastMoveState;
-            result._chainDotsPositions = new List<DotPosition>(_chainDotsPositions);
-            result._surroundDotsPositions = new List<DotPosition>(_surroundDotsPositions);
-            result._dots = (DotState[])_dots.Clone();
+            var result = new Field
+            {
+                _tempList = new List<int>(_tempList),
+                _chainPositions = new List<short>(_chainPositions),
+                _surroundPositions = new List<short>(_surroundPositions),
+                _emptyBaseCreated = _emptyBaseCreated,
+                Player0CaptureCount = Player0CaptureCount,
+                Player1CaptureCount = Player1CaptureCount,
+                OldPlayer0CaptureCount = OldPlayer0CaptureCount,
+                OldPlayer1CaptureCount = OldPlayer1CaptureCount,
+                Player0Square = Player0Square,
+                Player1Square = Player1Square,
+                CurrentPlayer = CurrentPlayer,
+                LastPosition = LastPosition,
+                //result.LastBaseCaptureCount_ = LastBaseCaptureCount_;
+                //result.LastBaseFreedCount_ = LastBaseFreedCount_;
+                LastMoveCaptureCount = LastMoveCaptureCount,
+                LastMoveFreedCount = LastMoveFreedCount,
+                //result.LastSquareCaptureCount_ = LastSquareCaptureCount_;
+                //result.LastSquareFreedCount_ = LastSquareFreedCount_;
+                LastState = LastState.Clone(),
+                LastMoveState = LastMoveState,
+                _chainDotsPositions = new List<DotPosition>(_chainDotsPositions),
+                _surroundDotsPositions = new List<DotPosition>(_surroundDotsPositions),
+                _dots = (DotState[])_dots.Clone()
+            };
             var newDotsSequanceStates = new List<State>(_dotsSequenceStates.Capacity);
             _dotsSequenceStates.ForEach(state => newDotsSequanceStates.Add(state.Clone()));
             result._dotsSequenceStates = newDotsSequanceStates;
@@ -1060,7 +1050,7 @@ namespace DotsGame
 
         public DotState GetDot(int x, int y)
         {
-            return _dots[Field.GetPosition(x, y)];
+            return _dots[GetPosition(x, y)];
         }
 
         public State GetState(int ind)

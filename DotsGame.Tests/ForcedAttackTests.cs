@@ -1,8 +1,6 @@
-﻿using System.IO;
-using System.Linq;
-using System.Reflection;
-using NUnit.Framework;
+﻿using System.Linq;
 using DotsGame.AI;
+using NUnit.Framework;
 
 namespace DotsGame.Tests
 {
@@ -26,12 +24,12 @@ namespace DotsGame.Tests
             field.MakeMove(startX - 1, startY + 2);
 
             var moveGenerator = new ForcedAttackMoveGenerator(field);
-            var CapturesMoves = moveGenerator.FindCapturesMoves(field.CurrentPlayer, 1);
+            var capturesMoves = moveGenerator.FindCapturesMoves(field.CurrentPlayer);
 
-            Assert.AreEqual(1, CapturesMoves.Count);
-            Assert.AreEqual(Field.GetPosition(startX - 1, startY + 1), CapturesMoves[0].CapturePositions[0]);
-            Assert.AreEqual(4, CapturesMoves[0].ChainPositions.Count);
-            Assert.AreEqual(Field.GetPosition(startX, startY + 1), CapturesMoves[0].SurroundedPositions[0]);
+            Assert.AreEqual(1, capturesMoves.Count);
+            Assert.AreEqual(Field.GetPosition(startX - 1, startY + 1), capturesMoves[0].CapturePositions[0]);
+            Assert.AreEqual(4, capturesMoves[0].ChainPositions.Count);
+            Assert.AreEqual(Field.GetPosition(startX, startY + 1), capturesMoves[0].SurroundedPositions[0]);
         }
 
         [Test]
@@ -114,7 +112,7 @@ namespace DotsGame.Tests
             var moveGenerator = new ForcedAttackMoveGenerator(field);
             moveGenerator.GenerateMoves(0);
 
-            var result = moveGenerator.HashEntries.Select(entry => DotsGame.AI.Helper.HashEntryToString(entry)).ToList();
+            var result = moveGenerator.HashEntries.Select(entry => AI.Helper.HashEntryToString(entry)).ToList();
             Assert.AreEqual(Field.GetPosition(startX + 1, startY - 1), moveGenerator.HashEntries[0].GetMove());
             Assert.AreEqual(13, moveGenerator.HashEntries[0].GetDepth());
 
@@ -122,7 +120,7 @@ namespace DotsGame.Tests
             field.MakeMove(startX + 2, startY - 1, 1);
             moveGenerator.GenerateMoves(0);
 
-            result = moveGenerator.HashEntries.Select(entry => DotsGame.AI.Helper.HashEntryToString(entry)).ToList();
+            result = moveGenerator.HashEntries.Select(entry => AI.Helper.HashEntryToString(entry)).ToList();
             Assert.AreEqual(Field.GetPosition(startX + 2, startY - 2), moveGenerator.HashEntries[0].GetMove());
             Assert.AreEqual(11, moveGenerator.HashEntries[0].GetDepth());
         }

@@ -7,9 +7,9 @@ namespace DotsGame.GUI
     {
         public GameTreeControl()
         {
-            this.InitializeComponent();
+            InitializeComponent();
             ServiceLocator.GameTreeViewModel = new GameTreeViewModel(this);
-            this.DataContext = ServiceLocator.GameTreeViewModel;
+            DataContext = ServiceLocator.GameTreeViewModel;
         }
 
         private void InitializeComponent()

@@ -7,8 +7,8 @@ namespace DotsGame.GUI
     {
         public GroupsCoreControl()
         {
-            this.InitializeComponent();
-            this.DataContext = new GroupCoreControlViewModel();
+            InitializeComponent();
+            DataContext = new GroupCoreControlViewModel();
         }
 
         private void InitializeComponent()

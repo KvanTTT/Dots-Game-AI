@@ -1,6 +1,6 @@
 ﻿namespace DotsGame
 {
-    public enum enmMoveState
+    public enum MoveState
     {
         /// <summary>
         /// Dot has been putted (MakeMove).
@@ -15,6 +15,6 @@
         /// <summary>
         /// Start has not been changed.
         /// </summary>
-        None,
+        None
     }
 }

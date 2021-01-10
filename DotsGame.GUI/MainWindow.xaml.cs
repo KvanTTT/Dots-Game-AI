@@ -1,7 +1,8 @@
-﻿using Avalonia.Controls;
+﻿using System;
+using System.Text;
+using Avalonia.Controls;
 using Avalonia.Markup.Xaml;
 using DotsGame.Sgf;
-using System.Text;
 
 namespace DotsGame.GUI
 {
@@ -11,16 +12,16 @@ namespace DotsGame.GUI
 
         public MainWindow()
         {
-            this.InitializeComponent();
-            App.AttachDevTools(this);
+            InitializeComponent();
 
+            ServiceLocator.MainWindow = this;
             _viewModel = new MainWindowViewModel();
             DataContext = _viewModel;
 
-            this.Closed += MainWindow_Closed;
+            Closed += MainWindow_Closed;
         }
 
-        private void MainWindow_Closed(object sender, System.EventArgs e)
+        private void MainWindow_Closed(object sender, EventArgs e)
         {
             ServiceLocator.Settings.OpenedFileName = ServiceLocator.GameTreeViewModel.FileName;
             var serializer = new SgfParser();

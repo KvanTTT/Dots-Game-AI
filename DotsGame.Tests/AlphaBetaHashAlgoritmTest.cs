@@ -1,8 +1,7 @@
 ﻿using System;
 using System.Diagnostics;
-using NUnit.Framework;
-using DotsGame;
 using DotsGame.AI;
+using NUnit.Framework;
 
 namespace DotsGame.Tests
 {
@@ -39,7 +38,7 @@ namespace DotsGame.Tests
 
             var alphaBetaHashAlgoritm = new AlphaBetaHashAlgoritm(field);
             stopwatch.Start();
-            int alphaBetaHashBestMove = alphaBetaHashAlgoritm.SearchBestMove((byte)depth, DotState.Player0, -AiSettings.InfinityScore, AiSettings.InfinityScore);
+            int alphaBetaHashBestMove = alphaBetaHashAlgoritm.SearchBestMove(depth, DotState.Player0, -AiSettings.InfinityScore, AiSettings.InfinityScore);
             stopwatch.Stop();
             TimeSpan alphaBetaHashElapsed = stopwatch.Elapsed;
 
@@ -55,7 +54,7 @@ namespace DotsGame.Tests
             Console.WriteLine("Depth: {0}", depth);
             Console.WriteLine("Usual AlphaBeta time elapsed: {0}", alphaBetaElapsed);
             Console.WriteLine("Hash AlphaBeta time elapsed: {0}", alphaBetaHashElapsed);
-            Console.WriteLine("Ratio: {0}", (double)alphaBetaHashElapsed.Ticks / (double)alphaBetaElapsed.Ticks);
+            Console.WriteLine("Ratio: {0}", alphaBetaHashElapsed.Ticks / (double)alphaBetaElapsed.Ticks);
         }
     }
 }

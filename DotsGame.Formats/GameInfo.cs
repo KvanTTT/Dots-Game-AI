@@ -1,9 +1,5 @@
-﻿using DotsGame.Formats;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System;
+using DotsGame.Formats;
 
 namespace DotsGame
 {
@@ -27,9 +23,9 @@ namespace DotsGame
 
         public Rank Player2Rank { get; set; } = Rank.Unknown;
 
-        public double Player1Rating { get; set; } = 0;
+        public double Player1Rating { get; set; }
 
-        public double Player2Rating { get; set; } = 0;
+        public double Player2Rating { get; set; }
 
         public DateTime Date { get; set; } = DateTime.Now;
 
@@ -41,11 +37,11 @@ namespace DotsGame
 
         public string Event { get; set; } = "";
 
-        public int WinPlayerNumber { get; set; } = 0;
+        public int WinPlayerNumber { get; set; }
 
         public WinReason WinReason { get; set; } = WinReason.Unknown;
 
-        public int WinScore { get; set; } = 0;
+        public int WinScore { get; set; }
 
         public string Result
         {
@@ -72,7 +68,7 @@ namespace DotsGame
             }
             set
             {
-                string[] strs = value.Split(new char[] { '+' }, StringSplitOptions.RemoveEmptyEntries);
+                string[] strs = value.Split(new[] { '+' }, StringSplitOptions.RemoveEmptyEntries);
                 if (strs.Length > 1)
                 {
                     string reasonStr = strs[1];
@@ -118,7 +114,7 @@ namespace DotsGame
 
         public GameInfo()
         {
-            GameTree = new GameTree() { Number = 0, Root = true };
+            GameTree = new GameTree { Number = 0, Root = true };
         }
 
         public void CopyInfoFrom(GameInfo sourceInfo)

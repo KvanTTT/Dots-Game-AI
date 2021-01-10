@@ -1,12 +1,10 @@
-﻿using DotsGame.Sgf;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using System.Net;
 using System.Security.Cryptography;
 using System.Text;
-using System.Threading.Tasks;
+using DotsGame.Sgf;
 
 namespace DotsGame.Formats
 {
@@ -23,20 +21,18 @@ namespace DotsGame.Formats
 
         public GameInfo DetectFormatAndOpen(string fileUrlOrPath)
         {
-            bool fromCache;
-            return DetectFormatAndOpen(fileUrlOrPath, out fromCache);
+            return DetectFormatAndOpen(fileUrlOrPath, out bool fromCache);
         }
 
         public GameInfo DetectFormatAndOpen(string fileUrlOrPath, out bool fromCache)
         {
             fileUrlOrPath = fileUrlOrPath.Trim();
             GameInfo result = null;
-            long vkId;
             byte[] data = null;
             IDotsGameFormatParser parser = null;
             bool fromUrl = false;
             if (fileUrlOrPath.StartsWith("http://") || fileUrlOrPath.StartsWith("https://") ||
-                long.TryParse(fileUrlOrPath, out vkId))
+                long.TryParse(fileUrlOrPath, out long vkId))
             {
                 int digitPos = fileUrlOrPath.Length - 1;
                 while (digitPos >= 0 && char.IsDigit(fileUrlOrPath[digitPos]))

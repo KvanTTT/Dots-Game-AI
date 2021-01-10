@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Runtime.CompilerServices;
-
-namespace DotsGame
+﻿namespace DotsGame
 {
     public static class Helper
     {
@@ -59,7 +53,7 @@ namespace DotsGame
 
         public static bool IsZeroSurroundLevel(this DotState dot)
         {
-            return (dot & DotState.SurroundCountMask) == (DotState)0;
+            return (dot & DotState.SurroundCountMask) == 0;
         }
 
         public static bool IsOneSurroundLevel(this DotState dot)
@@ -134,12 +128,12 @@ namespace DotsGame
 
         public static DotState SetDiagonalGroupNumber(this DotState dot, int groupNumber)
         {
-            return (DotState)((dot & ~DotState.DiagonalGroupMask) | (DotState)groupNumber);
+            return (dot & ~DotState.DiagonalGroupMask) | (DotState)groupNumber;
         }
 
         public static DotState ClearGroupNumber(this DotState dot)
         {
-            return (DotState)(dot & ~DotState.DiagonalGroupMask);
+            return dot & ~DotState.DiagonalGroupMask;
         }
 
         public static bool IsEmptyBound(this DotState dot)

@@ -1,7 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 
 namespace DotsGame
 {
@@ -50,7 +48,7 @@ namespace DotsGame
                 return;
             }
 
-            if (SurroundCondition == enmSurroundCondition.Standart)
+            if (SurroundCondition == SurroundCondition.Standart)
             {
                 if (GetInputDots(LastPosition) > 1)
                     ProcessLastDot(LastPosition);
@@ -181,52 +179,52 @@ namespace DotsGame
                         var chainPositionJMinus1 = j > previousChainDotsCount ? _chainPositions[j - 1] : _chainPositions[_chainPositions.Count - 1];
                         int dif = _chainPositions[j] - chainPositionJMinus1;
 
-                        if (dif == Field.RealWidth - 1)
+                        if (dif == RealWidth - 1)
                         {
                             if (_dots[chainPositionJMinus1 - 1].IsPlayerPutted(enemyPlayer) &&
-                                _dots[chainPositionJMinus1 + Field.RealWidth].IsPlayerPutted(enemyPlayer))
+                                _dots[chainPositionJMinus1 + RealWidth].IsPlayerPutted(enemyPlayer))
                             {
                                 groupNumber = (int)_dots[chainPositionJMinus1 - 1].GetDiagGroupNumber();
                                 if (!crosswiseGroups.ContainsKey(groupNumber))
-                                    crosswiseGroups.Add(groupNumber, new List<int[]>() { new int[] { chainPositionJMinus1, _chainPositions[j], chainPositionJMinus1 - 1 } });
+                                    crosswiseGroups.Add(groupNumber, new List<int[]> { new[] { chainPositionJMinus1, _chainPositions[j], chainPositionJMinus1 - 1 } });
                                 else
-                                    crosswiseGroups[groupNumber].Add(new int[] { chainPositionJMinus1, _chainPositions[j], chainPositionJMinus1 - 1 });
+                                    crosswiseGroups[groupNumber].Add(new[] { chainPositionJMinus1, _chainPositions[j], chainPositionJMinus1 - 1 });
                             }
                         }
-                        else if (dif == Field.RealWidth + 1)
+                        else if (dif == RealWidth + 1)
                         {
                             if (_dots[chainPositionJMinus1 + 1].IsPlayerPutted(enemyPlayer) &&
-                                _dots[chainPositionJMinus1 + Field.RealWidth].IsPlayerPutted(enemyPlayer))
+                                _dots[chainPositionJMinus1 + RealWidth].IsPlayerPutted(enemyPlayer))
                             {
                                 groupNumber = (int)_dots[chainPositionJMinus1 + 1].GetDiagGroupNumber();
                                 if (!crosswiseGroups.ContainsKey(groupNumber))
-                                    crosswiseGroups.Add(groupNumber, new List<int[]>() { new int[] { chainPositionJMinus1, _chainPositions[j], chainPositionJMinus1 + Field.RealWidth } });
+                                    crosswiseGroups.Add(groupNumber, new List<int[]> { new[] { chainPositionJMinus1, _chainPositions[j], chainPositionJMinus1 + RealWidth } });
                                 else
-                                    crosswiseGroups[groupNumber].Add(new int[] { chainPositionJMinus1, _chainPositions[j], chainPositionJMinus1 + Field.RealWidth });
+                                    crosswiseGroups[groupNumber].Add(new[] { chainPositionJMinus1, _chainPositions[j], chainPositionJMinus1 + RealWidth });
                             }
                         }
-                        else if (dif == -Field.RealWidth + 1)
+                        else if (dif == -RealWidth + 1)
                         {
                             if (_dots[chainPositionJMinus1 + 1].IsPlayerPutted(enemyPlayer) &&
-                                _dots[chainPositionJMinus1 - Field.RealWidth].IsPlayerPutted(enemyPlayer))
+                                _dots[chainPositionJMinus1 - RealWidth].IsPlayerPutted(enemyPlayer))
                             {
                                 groupNumber = (int)_dots[chainPositionJMinus1 + 1].GetDiagGroupNumber();
                                 if (!crosswiseGroups.ContainsKey(groupNumber))
-                                    crosswiseGroups.Add(groupNumber, new List<int[]>() { new int[] { chainPositionJMinus1, _chainPositions[j], chainPositionJMinus1 + 1 } });
+                                    crosswiseGroups.Add(groupNumber, new List<int[]> { new[] { chainPositionJMinus1, _chainPositions[j], chainPositionJMinus1 + 1 } });
                                 else
-                                    crosswiseGroups[groupNumber].Add(new int[] { chainPositionJMinus1, _chainPositions[j], chainPositionJMinus1 + 1 });
+                                    crosswiseGroups[groupNumber].Add(new[] { chainPositionJMinus1, _chainPositions[j], chainPositionJMinus1 + 1 });
                             }
                         }
-                        else if (dif == -Field.RealWidth - 1)
+                        else if (dif == -RealWidth - 1)
                         {
                             if (_dots[chainPositionJMinus1 - 1].IsPlayerPutted(enemyPlayer) &&
-                                _dots[chainPositionJMinus1 - Field.RealWidth].IsPlayerPutted(enemyPlayer))
+                                _dots[chainPositionJMinus1 - RealWidth].IsPlayerPutted(enemyPlayer))
                             {
                                 groupNumber = (int)_dots[chainPositionJMinus1 - 1].GetDiagGroupNumber();
                                 if (!crosswiseGroups.ContainsKey(groupNumber))
-                                    crosswiseGroups.Add(groupNumber, new List<int[]>() { new int[] { chainPositionJMinus1, _chainPositions[j], chainPositionJMinus1 - Field.RealWidth } });
+                                    crosswiseGroups.Add(groupNumber, new List<int[]> { new[] { chainPositionJMinus1, _chainPositions[j], chainPositionJMinus1 - RealWidth } });
                                 else
-                                    crosswiseGroups[groupNumber].Add(new int[] { chainPositionJMinus1, _chainPositions[j], chainPositionJMinus1 - Field.RealWidth });
+                                    crosswiseGroups[groupNumber].Add(new[] { chainPositionJMinus1, _chainPositions[j], chainPositionJMinus1 - RealWidth });
                             }
                         }
                     }
@@ -240,7 +238,7 @@ namespace DotsGame
                     AddCapturedFreedCount(dotColor);
 
                     // If capture not empty base or turned on an option "Surround all".
-                    if ((LastMoveCaptureCount != 0) || (SurroundCondition == enmSurroundCondition.Always))
+                    if ((LastMoveCaptureCount != 0) || (SurroundCondition == SurroundCondition.Always))
                     {
                         for (var j = previousSuroundDotsCount; j < _surroundPositions.Count; j++)
                         {
@@ -313,9 +311,9 @@ namespace DotsGame
                     _dots[pos] = _dots[pos].SetDiagonalGroupNumber(newGroup);
                 }
 
-                for (int i = 0; i < Field.VertHorizDeltas.Length; i++)
+                for (int i = 0; i < VertHorizDeltas.Length; i++)
                 {
-                    int newPos = pos + Field.VertHorizDeltas[i];
+                    int newPos = pos + VertHorizDeltas[i];
                     if (_dots[newPos].IsEnable(enabledCondition) &&
                         _dots[newPos].GetDiagGroupNumber() != (DotState)newGroup)
                     {
@@ -359,9 +357,9 @@ namespace DotsGame
                 newPos = _tempList.Last();
                 _tempList.RemoveAt(_tempList.Count - 1);
 
-                for (int i = 0; i < Field.DiagDeltas.Length; i++)
+                for (int i = 0; i < DiagDeltas.Length; i++)
                 {
-                    newPos = pos + Field.DiagDeltas[i];
+                    newPos = pos + DiagDeltas[i];
                     if (_dots[newPos].GetEnabledCondition() == enableCond && !_dots[newPos].IsTagged())
                     {
                         _surroundDotsPositions.Add(new DotPosition(newPos, _dots[newPos]));
@@ -391,9 +389,9 @@ namespace DotsGame
                 pos = _tempList.Last();
                 _tempList.RemoveAt(_tempList.Count - 1);
 
-                for (int i = 0; i < Field.DiagDeltas.Length; i++)
+                for (int i = 0; i < DiagDeltas.Length; i++)
                 {
-                    int newPos = pos + Field.DiagDeltas[i];
+                    int newPos = pos + DiagDeltas[i];
                     if (_dots[newPos].GetDiagGroupNumber() == (DotState)oldGroupNumber)
                     {
                         _surroundDotsPositions.Add(new DotPosition(newPos, _dots[newPos]));
@@ -409,11 +407,10 @@ namespace DotsGame
         #region Constructors
 
         protected FieldWithGroups()
-            : base()
         {
         }
 
-        public FieldWithGroups(int width, int height, enmSurroundCondition surroundCondition = enmSurroundCondition.Standart)
+        public FieldWithGroups(int width, int height, SurroundCondition surroundCondition = SurroundCondition.Standart)
             : base(width, height, surroundCondition)
         {
         }

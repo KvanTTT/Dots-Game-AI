@@ -1,10 +1,6 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-
 namespace DotsGame.AI
 {
-	public enum RandomGenerateMethod
+    public enum RandomGenerateMethod
 	{
 		Standart,
 		Crypto

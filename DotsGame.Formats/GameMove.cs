@@ -1,8 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace DotsGame
 {
@@ -32,10 +28,8 @@ namespace DotsGame
             {
                 return "Root";
             }
-            else
-            {
-                return $"{Row}:{Column},{(PlayerNumber == 0 ? "Player0" : "Player1")}";
-            }
+
+            return $"{Row}:{Column},{(PlayerNumber == 0 ? "Player0" : "Player1")}";
         }
 
         public override int GetHashCode()

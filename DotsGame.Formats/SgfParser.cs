@@ -1,9 +1,8 @@
-﻿using DotsGame.Formats;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
+using DotsGame.Formats;
 
 namespace DotsGame.Sgf
 {
@@ -33,8 +32,7 @@ namespace DotsGame.Sgf
             bool atLeastOneGameTreeShouldBeSpecified = false;
             while (Accept('('))
             {
-                bool ignoreParent;
-                GameTree childGameTree = ParseGameTree(out ignoreParent);
+                GameTree childGameTree = ParseGameTree(out bool ignoreParent);
                 if (ignoreParent)
                 {
                     foreach (var tree in childGameTree.Childs)
@@ -142,8 +140,7 @@ namespace DotsGame.Sgf
 
             while (Accept('('))
             {
-                bool ignoreParent2;
-                GameTree childGameTree = ParseGameTree(out ignoreParent2);
+                GameTree childGameTree = ParseGameTree(out bool ignoreParent2);
                 if (ignoreParent2)
                 {
                     foreach (var tree in childGameTree.Childs)
@@ -279,7 +276,7 @@ namespace DotsGame.Sgf
                 case "SZ":
                     try
                     {
-                        string[] sizes = stringValue.Split(new char[] { ':' }, StringSplitOptions.RemoveEmptyEntries);
+                        string[] sizes = stringValue.Split(new[] { ':' }, StringSplitOptions.RemoveEmptyEntries);
                         if (sizes.Length == 1)
                         {
                             _gameInfo.Width = _gameInfo.Height = int.Parse(stringValue);
@@ -337,8 +334,7 @@ namespace DotsGame.Sgf
                     }
                     if (strs.Length > 1)
                     {
-                        int rating;
-                        if (int.TryParse(strs[1], out rating))
+                        if (int.TryParse(strs[1], out int rating))
                         {
                             if (id == "BR")
                             {
@@ -384,10 +380,6 @@ namespace DotsGame.Sgf
                         }
                     }
                     break;
-
-                default:
-                    // Unknown property.
-                    break;
             }
         }
 
@@ -428,10 +420,8 @@ namespace DotsGame.Sgf
             {
                 return true;
             }
-            else
-            {
-                throw new Exception($"Unexpected symbol {c}");
-            }
+
+            throw new Exception($"Unexpected symbol {c}");
         }
 
         private bool Accept(char c)
@@ -441,10 +431,8 @@ namespace DotsGame.Sgf
                 _currentDataPos++;
                 return true;
             }
-            else
-            {
-                return false;
-            }
+
+            return false;
         }
 
         #endregion
