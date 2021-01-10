@@ -1,20 +1,20 @@
 ## Dots-Game-AI
 
-Yet another implementation of [Dots Game](https://en.wikipedia.org/wiki/Dots_(game)) Artificial Intelligence (with russian rules).
+Yet another implementation of [Dots Game](https://en.wikipedia.org/wiki/Dots_(game))
+Artificial Intelligence (with russian rules).
 
 ### Features
 
-* Save to & load from [SGF](https://en.wikipedia.org/wiki/Smart_Game_Format) and [PointsXT](http://pointsgame.net/site/pointsxt) files.
+* Save to & load from [SGF](https://en.wikipedia.org/wiki/Smart_Game_Format)
+  and [PointsXT](http://pointsgame.net/site/pointsxt) files.
 * Working with game trees.
 * Interaction with [Sport Dots vk.com](https://vk.com/app4214777_1194928) application.
-
-### Unit Tests
-[![Build Status](https://travis-ci.org/KvanTTT/Dots-Game-AI.svg?branch=master)](https://travis-ci.org/KvanTTT/Dots-Game-AI)
 
 ### Roadmap
 
 * Collect statistics for open games with strong players from playdots.ru.
-* Train neural network with statistics info. Use [CNTK](https://github.com/Microsoft/CNTK) or another deep-learning framwork.
+* Train neural network with statistics info. Use [CNTK](https://github.com/Microsoft/CNTK)
+  or another deep-learning framework.
 
 ## Screen
 
