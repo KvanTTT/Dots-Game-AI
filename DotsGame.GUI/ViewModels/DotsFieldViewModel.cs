@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reactive.Linq;
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Controls.Shapes;
@@ -12,18 +13,18 @@ namespace DotsGame.GUI
 {
     public class DotsFieldViewModel : ReactiveObject
     {
-        private Canvas _canvasField;
+        private readonly Canvas _canvasField;
         private Field _field;
         private int _player1Score, _player2Score;
         private string _player1Name, _player2Name;
 
         private int _currentBaseZInd;
 
-        private List<Line> _lineShapes = new List<Line>();
-        private List<Ellipse> _dotShapes = new List<Ellipse>();
-        private Stack<List<Shape>> _movesShapes = new Stack<List<Shape>>();
+        private readonly List<Shape> _fieldShapes = new List<Shape>();
+        private readonly List<Ellipse> _dotShapes = new List<Ellipse>();
+        private readonly Stack<List<Shape>> _movesShapes = new Stack<List<Shape>>();
         private Shape _lastMoveMarker;
-        private List<Shape> _additionalShapes = new List<Shape>();
+        private readonly List<Shape> _additionalShapes = new List<Shape>();
 
         private GameTreeViewModel _gameTreeViewModel;
 
@@ -34,20 +35,52 @@ namespace DotsGame.GUI
 
         public Color Player1Color { get; set; } = Color.FromRgb(0, 0, 255);
         public Color Player2Color { get; set; } = Color.FromRgb(255, 0, 0);
-        public Color Player1BaseColor { get; private set; }
-        public Color Player2BaseColor { get; private set; }
+        public Color Player1BaseColor { get; }
+        public Color Player2BaseColor { get; }
 
-        public IBrush LineBrush { get; set; } = Brushes.DimGray;
+        public IBrush BackgroundBrush { get; } = Brushes.White;
 
-        public GameTreeViewModel GameTreeViewModel
-        {
-            get => _gameTreeViewModel ?? (_gameTreeViewModel = ServiceLocator.GameTreeViewModel);
-        }
+        public IBrush LineBrush { get; } = Brushes.DimGray;
+
+        public GameTreeViewModel GameTreeViewModel => _gameTreeViewModel ??= ServiceLocator.GameTreeViewModel;
 
         public DotsFieldViewModel(Canvas canvas, Field field = null)
         {
             _canvasField = canvas;
-            _canvasField.PointerPressed += CanvasField_PointerPressed;
+
+            Observable.FromEventPattern<PointerPressedEventArgs>(
+                    addHandler => _canvasField.PointerPressed += addHandler,
+                    removeHandler => _canvasField.PointerPressed -= removeHandler)
+                .ObserveOn(RxApp.MainThreadScheduler)
+                .Subscribe(ev =>
+                {
+                    var evenArgs = ev.EventArgs;
+                    var pos = evenArgs.GetPosition(_canvasField) - new Point(FieldMargin, FieldMargin);
+                    pos = pos / CellSize;
+                    int fieldPosX = (int)Math.Round(pos.X) + 1;
+                    int fieldPosY = (int)Math.Round(pos.Y) + 1;
+
+                    var pointerUpdateKind = evenArgs.GetCurrentPoint(null).Properties.PointerUpdateKind;
+
+                    if (pointerUpdateKind == PointerUpdateKind.LeftButtonPressed)
+                    {
+                        if (_field.MakeMove(fieldPosX, fieldPosY))
+                        {
+                            AddLastMoveState();
+                            UpdateInfo();
+                            GameTreeViewModel.AddMove(new GameMove((int)Field.CurrentPlayer.NextPlayer(), fieldPosY, fieldPosX));
+                        }
+                    }
+                    else if (pointerUpdateKind == PointerUpdateKind.RightButtonPressed)
+                    {
+                        Field.GetPosition(_field.LastMakedPosition, out int lastX, out int lastY);
+                        if (fieldPosX == lastX && fieldPosY == lastY)
+                        {
+                            GameTreeViewModel.PrevMoveCommandAction();
+                        }
+                    }
+                });
+
             _field = field ?? new Field(39, 32);
             Player1BaseColor = Color.FromArgb(50, Player1Color.R, Player1Color.G, Player1Color.B);
             Player2BaseColor = Color.FromArgb(50, Player2Color.R, Player1Color.G, Player2Color.B);
@@ -141,32 +174,6 @@ namespace DotsGame.GUI
             _canvasField.Children.AddRange(shapes);
         }
 
-        private void CanvasField_PointerPressed(object sender, PointerPressedEventArgs e)
-        {
-            var pos = e.GetPosition(_canvasField) - new Point(FieldMargin, FieldMargin);
-            pos = pos / CellSize;
-            int fieldPosX = (int)Math.Round(pos.X) + 1;
-            int fieldPosY = (int)Math.Round(pos.Y) + 1;
-
-            if (e.MouseButton == MouseButton.Left)
-            {
-                if (_field.MakeMove(fieldPosX, fieldPosY))
-                {
-                    AddLastMoveState();
-                    UpdateInfo();
-                    GameTreeViewModel.AddMove(new GameMove((int)Field.CurrentPlayer.NextPlayer(), fieldPosY, fieldPosX));
-                }
-            }
-            else if (e.MouseButton == MouseButton.Right)
-            {
-                Field.GetPosition(_field.LastMakedPosition, out int lastX, out int lastY);
-                if (fieldPosX == lastX && fieldPosY == lastY)
-                {
-                    GameTreeViewModel.PrevMoveCommandAction();
-                }
-            }
-        }
-
         private void UpdateInfo()
         {
             UpdateLastMoveMarker();
@@ -176,10 +183,19 @@ namespace DotsGame.GUI
 
         private void RefreshField()
         {
-            _lineShapes.Clear();
+            _fieldShapes.Clear();
 
             _canvasField.Width = CellSize * _field.Width;
             _canvasField.Height = CellSize * _field.Height;
+
+            var backgroundShape = new Rectangle
+            {
+                Width = _canvasField.Width,
+                Height = _canvasField.Height,
+                Fill = BackgroundBrush
+            };
+            _fieldShapes.Add(backgroundShape);
+            _canvasField.Children.Add(backgroundShape);
 
             double lineLength = CellSize * (_field.Height - 1);
             double x = FieldMargin;
@@ -194,7 +210,7 @@ namespace DotsGame.GUI
                     ZIndex = 0
                 };
 
-                _lineShapes.Add(line);
+                _fieldShapes.Add(line);
                 _canvasField.Children.Add(line);
                 x += CellSize;
             }
@@ -212,7 +228,7 @@ namespace DotsGame.GUI
                     ZIndex = 0
                 };
 
-                _lineShapes.Add(line);
+                _fieldShapes.Add(line);
                 _canvasField.Children.Add(line);
                 y += CellSize;
             }

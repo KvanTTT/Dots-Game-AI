@@ -24,12 +24,12 @@ namespace DotsGame.Tests
             field.MakeMove(startX - 1, startY + 2);
 
             var moveGenerator = new ForcedAttackMoveGenerator(field);
-            var CapturesMoves = moveGenerator.FindCapturesMoves(field.CurrentPlayer);
+            var capturesMoves = moveGenerator.FindCapturesMoves(field.CurrentPlayer);
 
-            Assert.AreEqual(1, CapturesMoves.Count);
-            Assert.AreEqual(Field.GetPosition(startX - 1, startY + 1), CapturesMoves[0].CapturePositions[0]);
-            Assert.AreEqual(4, CapturesMoves[0].ChainPositions.Count);
-            Assert.AreEqual(Field.GetPosition(startX, startY + 1), CapturesMoves[0].SurroundedPositions[0]);
+            Assert.AreEqual(1, capturesMoves.Count);
+            Assert.AreEqual(Field.GetPosition(startX - 1, startY + 1), capturesMoves[0].CapturePositions[0]);
+            Assert.AreEqual(4, capturesMoves[0].ChainPositions.Count);
+            Assert.AreEqual(Field.GetPosition(startX, startY + 1), capturesMoves[0].SurroundedPositions[0]);
         }
 
         [Test]

@@ -22,12 +22,11 @@ namespace DotsGame.GUI
     {
         private DotsFieldViewModel _dotsFieldViewModel;
         private GameInfo _gameInfo;
-        private UserControl _gameTreeUserControl;
-        private Canvas _gameTreeCanvas;
-        private ScrollViewer _canvasScrollViewer;
+        private readonly Canvas _gameTreeCanvas;
+        private readonly ScrollViewer _canvasScrollViewer;
         private string _fileName;
         private bool _autoUpdate;
-        private Timer _autoupdateGameTimer;
+        private readonly Timer _autoupdateGameTimer;
 
         private double _dotSize = 23;
         private double _dotSpace = 32;
@@ -37,7 +36,7 @@ namespace DotsGame.GUI
         private GameTree _previousSelectedGameTree;
         private GameTree _selectedGameTree;
         private GameTree[,] _gameTreesOnCanvas;
-        private Dictionary<GameTree, Tuple<int, int>> _gameTreesPositions = new Dictionary<GameTree, Tuple<int, int>>();
+        private readonly Dictionary<GameTree, Tuple<int, int>> _gameTreesPositions = new Dictionary<GameTree, Tuple<int, int>>();
         int _prevMovesCount;
 
         private Dictionary<long, Ellipse> _moveCircles = new Dictionary<long, Ellipse>();
@@ -69,10 +68,7 @@ namespace DotsGame.GUI
 
         public ReactiveCommand<Unit, Unit> UpdateCommand { get; }
 
-        public DotsFieldViewModel DotsFieldViewModel
-        {
-            get => _dotsFieldViewModel ?? (_dotsFieldViewModel = ServiceLocator.DotsFieldViewModel);
-        }
+        public DotsFieldViewModel DotsFieldViewModel => _dotsFieldViewModel ??= ServiceLocator.DotsFieldViewModel;
 
         public string FileName
         {
@@ -110,7 +106,6 @@ namespace DotsGame.GUI
         public GameTreeViewModel(UserControl gameTreeUserControl)
         {
             _autoupdateGameTimer = new Timer(UpdateGame, "timer", Timeout.Infinite, Timeout.Infinite);
-            _gameTreeUserControl = gameTreeUserControl;
             _gameTreeCanvas = gameTreeUserControl.Find<Canvas>("GameTreeCanvas");
             _canvasScrollViewer = gameTreeUserControl.Find<ScrollViewer>("GameTreeScrollViewer");
             _gameTreeCanvas.PointerPressed += GameTreeCanvas_PointerPressed;

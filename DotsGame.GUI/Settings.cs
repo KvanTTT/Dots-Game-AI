@@ -6,7 +6,7 @@ namespace DotsGame.GUI
 {
     public class Settings
     {
-        private static string settingsFileName = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData),
+        private static readonly string settingsFileName = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData),
                 "DotsGame.json");
         private static readonly object saveLock = new object();
 
