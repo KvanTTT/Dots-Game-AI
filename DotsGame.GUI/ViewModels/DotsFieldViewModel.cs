@@ -187,15 +187,7 @@ namespace DotsGame.GUI
 
             _canvasField.Width = CellSize * _field.Width;
             _canvasField.Height = CellSize * _field.Height;
-
-            var backgroundShape = new Rectangle
-            {
-                Width = _canvasField.Width,
-                Height = _canvasField.Height,
-                Fill = BackgroundBrush
-            };
-            _fieldShapes.Add(backgroundShape);
-            _canvasField.Children.Add(backgroundShape);
+            _canvasField.Background = BackgroundBrush;
 
             double lineLength = CellSize * (_field.Height - 1);
             double x = FieldMargin;
