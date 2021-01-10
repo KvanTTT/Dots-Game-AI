@@ -40,8 +40,8 @@ namespace DotsGame.Formtas.Tests
             CheckCrosswise(deserialized);
         }
 
-        [TestCase("874744")]
-        [TestCase("https://game.playdots.ru/game/redirect?game_id=874744")]
+        [TestCase("874744", Ignore = "app is down")]
+        [TestCase("https://game.playdots.ru/game/redirect?game_id=874744", Ignore = "playdots app is down")]
         public void DownloadParse_SgfFromVkComplex(string fileNameOrPath)
         {
             var extractor = new GameInfoExtractor();
