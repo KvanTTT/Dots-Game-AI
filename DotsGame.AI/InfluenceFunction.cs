@@ -2,8 +2,7 @@
 {
     public class InfluenceFunction
     {
-        Field _field;
-        float[] influence;
+        private Field _field;
 
         public InfluenceFunction(Field field)
         {
